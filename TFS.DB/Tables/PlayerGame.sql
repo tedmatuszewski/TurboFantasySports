@@ -1,9 +1,0 @@
-﻿CREATE TABLE [dbo].[PlayerGame]
-(
-	[Guid] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
-	[PlayerGuid] UNIQUEIDENTIFIER NOT NULL,
-	[GameGuid] UNIQUEIDENTIFIER NOT NULL,
-	[Score] INT NOT NULL, 
-    CONSTRAINT [FK_PlayerGame_Player] FOREIGN KEY ([PlayerGuid]) REFERENCES [Player]([Guid]), 
-    CONSTRAINT [FK_PlayerGame_Game] FOREIGN KEY ([GameGuid]) REFERENCES [Game]([Guid])
-)

@@ -1,32 +1,23 @@
 <template>
   <div>
     <hero />
-    <hr />
-    <home-content />
+    
+    <leagues />
   </div>
 </template>
 
-<script lang="ts">
-import Hero from "../components/Hero.vue";
-import HomeContent from "../components/HomeContent.vue";
-import { StorageContext } from "../storage/StorageContext";
+<script setup>
+  import Hero from "../components/Hero.vue";
+  import Leagues from "../components/Leagues.vue"
 
-let cont = await StorageContext();
-let riders = await cont.Riders.getAll();
-let leagues = await cont.Leagues.getAll();
-let races = await cont.Races.getAll();
+  // let riders = await cont.Riders.getAll();
+  // let races = await cont.Races.getAll();
+  // let members = await cont.Members.getAll();
 
-console.log(riders);
-console.log(leagues);
-console.log(races);
-
-export default {
-  name: "home-view",
-  components: {
-    Hero,
-    HomeContent,
-  },
-};
+  // console.log(riders);
+  // console.log(leagues);
+  // console.log(races);
+  // console.log(members);
 </script>
 
 <style lang="css" scoped>

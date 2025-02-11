@@ -19,6 +19,18 @@ export default function (credential) {
 
             return result;
         },
+        getByLeagueGuid: async function(leagueGuid) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `LeagueGuid eq '${leagueGuid}'` } });
+            let result = [];
+
+            for await (const entity of entitiesIter) {
+                if (entity.LeagueGuid === leagueGuid) {
+                    result.push(new Member(entity));
+                }
+            }
+
+            return result;
+        },
         create: async function(entity) {
             entity.RowKey = generateGuid();
             entity.PartitionKey = "1";

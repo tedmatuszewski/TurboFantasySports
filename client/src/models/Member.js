@@ -3,5 +3,6 @@ export default class Member {
       this.UserGuid = entity.UserGuid;
       this.LeagueGuid = entity.LeagueGuid;
       this.Id = entity.rowKey;
+      this.TeamName = entity.TeamName;
     }
   }

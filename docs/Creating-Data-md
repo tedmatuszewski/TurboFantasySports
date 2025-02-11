@@ -1,0 +1,30 @@
+
+To get the races run the below code on [this](https://racerxonline.com/sx/schedule) page.
+
+var re = [] 
+document.querySelectorAll(".event_list > li .event_main").forEach(i => { re.push({ 
+    name: i.querySelector("a strong").innerText, 
+    "class": i.querySelector("strong:nth-child(2)").innerText, 
+    date: i.querySelector(".date").attributes.getNamedItem("content").value,
+    key: i.querySelector("a").href.split("/").pop() }) 
+});
+
+JSON.stringify(re);
+
+To get race result go [here](https://www.supercrosslive.com/results/). Find the race, and go to that page. In the Main Event Results section click each of the 250 and 450 links.
+
+## 250
+
+var re = []
+
+document.querySelectorAll(".table.table-hover.table-sm.table-sm-data.table-responsive.m-0 tr.driver_details_link").forEach(t => { re.push({ position: parseInt(t.querySelector("td:nth-child(1)").innerText), rider: parseInt(i.querySelector("td:nth-child(2)").innerText), class: 250, race: "anaheim-1" }); });
+
+JSON.stringify(re);
+
+## 450
+
+var re = []
+
+document.querySelectorAll(".table.table-hover.table-sm.table-sm-data.table-responsive.m-0 tr.driver_details_link").forEach(t => { re.push({ position: parseInt(t.querySelector("td:nth-child(1)").innerText), rider: parseInt(t.querySelector("td:nth-child(2)").innerText), class: 450, race: "anaheim-1" }); });
+
+JSON.stringify(re);

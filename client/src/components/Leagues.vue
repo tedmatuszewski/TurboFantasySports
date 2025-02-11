@@ -51,8 +51,10 @@
   async function joinLeague(league) {
     let response = await context.Members.create({
       LeagueGuid: league.Id,
-      UserGuid: auth0.user.value.sub
+      UserGuid: auth0.user.value.sub,
+      TeamName: "Team " + auth0.user.value.name
     });
+    
     league.Members.push(response);
   }
 </script>

@@ -3,7 +3,7 @@
     <nav-bar />
     <div class="container flex-grow-1">
       <error />
-      <div class="mt-5">
+      <div class="my-5">
         <router-view />
       </div>
     </div>

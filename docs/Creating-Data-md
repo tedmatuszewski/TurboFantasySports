@@ -1,6 +1,7 @@
 
 To get the races run the below code on [this](https://racerxonline.com/sx/schedule) page.
 
+```
 var re = [] 
 document.querySelectorAll(".event_list > li .event_main").forEach(i => { re.push({ 
     name: i.querySelector("a strong").innerText, 
@@ -10,21 +11,28 @@ document.querySelectorAll(".event_list > li .event_main").forEach(i => { re.push
 });
 
 JSON.stringify(re);
+```
 
 To get race result go [here](https://www.supercrosslive.com/results/). Find the race, and go to that page. In the Main Event Results section click each of the 250 and 450 links.
 
 ## 250
 
+```
 var re = []
 
 document.querySelectorAll(".table.table-hover.table-sm.table-sm-data.table-responsive.m-0 tr.driver_details_link").forEach(t => { re.push({ position: parseInt(t.querySelector("td:nth-child(1)").innerText), rider: parseInt(i.querySelector("td:nth-child(2)").innerText), class: 250, race: "anaheim-1" }); });
 
 JSON.stringify(re);
+```
 
 ## 450
 
-var re = []
+```
+var pos1 = race.data.riderIds250.map(r => { return { position: race.data.riders250[r].position, class: race.data.riders250[r].class, number: race.data.riders250[r].numberInt, race: "tampa" }; }).filter(r => r.position != null);
 
-document.querySelectorAll(".table.table-hover.table-sm.table-sm-data.table-responsive.m-0 tr.driver_details_link").forEach(t => { re.push({ position: parseInt(t.querySelector("td:nth-child(1)").innerText), rider: parseInt(t.querySelector("td:nth-child(2)").innerText), class: 450, race: "anaheim-1" }); });
+var pos2 = race.data.riderIds450.map(r => { return { position: race.data.riders450[r].position, class: race.data.riders450[r].class, number: race.data.riders450[r].numberInt, race: "tampa" }; }).filter(r => r.position != null);
 
-JSON.stringify(re);
+var pos = pos1.concat(pos2);
+
+JSON.stringify(pos);
+```

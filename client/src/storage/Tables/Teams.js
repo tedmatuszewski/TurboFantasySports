@@ -3,7 +3,7 @@ import Team from '../../models/Team';
 
 // https://learn.microsoft.com/en-us/javascript/api/overview/azure/data-tables-readme?view=azure-node-latest
 export default function (credential) {
-    const table = "Leagues";
+    const table = "Teams";
     const account = "tedpersonalwebsite";
     const client = new TableClient(`https://${account}.table.core.windows.net`, table, credential);
 
@@ -22,6 +22,16 @@ export default function (credential) {
             const entity = await client.getEntity("1", rowKey);
             
             return new League(entity);
+        },
+        getByLeagueAndOwner: async function(leagueGuid, ownerId) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}' and Owner eq '${ownerId}'` } });
+            let result = [];
+
+            for await (const entity of entitiesIter) {
+                result.push(new Team(entity));
+            }
+
+            return result;
         },
     };
 }

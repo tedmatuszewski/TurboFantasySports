@@ -29,7 +29,7 @@
           </tbody>
         </table>
 
-        <button class="btn btn-primary btn-block">Add Rider</button>
+        <button class="btn btn-primary btn-block" v-on:click="showModalClick()">Add Rider</button>
       </div>
       
       <div class="col-md-6">
@@ -63,6 +63,38 @@
         </table>
       </div>
     </div>
+
+    <div class="modal" tabindex="-1" id="riderModal">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Riders</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Rider</th>
+              <th>Number</th>
+              <th>Class</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="rider in riderBank" :value="rider.number">
+              <td>{{rider.number}}</td>
+              <td>{{rider.name}}</td>
+              <td>{{ rider.class }}</td>
+            </tr>
+          </tbody>
+        </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -72,11 +104,14 @@
   import { useRoute } from 'vue-router';
   import { useAuth0 } from '@auth0/auth0-vue';
   import results from '../data/results.json';
+  import riderBank from '../data/riders.json';
   import Races from "../components/Races.vue";
-  
+
+  const showModal = ref(false)
   const auth0 = useAuth0();
   const route = useRoute();
   
+  let isRiderModalVisible = ref(false);
   let selectedTeam = ref(null);
   let league = ref(null);
   let members = ref(null);
@@ -85,8 +120,11 @@
   let context = null;
   let myTeam = ref(null);
 
+  let myModal = null;
+
   onMounted(async () => {
     context = await StorageContext();
+    myModal = new bootstrap.Modal(document.getElementById('riderModal'), {})
 
     league.value = await context.Leagues.get(route.params.id);
     members.value = await context.Members.getByLeagueGuid(route.params.id);
@@ -99,6 +137,10 @@
   async function onTeamChange() {
     myTeam.value = await context.Teams.getByLeagueAndOwner(route.params.id, selectedTeam.value);
     console.log(route.params.id, selectedTeam.value, teams.value);
+  }
+
+  function showModalClick() {
+    myModal.show();
   }
 </script>
 

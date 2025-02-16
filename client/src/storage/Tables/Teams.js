@@ -1,5 +1,6 @@
 import { TableClient } from "@azure/data-tables";
 import Team from '../../models/Team';
+import { generateGuid } from "../generateGuid";
 
 // https://learn.microsoft.com/en-us/javascript/api/overview/azure/data-tables-readme?view=azure-node-latest
 export default function (credential) {
@@ -32,6 +33,24 @@ export default function (credential) {
             }
 
             return result;
+        },
+        getByLeague: async function(leagueGuid) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}'` } });
+            let result = [];
+
+            for await (const entity of entitiesIter) {
+                result.push(new Team(entity));
+            }
+
+            return result;
+        },
+        create: async function(entity) {
+            entity.RowKey = generateGuid();
+            entity.PartitionKey = "1";
+
+            await client.createEntity(entity);
+            
+            return new Team(entity);
         },
     };
 }

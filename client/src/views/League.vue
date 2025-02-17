@@ -114,7 +114,7 @@
   const auth0 = useAuth0();
   const route = useRoute();
   
-  let addRidersList = reactive(riderBank);
+  let addRidersList = reactive([]);
   let myRidersList = reactive([]);
   let selectedTeam = ref(null);
   let league = ref(null);
@@ -133,6 +133,7 @@
     let allTeams = await context.Teams.getByLeague(route.params.id);
     let myTeam = await context.Teams.getByLeagueAndOwner(route.params.id, auth0.user.value.sub);
 
+    riderBank.sort((a, b) => a.name.localeCompare(b.name));
     riderBank.forEach(rider => {
       let all = allTeams.map(a => a.Rider).indexOf(rider.number);
       let mine = myTeam.map(a => a.Rider).indexOf(rider.number);

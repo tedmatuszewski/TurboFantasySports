@@ -24,7 +24,7 @@
               <td>{{rider.number}}</td>
               <td>{{rider.name}}</td>
               <td>{{rider.class}}</td>
-              <td><button class="btn btn-sm" v-on:click="removeRiderClick(rider)">Remove</button></td>
+              <td><button class="btn btn-sm btn-danger" v-on:click="removeRiderClick(rider)">Remove</button></td>
             </tr>
           </tbody>
         </table>

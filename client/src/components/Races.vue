@@ -7,7 +7,7 @@
         :gap="3"
         :slide-ratio="1 / 4"
         :dragging-distance="200"
-        :initSlide="5"
+        :initSlide=initSlide
         :arrows="false"
         fixed-height="200px"
         :breakpoints="{ 800: { visibleSlides: 2, slideMultiple: 2 } }">
@@ -35,6 +35,10 @@
     import races from '../data/races.json';
     import { reactive  } from "vue";
 
+    const initSlide = reactive(getNextUpcomingRaceIndex());
+
+    console.log(initSlide);
+
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         return new Date(dateString).toLocaleDateString(undefined, options);
@@ -49,6 +53,14 @@
         const upcomingRace = races.filter(r => new Date(r.date) > now)[0];
         
         return race.key === upcomingRace.key;
+    }
+
+    function getNextUpcomingRaceIndex() {
+        for(let i = 0; i<races.length; i++) {
+            if (isNextUpcomingRace(races[i])) {
+                return (i+1);
+            }
+        }
     }
 </script>
 

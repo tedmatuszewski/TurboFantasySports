@@ -69,7 +69,6 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Riders</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
           <div class="modal-body">
@@ -122,10 +121,12 @@
   let teams = ref(null);
   let context = null;
   let riderModal = null;
+  let confirmModal = null;
 
   onMounted(async () => {
     context = await StorageContext();
-    riderModal = new bootstrap.Modal(document.getElementById('riderModal'), {})
+    riderModal = new bootstrap.Modal(document.getElementById('riderModal'), {});
+    confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'), {});
 
     league.value = await context.Leagues.get(route.params.id);
     members.value = await context.Members.getByLeagueGuid(route.params.id);
@@ -183,6 +184,10 @@
   }
 
   async function removeRiderClick(rider){
+    if(confirm("Are you sure that you want to remove this rider from your team? Removing this rider will put them back in the pool of available riders for anyone else to scoop up.") == false) {
+      return;
+    }
+
     let sel = myRidersList.find(r => r.number == rider.number);
     let index = myRidersList.indexOf(sel);
     

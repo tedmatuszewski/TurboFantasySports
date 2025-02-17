@@ -34,6 +34,16 @@ export default function (credential) {
 
             return result;
         },
+        getByLeagueAndOwnerAndNumber: async function(leagueGuid, ownerId, number) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}' and Owner eq '${ownerId}' and Rider eq ${number}` } });
+            let result = [];
+
+            for await (const entity of entitiesIter) {
+                result.push(new Team(entity));
+            }
+
+            return result;
+        },
         getByLeague: async function(leagueGuid) {
             const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}'` } });
             let result = [];
@@ -51,6 +61,9 @@ export default function (credential) {
             await client.createEntity(entity);
             
             return new Team(entity);
+        },
+        remove: async function(key) {
+            await client.deleteEntity("1", key);
         },
     };
 }

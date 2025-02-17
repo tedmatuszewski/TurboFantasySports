@@ -24,7 +24,7 @@
               <td>{{rider.number}}</td>
               <td>{{rider.name}}</td>
               <td>{{rider.class}}</td>
-              <td><button class="btn btn-sm">Trade</button></td>
+              <td><button class="btn btn-sm" v-on:click="removeRiderClick(rider)">Remove</button></td>
             </tr>
           </tbody>
         </table>
@@ -109,7 +109,6 @@
   import results from '../data/results.json';
   import riderBank from '../data/riders.json';
   import Races from "../components/Races.vue";
-import { faAllergies } from '@fortawesome/free-solid-svg-icons';
 
   const showModal = ref(false)
   const auth0 = useAuth0();
@@ -122,7 +121,6 @@ import { faAllergies } from '@fortawesome/free-solid-svg-icons';
   let members = ref(null);
   let teams = ref(null);
   let context = null;
-  let myTeam = ref(null);
   let riderModal = null;
 
   onMounted(async () => {
@@ -162,7 +160,7 @@ import { faAllergies } from '@fortawesome/free-solid-svg-icons';
     riderModal.hide();
   }
 
-  function addRiderModalClick() {
+  async function addRiderModalClick() {
     let sel = addRidersList.find(r => r.selected);
     let index = addRidersList.indexOf(sel);
 
@@ -171,7 +169,7 @@ import { faAllergies } from '@fortawesome/free-solid-svg-icons';
     myRidersList.push(sel);
     addRidersList.splice(index, 1);
 
-    context.Teams.create({
+    await context.Teams.create({
       League: route.params.id,
       Owner: auth0.user.value.sub,
       Rider: sel.number
@@ -181,6 +179,20 @@ import { faAllergies } from '@fortawesome/free-solid-svg-icons';
   function selectRider(rider) {
     addRidersList.forEach(r => r.selected = false);
     rider.selected = true;
+  }
+
+  async function removeRiderClick(rider){
+    let sel = myRidersList.find(r => r.number == rider.number);
+    let index = myRidersList.indexOf(sel);
+    
+    addRidersList.push(sel);
+    myRidersList.splice(index, 1);
+
+    let toDelete = await context.Teams.getByLeagueAndOwnerAndNumber(route.params.id, auth0.user.value.sub, sel.number);
+
+    toDelete.forEach(async d => {
+      await context.Teams.remove(d.Id);
+    })
   }
 </script>
 

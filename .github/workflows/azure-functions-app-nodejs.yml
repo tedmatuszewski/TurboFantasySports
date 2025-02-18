@@ -23,7 +23,12 @@ name: Deploy Node.js project to Azure Function App
 on:
   push:
     branches: ["master"]
-
+    
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  
 env:
   AZURE_FUNCTIONAPP_NAME: 'FA-TurboFantasySports'   # set this to your function app name on Azure
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './jobs'       # set this to the path to your function app project, defaults to the repository root

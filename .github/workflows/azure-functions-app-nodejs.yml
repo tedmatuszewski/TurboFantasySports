@@ -59,10 +59,10 @@ jobs:
     - name: Azure Login
       uses: Azure/login@v2.2.0
       with:
-        creds: 'Hz_8Q~ETMUfBOEnQ_vE1FktATJ-17KxVjnj~kcZo'
         client-id: 'da6584b1-95e1-42e2-adce-12c7a9c8d9b8'
         tenant-id: '16ce3a83-a3d3-41cc-965d-685178f36eaf'
         subscription-id: '86057a2d-51b1-4c35-92a7-9931c6744157'
+        auth-type: SERVICE_PRINCIPAL
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa

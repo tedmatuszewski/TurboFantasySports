@@ -23,7 +23,6 @@ namespace TurboFantasySports
         {
             // https://www.nuget.org/packages/Azure.Data.Tables/
             var accountName = "tedpersonalwebsite";
-            var storageAccountKey = "fVAszloqYcVBsKrqpzKOgdnYeInUZCHsX6bIU1l5h5oJ86oyMZzl159Q9o5Xuk4fWB97TQkK02Yv+ASt4/Zw3A==";
             var storageUri = $"https://{accountName}.table.core.windows.net";
             var credential = new TableSharedKeyCredential(accountName, storageAccountKey);
             var resultsClient = new TableClient(new Uri(storageUri), "Results", credential);

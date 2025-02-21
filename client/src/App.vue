@@ -2,13 +2,9 @@
   <div id="app" class="d-flex flex-column h-100">
     <nav-bar />
     
-    <div class="container flex-grow-1">
-      <error />
+    <error />
       
-      <div class="my-5">
-        <router-view />
-      </div>
-    </div>
+    <router-view />
 
     <footer class="bg-light text-center p-3">
       <div class="logo"></div>

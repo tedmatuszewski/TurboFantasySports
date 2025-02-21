@@ -2,7 +2,9 @@
   <div>
     <hero />
     
-    <leagues />
+    <div class="container">
+      <leagues />
+    </div>
   </div>
 </template>
 

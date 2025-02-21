@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <img src="../assets/poster.jpeg" alt="Turbo Fantasy Supercross" />
+    <img src="../assets/2025-a2-jumbo.jpg" alt="Turbo Fantasy Supercross" />
   </div>
 </template>
 

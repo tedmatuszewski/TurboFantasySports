@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container my-5">
     <h1>{{league?.Name}}</h1>
     <p>{{league?.Description}}</p>
 

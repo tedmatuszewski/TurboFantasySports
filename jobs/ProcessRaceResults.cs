@@ -22,43 +22,7 @@ namespace TurboFantasySports
         public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
             // https://www.nuget.org/packages/Azure.Data.Tables/
-            var accountName = "tedpersonalwebsite";
-            var storageUri = $"https://{accountName}.table.core.windows.net";
-            var credential = new TableSharedKeyCredential(accountName, storageAccountKey);
-            var resultsClient = new TableClient(new Uri(storageUri), "Results", credential);
-            var teamsClient = new TableClient(new Uri(storageUri), "Teams", credential);
-            //var race = new Detroit();
-
-
-            using (var reader = new StreamReader("C:\\Users\\tznqxt\\Downloads\\teams.csv"))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                var records = csv.GetRecords<dynamic>().ToList();
-
-                 foreach (var record in records)
-                 {
-                    try
-                    {
-                        // Process each record
-                        string rider = record.Rider;
-                        string league = record.League;
-                        string member = record.Team;
-
-                        var tableEntity = new TableEntity("1", Guid.NewGuid().ToString())
-                        {
-                            { "Rider", rider },
-                            { "League", league },
-                            { "Member", member }
-                        };
-
-                        teamsClient.AddEntity(tableEntity);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                }
-            }
+            
 
             //Pageable<TableEntity> queryResultsFilter = teamsClient.Query<TableEntity>();
 

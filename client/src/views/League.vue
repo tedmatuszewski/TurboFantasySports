@@ -15,6 +15,7 @@
             <tr>
               <th>Rider</th>
               <th>Number</th>
+              <th></th>
               <th>Class</th>
               <th></th>
             </tr>
@@ -23,6 +24,7 @@
             <tr v-for="rider in myRidersList" :value="rider.number">
               <td>{{rider.number}}</td>
               <td>{{rider.name}}</td>
+              <td><RacerLink :id="rider.id"></RacerLink></td>
               <td>{{rider.class}}</td>
               <td><button class="btn btn-sm btn-danger" v-on:click="removeRiderClick(rider)">Remove</button></td>
             </tr>
@@ -77,6 +79,7 @@
                 <tr>
                   <th>Number</th>
                   <th>Rider</th>
+                  <th></th>
                   <th>Class</th>
                 </tr>
               </thead>
@@ -84,6 +87,7 @@
                 <tr v-for="rider in addRidersList" :value="rider.id" v-on:click="selectRider(rider)" :class="{ 'table-active': rider.selected }">
                   <td>{{rider.number}}</td>
                   <td>{{rider.name}}</td>
+                  <td><RacerLink :id="rider.id"></RacerLink></td>
                   <td>{{ rider.class }}</td>
                 </tr>
               </tbody>
@@ -107,6 +111,8 @@
   import { useAuth0 } from '@auth0/auth0-vue';
   import riderBank from '../data/riders.json';
   import Races from "../components/Races.vue";
+  import Config from "../data/config.json";
+  import RacerLink from "../components/RacerLink.vue";
 
   const showModal = ref(false)
   const auth0 = useAuth0();

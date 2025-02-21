@@ -26,12 +26,9 @@
 <script setup>
   import { useRoute } from 'vue-router';
   import { ref,onMounted,computed, reactive  } from "vue";
-  import results from '../data/results.json';
   
   const route = useRoute();
-
-  let raceResults = results.filter(r => r.race === route.params.race);
-
+  
   onMounted(async () => {
 
   });

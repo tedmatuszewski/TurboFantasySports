@@ -24,8 +24,8 @@ export default function (credential) {
             
             return new League(entity);
         },
-        getByLeagueAndOwner: async function(leagueGuid, ownerId) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}' and Owner eq '${ownerId}'` } });
+        getByLeagueAndOwnerAndNumber: async function(league, member, rider) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Member eq '${member}' and Rider eq '${rider}'` } });
             let result = [];
 
             for await (const entity of entitiesIter) {
@@ -34,18 +34,8 @@ export default function (credential) {
 
             return result;
         },
-        getByLeagueAndOwnerAndNumber: async function(leagueGuid, ownerId, number) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}' and Owner eq '${ownerId}' and Rider eq ${number}` } });
-            let result = [];
-
-            for await (const entity of entitiesIter) {
-                result.push(new Team(entity));
-            }
-
-            return result;
-        },
-        getByLeague: async function(leagueGuid) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}'` } });
+        getByLeague: async function(league) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
             let result = [];
 
             for await (const entity of entitiesIter) {

@@ -81,7 +81,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="rider in addRidersList" :value="rider.number" v-on:click="selectRider(rider)" :class="{ 'table-active': rider.selected }">
+                <tr v-for="rider in addRidersList" :value="rider.id" v-on:click="selectRider(rider)" :class="{ 'table-active': rider.selected }">
                   <td>{{rider.number}}</td>
                   <td>{{rider.name}}</td>
                   <td>{{ rider.class }}</td>
@@ -105,7 +105,6 @@
   import { ref,onMounted,computed, reactive  } from "vue";
   import { useRoute } from 'vue-router';
   import { useAuth0 } from '@auth0/auth0-vue';
-  import results from '../data/results.json';
   import riderBank from '../data/riders.json';
   import Races from "../components/Races.vue";
 
@@ -132,12 +131,12 @@
     members.value = await context.Members.getByLeagueGuid(route.params.id);
 
     let allTeams = await context.Teams.getByLeague(route.params.id);
-    let myTeam = await context.Teams.getByLeagueAndOwner(route.params.id, auth0.user.value.sub);
+    let myTeam = allTeams.filter(t => t.Member == auth0.user.value.sub);
 
     riderBank.sort((a, b) => a.name.localeCompare(b.name));
     riderBank.forEach(rider => {
-      let all = allTeams.map(a => a.Rider).indexOf(rider.number);
-      let mine = myTeam.map(a => a.Rider).indexOf(rider.number);
+      let all = allTeams.map(a => a.Rider).indexOf(rider.id);
+      let mine = myTeam.map(a => a.Rider).indexOf(rider.id);
 
       if(all === -1) {
         addRidersList.push(rider);
@@ -148,11 +147,6 @@
       }
     });
   });
-
-  async function onTeamChange() {
-    myTeam.value = await context.Teams.getByLeagueAndOwner(route.params.id, selectedTeam.value);
-    console.log(route.params.id, selectedTeam.value, teams.value);
-  }
 
   function showModalClick() {
     riderModal.show();
@@ -173,8 +167,8 @@
 
     await context.Teams.create({
       League: route.params.id,
-      Owner: auth0.user.value.sub,
-      Rider: sel.number
+      Member: auth0.user.value.sub,
+      Rider: sel.id
     });
   }
 
@@ -188,16 +182,16 @@
       return;
     }
 
-    let sel = myRidersList.find(r => r.number == rider.number);
+    let sel = myRidersList.find(r => r.id == rider.id);
     let index = myRidersList.indexOf(sel);
     
     addRidersList.push(sel);
     myRidersList.splice(index, 1);
 
-    let toDelete = await context.Teams.getByLeagueAndOwnerAndNumber(route.params.id, auth0.user.value.sub, sel.number);
+    let toDelete = await context.Teams.getByLeagueAndOwnerAndNumber(route.params.id, auth0.user.value.sub, sel.id);
 
     toDelete.forEach(async d => {
-      await context.Teams.remove(d.Id);
+      await context.Teams.remove(d.RowKey);
     })
   }
 </script>

@@ -7,7 +7,7 @@
         <div v-for="league in pair" :key="league.Id" class="col-md-6 mb-4">
           <h6 class="mb-3">{{ league.Name }}</h6>
           <p>{{ league.Description }}</p>
-          <router-link v-if="league.isMember(auth0.user.value.sub)" :to="{ name: 'league', params: { id: league.Id } }" class="btn btn-primary">View</router-link>
+          <router-link v-if="league.isMember(auth0.user.value.sub)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
           <button v-else @click="joinLeague(league)" class="btn btn-primary">Join</button>
         </div>
       </div>
@@ -34,9 +34,7 @@
 
     leagues.value.forEach(league => {
       league.setMembers(members.value);
-      console.log(league.isMember(auth0.user.value.sub));
     });
-    console.log(leagues.value);
   });
 
   const leaguePairs = computed(() => {
@@ -50,7 +48,7 @@
 
   async function joinLeague(league) {
     let response = await context.Members.create({
-      LeagueGuid: league.Id,
+      LeagueGuid: league.RowKey,
       UserGuid: auth0.user.value.sub,
       TeamName: "Team " + auth0.user.value.name
     });

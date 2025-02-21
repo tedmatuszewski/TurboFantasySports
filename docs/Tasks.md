@@ -1,0 +1,7 @@
+- [ ] Rename/delete all tables in storage account to have consistent and intuitive names
+- [ ] Fix code as a result of the storage account renaming
+- [ ] Continue to break down the inner workings of the [supercross live pages](Supercross-Live.md)
+- [ ] Redo the Race class in the function app to read from the json race results files
+- [ ] Fill in results data for each week as per the excel
+- [ ] Make it so that the results page in the client app shows the results of the week
+- [ ] Make the area to the right of your roster show a panel that has your current position and any other stats I can come up with

@@ -1,458 +1,105 @@
-
 [
-    {
-        "number": 18,
-        "name": "Jett Lawrence",
-        "class": "450"
-    },
-    {
-        "number": 2,
-        "name": "Cooper Webb",
-        "class": "450"
-    },
-    {
-        "number": 4,
-        "name": "Chase Sexton",
-        "class": "450"
-    },
-    {
-        "number": 3,
-        "name": "Eli Tomac",
-        "class": "450"
-    },
-    {
-        "number": 21,
-        "name": "Jason Anderson",
-        "class": "450"
-    },
-    {
-        "number": 32,
-        "name": "Justin Cooper",
-        "class": "450"
-    },
-    {
-        "number": 94,
-        "name": "Ken Roczen",
-        "class": "450"
-    },
-    {
-        "number": 51,
-        "name": "Justin Barcia",
-        "class": "450"
-    },
-    {
-        "number": 96,
-        "name": "Hunter Lawrence",
-        "class": "450"
-    },
-    {
-        "number": 27,
-        "name": "Malcolm Stewart",
-        "class": "450"
-    },
-    {
-        "number": 7,
-        "name": "Aaron Plessinger",
-        "class": "450"
-    },
-    {
-        "number": 14,
-        "name": "Dylan Ferrandis",
-        "class": "450"
-    },
-    {
-        "number": 12,
-        "name": "Shane McElrath",
-        "class": "450"
-    },
-    {
-        "number": 57,
-        "name": "Benny Bloss",
-        "class": "450"
-    },
-    {
-        "number": 15,
-        "name": "Dean Wilson",
-        "class": "450"
-    },
-    {
-        "number": 46,
-        "name": "Justin Hill",
-        "class": "450"
-    },
-    {
-        "number": 11,
-        "name": "Kyle Chisholm",
-        "class": "450"
-    },
-    {
-        "number": 66,
-        "name": "Vince Friese",
-        "class": "450"
-    },
-    {
-        "number": 45,
-        "name": "Colt Nichols",
-        "class": "450"
-    },
-    {
-        "number": 49,
-        "name": "Mitchell Oldenburg",
-        "class": "450"
-    },
-    {
-        "number": 70,
-        "name": "Jorge Prado",
-        "class": "450"
-    },
-    {
-        "number": 28,
-        "name": "Christian Craig",
-        "class": "450"
-    },
-    {
-        "number": 78,
-        "name": "Cade Clason",
-        "class": "450"
-    },
-    {
-        "number": 86,
-        "name": "Mitchell Harrison",
-        "class": "450"
-    },
-    {
-        "number": 43,
-        "name": "Grant Harlan",
-        "class": "450"
-    },
-    {
-        "number": 200,
-        "name": "Ryan Breece",
-        "class": "450"
-    },
-    {
-        "number": 17,
-        "name": "Joey Savatgy",
-        "class": "450"
-    },
-    {
-        "number": 35,
-        "name": "Marshall Weltin",
-        "class": "450"
-    },
-    {
-        "number": 33,
-        "name": "Freddie Noren",
-        "class": "450"
-    },
-    {
-        "number": 282,
-        "name": "Bubba Pauli",
-        "class": "450"
-    },
-    {
-        "number": 16,
-        "name": "Tom Vialle",
-        "class": "250"
-    },
-    {
-        "number": 24,
-        "name": "RJ Hampshire",
-        "class": "250"
-    },
-    {
-        "number": 20,
-        "name": "Pierce Brown",
-        "class": "250"
-    },
-    {
-        "number": 31,
-        "name": "Max Anstie",
-        "class": "250"
-    },
-    {
-        "number": 41,
-        "name": "Nate Thrasher",
-        "class": "250"
-    },
-    {
-        "number": 50,
-        "name": "Cameron McAdoo",
-        "class": "250"
-    },
-    {
-        "number": 10,
-        "name": "Chance Hymas",
-        "class": "250"
-    },
-    {
-        "number": 34,
-        "name": "Daxton Bennick",
-        "class": "250"
-    },
-    {
-        "number": 56,
-        "name": "Seth Hammaker",
-        "class": "250"
-    },
-    {
-        "number": 39,
-        "name": "Nick Romano",
-        "class": "250"
-    },
-    {
-        "number": 73,
-        "name": "Preston Boespflug",
-        "class": "250"
-    },
-    {
-        "number": 75,
-        "name": "Gage Linville",
-        "class": "250"
-    },
-    {
-        "number": 83,
-        "name": "Austin Forkner",
-        "class": "250"
-    },
-    {
-        "number": 92,
-        "name": "Max Vohland",
-        "class": "250"
-    },
-    {
-        "number": 40,
-        "name": "Casey Cochran",
-        "class": "250"
-    },
-    {
-        "number": 93,
-        "name": "Michael Mosiman",
-        "class": "250"
-    },
-    {
-        "number": 97,
-        "name": "Bryce Shelly",
-        "class": "250"
-    },
-    {
-        "number": 80,
-        "name": "Derek Drake",
-        "class": "250"
-    },
-    {
-        "number": 26,
-        "name": "Ty Masterpool",
-        "class": "250"
-    },
-    {
-        "number": 511,
-        "name": "Jace Kessler",
-        "class": "250"
-    },
-    {
-        "number": 77,
-        "name": "Jerry Robin",
-        "class": "250"
-    },
-    {
-        "number": 105,
-        "name": "Marcus Phelps",
-        "class": "250"
-    },
-    {
-        "number": 88,
-        "name": "Devin Simonson",
-        "class": "250"
-    },
-    {
-        "number": 60,
-        "name": "Carson Mumford",
-        "class": "250"
-    },
-    {
-        "number": 54,
-        "name": "Jett Reynolds",
-        "class": "250"
-    },
-    {
-        "number": 44,
-        "name": "Dilan Schwartz",
-        "class": "250"
-    },
-    {
-        "number": 154,
-        "name": "Leo Tucker",
-        "class": "250"
-    },
-    {
-        "number": 192,
-        "name": "Jack Chambers",
-        "class": "250"
-    },
-    {
-        "number": 142,
-        "name": "Crocket Myers",
-        "class": "250"
-    },
-    {
-        "number": 42,
-        "name": "Harri Kullas",
-        "class": "250"
-    },
-    {
-        "number": 734,
-        "name": "Dayton Briggs",
-        "class": "250"
-    },
-    {
-        "number": 99,
-        "name": "Brock Bennett",
-        "class": "250"
-    },
-    {
-        "number": 47,
-        "name": "Levi Kitchen",
-        "class": "250"
-    },
-    {
-        "number": 38,
-        "name": "Haiden Deegan",
-        "class": "250"
-    },
-    {
-        "number": 37,
-        "name": "Coty Schock",
-        "class": "250"
-    },
-    {
-        "number": 30,
-        "name": "Jo Shimoda",
-        "class": "250"
-    },
-    {
-        "number": 36,
-        "name": "Garrett Marchbanks",
-        "class": "250"
-    },
-    {
-        "number": 23,
-        "name": "Julien Beaumer",
-        "class": "250"
-    },
-    {
-        "number": 61,
-        "name": "Cole Thompson",
-        "class": "250"
-    },
-    {
-        "number": 25,
-        "name": "Ryder DiFrancesco",
-        "class": "250"
-    },
-    {
-        "number": 63,
-        "name": "Hunter Yoder",
-        "class": "250"
-    },
-    {
-        "number": 48,
-        "name": "Talon Hawkins",
-        "class": "250"
-    },
-    {
-        "number": 91,
-        "name": "TJ Albright",
-        "class": "250"
-    },
-    {
-        "number": 65,
-        "name": "Lux Turner",
-        "class": "250"
-    },
-    {
-        "number": 132,
-        "name": "Billy Laninovich",
-        "class": "250"
-    },
-    {
-        "number": 52,
-        "name": "Anthony Bourdon",
-        "class": "250"
-    },
-    {
-        "number": 334,
-        "name": "Brad West",
-        "class": "250"
-    },
-    {
-        "number": 64,
-        "name": "Robbie Wageman",
-        "class": "250"
-    },
-    {
-        "number": 100,
-        "name": "Cole Davies",
-        "class": "250"
-    },
-    {
-        "number": 62,
-        "name": "Mark Fineis",
-        "class": "250"
-    },
-    {
-        "number": 115,
-        "name": "Gavin Towers",
-        "class": "250"
-    },
-    {
-        "number": 751,
-        "name": "Evan Ferry",
-        "class": "250"
-    },
-    {
-        "number": 19,
-        "name": "Jordan Smith",
-        "class": "250"
-    },
-    {
-        "number": 325,
-        "name": "Stilez Robertson",
-        "class": "250"
-    },
-    {
-        "number": 134,
-        "name": "Avery Long",
-        "class": "250"
-    },
-    {
-        "number": 85,
-        "name": "Max Sanford",
-        "class": "250"
-    },
-    {
-        "number": 101,
-        "name": "Dylan Walsh",
-        "class": "250"
-    },
-    {
-        "number": 302,
-        "name": "Parker Ross",
-        "class": "250"
-    },
-    {
-        "number": 943,
-        "name": "Noah Viney",
-        "class": "250"
-    },
-    {
-        "number": 58,
-        "name": "Derek Kelly",
-        "class": "250"
-    },
-    {
-        "number": 805,
-        "name": "Slade Varola",
-        "class": "250"
-    }
+{ "name": "Jett Lawrence", "number":18, "id": "jett-lawrence", "class": 450 },
+{ "name": "Cooper Webb", "number":2, "id": "cooper-webb", "class": 450 },
+{ "name": "Chase Sexton", "number":4, "id": "chase-sexton", "class": 450 },
+{ "name": "Eli Tomac", "number":3, "id": "eli-tomac", "class": 450 },
+{ "name": "Jason Anderson", "number":21, "id": "jason-anderson", "class": 450 },
+{ "name": "Justin Cooper", "number":32, "id": "justin-cooper", "class": 450 },
+{ "name": "Ken Roczen", "number":94, "id": "ken-roczen", "class": 450 },
+{ "name": "Justin Barcia", "number":51, "id": "justin-barcia", "class": 450 },
+{ "name": "Hunter Lawrence", "number":96, "id": "hunter-lawrence", "class": 450 },
+{ "name": "Malcolm Stewart", "number":27, "id": "malcolm-stewart", "class": 450 },
+{ "name": "Aaron Plessinger", "number":7, "id": "aaron-plessinger", "class": 450 },
+{ "name": "Dylan Ferrandis", "number":14, "id": "dylan-ferrandis", "class": 450 },
+{ "name": "Shane McElrath", "number":12, "id": "shane-mcelrath", "class": 450 },
+{ "name": "Benny Bloss", "number":57, "id": "benny-bloss", "class": 450 },
+{ "name": "Dean Wilson", "number":15, "id": "dean-wilson", "class": 450 },
+{ "name": "Justin Hill", "number":46, "id": "justin-hill", "class": 450 },
+{ "name": "Kyle Chisholm", "number":11, "id": "kyle-p-chisholm", "class": 450 },
+{ "name": "Vince Friese", "number":66, "id": "vince-freise", "class": 450 },
+{ "name": "Colt Nichols", "number":45, "id": "colt-nichols", "class": 450 },
+{ "name": "Mitchell Oldenburg", "number":49, "id": "mitchell-oldenburg", "class": 450 },
+{ "name": "Jorge Prado", "number":70, "id": "jorge-prado", "class": 450 },
+{ "name": "Christian Craig", "number":28, "id": "christian-craig", "class": 450 },
+{ "name": "Cade Clason", "number":78, "id": "cade-clason", "class": 450 },
+{ "name": "Mitchell Harrison", "number":86, "id": "mitchell-harrison", "class": 450 },
+{ "name": "Grant Harlan", "number":43, "id": "grant-harlan", "class": 450 },
+{ "name": "Ryan Breece", "number":200, "id": "ryan-breece", "class": 450 },
+{ "name": "Joey Savatgy", "number":17, "id": "joey-savatgy", "class": 450 },
+{ "name": "Marshall Weltin", "number":35, "id": "marshal-weltin", "class": 450 },
+{ "name": "Freddie Noren", "number":33, "id": "freddie-noren", "class": 450 },
+{ "name": "Bubba Pauli", "number":282, "id": "bubba-pauli", "class": 450 },
+{ "name": "Tom Vialle", "number":16, "id": "tom-vialle", "class": 250 },
+{ "name": "RJ Hampshire", "number":24, "id": "rj-hampshire", "class": 250 },
+{ "name": "Pierce Brown", "number":20, "id": "pierce-brown", "class": 250 },
+{ "name": "Max Anstie", "number":31, "id": "max-anstie", "class": 250 },
+{ "name": "Nate Thrasher", "number":41, "id": "nate-thrasher", "class": 250 },
+{ "name": "Cameron McAdoo", "number":50, "id": "cameron-mcadoo", "class": 250 },
+{ "name": "Chance Hymas", "number":10, "id": "chance-hymas", "class": 250 },
+{ "name": "Daxton Bennick", "number":34, "id": "daxton-bennick", "class": 250 },
+{ "name": "Seth Hammaker", "number":56, "id": "seth-hammaker", "class": 250 },
+{ "name": "Nick Romano", "number":39, "id": "nick-romano", "class": 250 },
+{ "name": "Preston Boespflug", "number":73, "id": "preston-boespflug", "class": 250 },
+{ "name": "Gage Linville", "number":75, "id": "gage-linville", "class": 250 },
+{ "name": "Austin Forkner", "number":83, "id": "austin-forkner", "class": 250 },
+{ "name": "Max Vohland", "number":92, "id": "max-vohland", "class": 250 },
+{ "name": "Casey Cochran", "number":40, "id": "casey-cochran", "class": 250 },
+{ "name": "Michael Mosiman", "number":93, "id": "michael-mosiman", "class": 250 },
+{ "name": "Bryce Shelly", "number":97, "id": "bryce-shelly", "class": 250 },
+{ "name": "Derek Drake", "number":80, "id": "derek-drake", "class": 250 },
+{ "name": "Ty Masterpool", "number":26, "id": "ty-masterpool", "class": 250 },
+{ "name": "Jace Kessler", "number":511, "id": "jace-kessler", "class": 250 },
+{ "name": "Jerry Robin", "number":77, "id": "jerry-robin", "class": 250 },
+{ "name": "Marcus Phelps", "number":105, "id": "marcus-phelps", "class": 250 },
+{ "name": "Devin Simonson", "number":88, "id": "devin-simonson", "class": 250 },
+{ "name": "Carson Mumford", "number":60, "id": "carson-mumford", "class": 250 },
+{ "name": "Jett Reynolds", "number":54, "id": "jett-reynolds", "class": 250 },
+{ "name": "Dilan Schwartz", "number":44, "id": "dilan-schwartz", "class": 250 },
+{ "name": "Leo Tucker", "number":154, "id": "leo-tucker", "class": 250 },
+{ "name": "Jack Chambers", "number":192, "id": "jack-chambers", "class": 250 },
+{ "name": "Crocket Myers", "number":142, "id": "crocket-myers", "class": 250 },
+{ "name": "Harri Kullas", "number":42, "id": "harri-kullas", "class": 250 },
+{ "name": "Dayton Briggs", "number":734, "id": "dayton-briggs", "class": 250 },
+{ "name": "Brock Bennett", "number":99, "id": "brock-bennett", "class": 250 },
+{ "name": "Levi Kitchen", "number":47, "id": "levi-kitchen", "class": 250 },
+{ "name": "Haiden Deegan", "number":38, "id": "haiden-deegan", "class": 250 },
+{ "name": "Coty Schock", "number":37, "id": "coty-schock", "class": 250 },
+{ "name": "Jo Shimoda", "number":30, "id": "jo-shimoda", "class": 250 },
+{ "name": "Julien Beaumer", "number":23, "id": "julien-beaumer", "class": 250 },
+{ "name": "Cole Thompson", "number":61, "id": "cole-thompson", "class": 250 },
+{ "name": "Ryder DiFrancesco", "number":25, "id": "ryder-difrancesco", "class": 250 },
+{ "name": "Hunter Yoder", "number":63, "id": "hunter-yoder", "class": 250 },
+{ "name": "Talon Hawkins", "number":48, "id": "talon-hawkins", "class": 250 },
+{ "name": "TJ Albright", "number":91, "id": "tj-albright", "class": 250 },
+{ "name": "Lux Turner", "number":65, "id": "lux-turner", "class": 250 },
+{ "name": "Billy Laninovich", "number":132, "id": "billy-laninovich", "class": 250 },
+{ "name": "Anthony Bourdon", "number":52, "id": "anthony-bourdon", "class": 250 },
+{ "name": "Brad West", "number":334, "id": "brad-west", "class": 250 },
+{ "name": "Robbie Wageman", "number":64, "id": "robbie-wageman", "class": 250 },
+{ "name": "Cole Davies", "number":100, "id": "cole-davies", "class": 250 },
+{ "name": "Mark Fineis", "number":62, "id": "mark-fineis", "class": 250 },
+{ "name": "Gavin Towers", "number":115, "id": "gavin-towers", "class": 250 },
+{ "name": "Evan Ferry", "number":751, "id": "evan-ferry", "class": 250 },
+{ "name": "Jordan Smith", "number":19, "id": "jordan-smith", "class": 250 },
+{ "name": "Stilez Robertson", "number":325, "id": "stilez-robertson", "class": 250 },
+{ "name": "Avery Long", "number":134, "id": "avery-long", "class": 250 },
+{ "name": "Max Sanford", "number":85, "id": "max-sanford", "class": 250 },
+{ "name": "Dylan Walsh", "number":101, "id": "dylan-walsh", "class": 250 },
+{ "name": "Parker Ross", "number":302, "id": "parker-ross", "class": 250 },
+{ "name": "Noah Viney", "number":943, "id": "noah-viney", "class": 250 },
+{ "name": "Derek Kelly", "number":58, "id": "derek-kelly", "class": 250 },
+{ "name": "Slade Varola", "number":805, "id": "slade-varola", "class": 250 },
+{ "name": "Garret Marchbanks", "number":36, "id": "garrett-marchbanks", "class": 250 },
+{ "name": "Lance Kobusch", "number":195, "id": "lance-kobusch", "class": 250 },
+{ "name": "Enzo Lopes", "number":166, "id": "enzo-lopes", "class": 250 },
+{ "name": "Gaven Towers", "number":115, "id": "gavin-towers", "class": 250 },
+{ "name": "Henry Miller", "number":55, "id": "henry-miller", "class": 250 },
+{ "name": "Marshal Weltin", "number":35, "id": "marshal-weltin", "class": 250 },
+{ "name": "Justin Starling", "number":	122, "id": "justin-starling", "class": 450 },
+{ "name": "Hardy Munoz", "number":87, "id": "hardy-munoz", "class": 250 },
+{ "name": "Cullin Park", "number":59, "id": "cullin-park", "class": 250 },
+{ "name": "Josh Varize", "number":67, "id": "josh-varize", "class": 250 },
+{ "name": "Drew Adams", "number":98, "id": "drew-adams", "class": 250 },
+{ "name": "Derek Kelley", "number":58, "id": "derek-kelley", "class": 250 },
+{ "name": "Anthony Rodriguez", "number": 267, "id": "anthony-rodriguez", "class":	450 }
 ]

@@ -1,8 +1,8 @@
 export default class Member {
     constructor(entity) {
-      this.UserGuid = entity.UserGuid;
+      this.RowKey = entity.rowKey;
       this.LeagueGuid = entity.LeagueGuid;
-      this.Id = entity.rowKey;
+      this.UserGuid = entity.UserGuid;
       this.TeamName = entity.TeamName;
     }
   }

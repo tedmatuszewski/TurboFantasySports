@@ -1,8 +1,7 @@
 import { AzureSASCredential } from "@azure/data-tables";
-import Rider from "./Tables/Rider";
-import Races from "./Tables/Races";
 import Leagues from "./Tables/Leagues";
 import Members from "./Tables/Members";
+import Results from "./Tables/Results";
 import Teams from './Tables/Teams';
 
 export async function StorageContext() {
@@ -10,8 +9,7 @@ export async function StorageContext() {
     const credential = new AzureSASCredential(key);
 
     return {
-        Riders: Rider(credential),
-        Races: Races(credential),
+        Results: Results(credential),
         Leagues: Leagues(credential),
         Members: Members(credential),
         Teams: Teams(credential)

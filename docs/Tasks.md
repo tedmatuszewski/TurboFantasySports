@@ -1,5 +1,5 @@
-- [ ] Rename/delete all tables in storage account to have consistent and intuitive names
-- [ ] Fix code as a result of the storage account renaming
+- [x] Rename/delete all tables in storage account to have consistent and intuitive names
+- [x] Fix code as a result of the storage account renaming
 - [ ] Continue to break down the inner workings of the [supercross live pages](Supercross-Live.md)
 - [ ] Redo the Race class in the function app to read from the json race results files
 - [ ] Fill in results data for each week as per the excel

@@ -19,6 +19,7 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <router-link to="/" class="nav-link">Home</router-link>
+              <a href="https://live.supermotocross.com/" class="nav-link">Live Timing</a>
             </li>
           </ul>
           <ul class="navbar-nav d-none d-md-block">

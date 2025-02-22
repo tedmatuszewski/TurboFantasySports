@@ -23,6 +23,9 @@
             <li class="nav-item">
               <a href="https://live.supermotocross.com/" class="nav-link">Live Timing</a>
             </li>
+            <li class="nav-item">
+              <a href="https://cash.app/$tmaski45/" class="nav-link">Buy me a Beer!</a>
+            </li>
           </ul>
           <ul class="navbar-nav d-none d-md-block">
             <li v-if="!isAuthenticated && !isLoading" class="nav-item">

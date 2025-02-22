@@ -8,3 +8,5 @@
 - [ ] Add Paypal donate button to footer
 - [ ] Add max num of riders to config and enforce
 - [ ] Clean out the doccker files and all the other junk in the root that wont get used
+- [ ] Add the home page content
+- [ ] Setup a proper fb app

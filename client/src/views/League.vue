@@ -13,8 +13,8 @@
         <table class="table table-sm">
           <thead>
             <tr>
-              <th>Rider</th>
               <th>Number</th>
+              <th>Rider</th>
               <th></th>
               <th>Class</th>
               <th></th>
@@ -35,46 +35,50 @@
       </div>
       
       <div class="col-md-4">
-        <!-- <div class="row align-items-center">
-          <div class="col-md-6">
-            <h3>Other Teams</h3>
+        <div class="pricing card-deck flex-column flex-md-row my-3">
+          <div class="card card-pricing shadow text-center px-3 mb-4">
+              <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-primary text-white shadow-sm">Standings</span>
+              <div class="bg-transparent card-header pt-4 border-0">
+                  <h1 class="h1 font-weight-normal text-primary text-center mb-0" data-pricing-value="30"><span class="price">3rd</span><span class="h6 text-muted ml-2">place</span></h1>
+              </div>
+              <div class="card-body pt-0">
+                  <ul class="list-unstyled mb-4">
+                      <li>You have {{ numOf250riders }} 250 riders</li>
+                      <li>You have {{ numOf450riders }} 450 riders</li>
+                      <li>You won 0 weeks</li>
+                      <li>Your current score is 150</li>
+                  </ul>
+                  <a href="https://www.totoprayogo.com" target="_blank" class="btn btn-primary mb-3">Ranking</a>
+              </div>
           </div>
-          
-          <div class="col-md-6">
-            <select v-model="selectedTeam" class="form-control" v-on:change="onTeamChange">
-              <option v-for="member in members" :value="member.UserGuid">{{member.TeamName}}</option>
-            </select>
-          </div>
-        </div>
-
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th>Number</th>
-              <th>Rider</th>
-              <th>Class</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="rider in myRidersList" :value="rider.number">
-              <td>{{rider.number}}</td>
-              <td>{{rider.name}}</td>
-              <td>{{rider.class}}</td>
-            </tr>
-          </tbody>
-        </table>-->
       </div> 
+    </div> 
     </div>
 
     <div class="modal" tabindex="-1" id="riderModal">
-      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Riders</h5>
           </div>
 
           <div class="modal-body">
-            <table class="table table-sm table-hover">
+            <input type="text" class="form-control mb-3" placeholder="Search for a rider" v-model="searchValue">
+
+            <Vue3EasyDataTable
+                :headers="headers"
+                :items="addRidersList"
+                :search-field="searchField"
+                :search-value="searchValue"
+                :rows-per-page="100"
+                v-model:items-selected="itemsSelected"
+                @click-row="rowClick"
+                :hide-footer="true">
+              <template #item-link="{ id }">
+                <RacerLink :id="id"></RacerLink>
+              </template>
+            </Vue3EasyDataTable>
+            <!-- <table class="table table-sm table-hover">
               <thead>
                 <tr>
                   <th>Number</th>
@@ -91,7 +95,7 @@
                   <td>{{ rider.class }}</td>
                 </tr>
               </tbody>
-            </table>
+            </table> -->
           </div>
 
           <div class="modal-footer">
@@ -113,20 +117,30 @@
   import Races from "../components/Races.vue";
   import Config from "../data/config.json";
   import RacerLink from "../components/RacerLink.vue";
+  import Vue3EasyDataTable from 'vue3-easy-data-table';
 
-  const showModal = ref(false)
+  const headers = [
+    { text: "Number", value: "number", sortable: true },
+    { text: "Rider", value: "name", sortable: true},
+    { text: "", value: "link"},
+    { text: "Class", value: "class", sortable: true}
+  ];
+
+  let itemsSelected = ref([]);
+  const searchField = ref("name");
+  const searchValue = ref("");
   const auth0 = useAuth0();
   const route = useRoute();
   
   let addRidersList = reactive([]);
   let myRidersList = reactive([]);
-  let selectedTeam = ref(null);
   let league = ref(null);
   let members = ref(null);
-  let teams = ref(null);
   let context = null;
   let riderModal = null;
   let confirmModal = null;
+  let numOf250riders = 0;
+  let numOf450riders = 0;
 
   onMounted(async () => {
     context = await StorageContext();
@@ -138,21 +152,28 @@
 
     let allTeams = await context.Teams.getByLeague(route.params.id);
     let myTeam = allTeams.filter(t => t.Member == auth0.user.value.sub);
-
+    
     riderBank.sort((a, b) => a.name.localeCompare(b.name));
     riderBank.forEach(rider => {
       let all = allTeams.map(a => a.Rider).indexOf(rider.id);
       let mine = myTeam.map(a => a.Rider).indexOf(rider.id);
-
+      
       if(all === -1) {
         addRidersList.push(rider);
       }
-
+      
       if (mine > -1) {
         myRidersList.push(rider);
       }
     });
+    
+        numOf250riders = myRidersList.filter(t => t.class == "250").length;
+        numOf450riders = myRidersList.filter(t => t.class == "450").length;
   });
+
+  function rowClick(row, e) {
+    e.srcElement.closest("tr").querySelector("input[type=checkbox]").click();
+  }
 
   function showModalClick() {
     riderModal.show();
@@ -163,19 +184,26 @@
   }
 
   async function addRiderModalClick() {
-    let sel = addRidersList.find(r => r.selected);
-    let index = addRidersList.indexOf(sel);
+    if(myRidersList.length >= Config.maxRiders && itemsSelected.value.length > 0) {
+      alert("You can only have 6 riders on your team.");
+      return;
+    }
 
-    sel.selected = false;
-    riderModal.hide();
-    myRidersList.push(sel);
-    addRidersList.splice(index, 1);
+    itemsSelected.value.map(i => i.id).forEach(async id => {
+      let sel = addRidersList.find(r => r.id == id);
+      let index = addRidersList.indexOf(sel);
 
-    await context.Teams.create({
-      League: route.params.id,
-      Member: auth0.user.value.sub,
-      Rider: sel.id
+      myRidersList.push(sel);
+      addRidersList.splice(index, 1);
+
+      await context.Teams.create({
+        League: route.params.id,
+        Member: auth0.user.value.sub,
+        Rider: sel.id
+      });
     });
+
+    riderModal.hide();
   }
 
   function selectRider(rider) {
@@ -205,5 +233,14 @@
 <style lang="css" scoped>
 .next-steps .fa-link {
     margin-right: 5px;
+}
+
+.card-pricing.popular {
+    z-index: 1;
+    border: 3px solid #007bff;
+}
+.card-pricing .list-unstyled li {
+    padding: .5rem 0;
+    color: #6c757d;
 }
 </style>

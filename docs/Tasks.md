@@ -1,7 +1,9 @@
 - [x] Rename/delete all tables in storage account to have consistent and intuitive names
 - [x] Fix code as a result of the storage account renaming
+- [x] Fill in results data for each week as per the excel
 - [ ] Continue to break down the inner workings of the [supercross live pages](Supercross-Live.md)
 - [ ] Redo the Race class in the function app to read from the json race results files
-- [ ] Fill in results data for each week as per the excel
 - [ ] Make it so that the results page in the client app shows the results of the week
 - [ ] Make the area to the right of your roster show a panel that has your current position and any other stats I can come up with
+- [ ] Add Paypal donate button to footer
+- [ ] Add max num pof riders to config and enforce

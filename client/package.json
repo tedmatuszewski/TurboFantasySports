@@ -19,6 +19,7 @@
     "morgan": "^1.10.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.1",
+    "vue3-easy-data-table": "^1.5.47",
     "vueperslides": "^3.6.0"
   },
   "devDependencies": {

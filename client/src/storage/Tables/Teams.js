@@ -34,6 +34,16 @@ export default function (credential) {
 
             return result;
         },
+        getByLeagueAndMember: async function(league, member) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Member eq '${member}'` } });
+            let result = [];
+
+            for await (const entity of entitiesIter) {
+                result.push(new Team(entity));
+            }
+
+            return result;
+        },
         getByLeague: async function(league) {
             const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
             let result = [];

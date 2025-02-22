@@ -26,6 +26,16 @@ export default function (credential) {
             }
 
             return result;
+        },
+        getByLeague: async function(league) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
+            let result = [];
+            
+            for await (const entity of entitiesIter) {
+                result.push(new Result(entity));
+            }
+
+            return result;
         }
     };
 }

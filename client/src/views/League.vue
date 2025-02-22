@@ -35,24 +35,8 @@
       </div>
       
       <div class="col-md-4">
-        <div class="pricing card-deck flex-column flex-md-row my-3">
-          <div class="card card-pricing shadow text-center px-3 mb-4">
-              <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-primary text-white shadow-sm">Standings</span>
-              <div class="bg-transparent card-header pt-4 border-0">
-                  <h1 class="h1 font-weight-normal text-primary text-center mb-0" data-pricing-value="30"><span class="price">3rd</span><span class="h6 text-muted ml-2">place</span></h1>
-              </div>
-              <div class="card-body pt-0">
-                  <ul class="list-unstyled mb-4">
-                      <li>You have {{ numOf250riders }} 250 riders</li>
-                      <li>You have {{ numOf450riders }} 450 riders</li>
-                      <li>You won 0 weeks</li>
-                      <li>Your current score is 150</li>
-                  </ul>
-                  <a href="https://www.totoprayogo.com" target="_blank" class="btn btn-primary mb-3">Ranking</a>
-              </div>
-          </div>
+        <Position></Position>
       </div> 
-    </div> 
     </div>
 
     <div class="modal" tabindex="-1" id="riderModal">
@@ -78,24 +62,6 @@
                 <RacerLink :id="id"></RacerLink>
               </template>
             </Vue3EasyDataTable>
-            <!-- <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th>Number</th>
-                  <th>Rider</th>
-                  <th></th>
-                  <th>Class</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="rider in addRidersList" :value="rider.id" v-on:click="selectRider(rider)" :class="{ 'table-active': rider.selected }">
-                  <td>{{rider.number}}</td>
-                  <td>{{rider.name}}</td>
-                  <td><RacerLink :id="rider.id"></RacerLink></td>
-                  <td>{{ rider.class }}</td>
-                </tr>
-              </tbody>
-            </table> -->
           </div>
 
           <div class="modal-footer">
@@ -115,6 +81,7 @@
   import { useAuth0 } from '@auth0/auth0-vue';
   import riderBank from '../data/riders.json';
   import Races from "../components/Races.vue";
+  import Position from "../components/Position.vue";
   import Config from "../data/config.json";
   import RacerLink from "../components/RacerLink.vue";
   import Vue3EasyDataTable from 'vue3-easy-data-table';
@@ -139,8 +106,6 @@
   let context = null;
   let riderModal = null;
   let confirmModal = null;
-  let numOf250riders = 0;
-  let numOf450riders = 0;
 
   onMounted(async () => {
     context = await StorageContext();
@@ -166,9 +131,6 @@
         myRidersList.push(rider);
       }
     });
-    
-        numOf250riders = myRidersList.filter(t => t.class == "250").length;
-        numOf450riders = myRidersList.filter(t => t.class == "450").length;
   });
 
   function rowClick(row, e) {

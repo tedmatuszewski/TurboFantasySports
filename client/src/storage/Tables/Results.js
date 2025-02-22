@@ -16,6 +16,16 @@ export default function (credential) {
             }
 
             return result;
+        },
+        getByLeagueAndRace: async function(league, race) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Race eq '${race}'` } });
+            let result = [];
+            
+            for await (const entity of entitiesIter) {
+                result.push(new Result(entity));
+            }
+
+            return result;
         }
     };
 }

@@ -30,12 +30,25 @@
 
 <script setup>
     // https://antoniandre.github.io/vueper-slides/?ref=madewithvuejs.com
+    import { defineProps } from 'vue';
     import { VueperSlides, VueperSlide } from 'vueperslides'
     import 'vueperslides/dist/vueperslides.css'
     import races from '../data/races.json';
     import { reactive  } from "vue";
 
-    const initSlide = reactive(getNextUpcomingRaceIndex());
+    const props = defineProps({
+        race: { type: String }
+    });
+
+    let initSlide = reactive(getNextUpcomingRaceIndex());
+
+    if(props.race !== undefined) {
+        initSlide = 1;
+        let race = races.find(r => r.key === props.race);
+        let index = races.indexOf(race);
+
+        initSlide = index;
+    }
 
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };

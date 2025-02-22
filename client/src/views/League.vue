@@ -6,9 +6,18 @@
     <h3>Races</h3>
     <races></races>
 
+    <div class="alert alert-primary" role="alert">
+      You can have up to {{ Config.maxRiders }} riders on your team. You can edit hour lineup up to the start of the current weeks race. Once the race begins, you will no longer see the edit roster buttons. The roster editing ability will become unlock as soon as the admin of the website uploads the race rasults.
+    </div>
+    
     <div class="row">
       <div class="col-md-8">
         <h3>My Roster</h3>
+        <p>Countdown to the next race. When this runs out, your roster will be locked until the race is over and results are posted.</p>
+
+        <div class="text-center my-2">
+          <Countdown></Countdown>
+        </div>
 
         <table class="table table-sm">
           <thead>
@@ -31,7 +40,7 @@
           </tbody>
         </table>
 
-        <button class="btn btn-primary btn-block" v-on:click="showModalClick()">Add Rider</button>
+        <button class="btn btn-primary btn-block" v-on:click="showModalClick()" :disabled="isAddRiderDisabled">Add Rider</button>
       </div>
       
       <div class="col-md-4">
@@ -82,6 +91,7 @@
   import riderBank from '../data/riders.json';
   import Races from "../components/Races.vue";
   import Position from "../components/Position.vue";
+  import Countdown from "../components/Countdown.vue";
   import Config from "../data/config.json";
   import RacerLink from "../components/RacerLink.vue";
   import Vue3EasyDataTable from 'vue3-easy-data-table';
@@ -106,6 +116,8 @@
   let context = null;
   let riderModal = null;
   let confirmModal = null;
+
+  const isAddRiderDisabled = computed(() => myRidersList.length >= Config.maxRiders);
 
   onMounted(async () => {
     context = await StorageContext();

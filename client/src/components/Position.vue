@@ -12,8 +12,8 @@
                     <li>You have {{ (numOf250Riders + numOf450Riders) }} of {{ Config.maxRiders }} spots filled</li>
                     <li>Your current score is {{ totalPoints }}</li>
                 </ul>
-                <a href="https://www.totoprayogo.com" target="_blank" class="btn btn-primary mb-3">Ranking</a>
-                <a href="https://www.totoprayogo.com" target="_blank" class="btn btn-primary mb-3">Matchup</a>
+                <router-link :to="{ name: 'standings', params: { id: route.params.id } }" class="btn btn-secondary mb-3">Points Standings</router-link>
+                <router-link :to="{ name: 'matchup', params: { id: route.params.id } }" class="btn btn-secondary mb-3">Current Matchup</router-link>
             </div>
         </div>
     </div> 

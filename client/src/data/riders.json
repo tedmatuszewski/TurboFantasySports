@@ -101,5 +101,6 @@
 { "name": "Josh Varize", "number":67, "id": "josh-varize", "class": 250 },
 { "name": "Drew Adams", "number":98, "id": "drew-adams", "class": 250 },
 { "name": "Derek Kelley", "number":58, "id": "derek-kelley", "class": 250 },
-{ "name": "Anthony Rodriguez", "number": 267, "id": "anthony-rodriguez", "class":	450 }
+{ "name": "Anthony Rodriguez", "number": 267, "id": "anthony-rodriguez", "class": 450 },
+{ "name": "Lorenzo Locurcio", "number": 74, "id": "lorenzo-locurcio", "class": 250 }
 ]

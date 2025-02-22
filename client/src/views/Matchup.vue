@@ -8,92 +8,81 @@
           <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary">League Home</router-link>
       </div>
     </div>
-
-    <!-- <races :race="race.key"></races>
     
+    <div class="alert alert-primary" role="alert">
+      This page shows the current roster of all the teams in the league. What is shown on this page will be the roster for the next upcoming race.
+    </div>
+
     <div class="row">
-      <div class="col-md-6" v-for="(table, i) in tables" :value="table.member.UserGuid">
+      <div class="col-md-6" v-for="(table, i) in tables" :value="table.TeamName">
         <div class="search-list mb-3">
-          <h4>{{ (i+1) }}. {{table.member.TeamName}}</h4>
+          <h4>{{table.TeamName}}</h4>
 
           <table class="table table-sm">
             <thead>
               <tr>
                 <th>Rider</th>
-                <th>Place</th>
-                <th>Points</th>
+                <th>Number</th>
+                <th>Class</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr v-for="result in table.results" :value="result.RowKey">
-                <td>{{ getRiderName(result.Rider) }}</td>
-                <td>{{ result.Place }}</td>
-                <td>{{ result.Points }}</td>
-              </tr>
-              <tr>
-                <td><b>Total</b></td>
-                <td></td>
-                <td>{{ table.total }}</td>
+              <tr v-for="team in table.Team" :value="team.RowKey">
+                <td>{{ getRiderName(team.Rider) }}</td>
+                <td>{{ getRiderNumber(team.Rider) }}</td>
+                <td>{{ getRiderClass(team.Rider) }}</td>
               </tr>
             </tbody>
           </table>
       </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script setup>
-  // import Races from "../components/Races.vue";
-  // import races from '../data/races.json';
-  // import Riders from '../data/riders.json';
-  // import { StorageContext } from '../storage/StorageContext';
+  import Riders from '../data/riders.json';
+  import { StorageContext } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
-  // import { ref,onMounted,computed, reactive, watch } from "vue";
+  import { ref,onMounted,computed, reactive, watch } from "vue";
   
   const route = useRoute();
-  // let tables = reactive([]);
-  // let race = races.find(r => r.key === route.params.race);
-  // let context;
+  let tables = reactive([]);
+  let context;
 
-  // watch(() => route.params.race, async (newRace) => {
-  //   race = races.find(r => r.key === newRace);
+  onMounted(async () => {
+    context = await StorageContext();
     
-  //   loadPage();
-  // });
+      //let results = await context.Results.getByLeague(route.params.id);
+      let teams = await context.Teams.getByLeague(route.params.id);
+      let members = await context.Members.getByLeagueGuid(route.params.id);
 
-  // onMounted(async () => {
-  //   context = await StorageContext();
-    
-  //   loadPage();
-  // });
+      members.forEach((member, i) => {
+        let rr = teams.filter(t => t.Member === member.UserGuid);
+        let table = {
+          TeamName: member.TeamName,
+          Team: rr
+        };
+  
+        tables.push(table);
+      });
+  });
 
-  // async function loadPage(){
-  //   tables.length = 0;
-    
-  //   let results = await context.Results.getByLeagueAndRace(route.params.id, route.params.race);
-  //   let members = await context.Members.getByLeagueGuid(route.params.id);
+function getRiderName(id) {
+  let rider = Riders.find(r => r.id === id);
+  return rider ? rider.name : id;
+}
 
-  //   members.forEach((member, i) => {
-  //     let rr = results.filter(result => result.Member === member.UserGuid);
-  //     let table = {
-  //       place: i,
-  //       member: member,
-  //       results: rr,
-  //       total: rr.map(r => r.Points).reduce((a, b) => a + b, 0)
-  //     };
+function getRiderNumber(id) {
+  let rider = Riders.find(r => r.id === id);
+  return rider ? rider.number : id;
+}
 
-  //     tables.push(table);
-  //   });
-
-  //   tables.sort((a, b) => b.total - a.total);
-  // }
-
-  // function getRiderName(id) {
-  //   let rider = Riders.find(r => r.id === id);
-  //   return rider ? rider.name : '';
-  // }
+function getRiderClass(id) {
+  let rider = Riders.find(r => r.id === id);
+  return rider ? rider.class : id;
+}
 </script>
 
 <style lang="css" scoped>

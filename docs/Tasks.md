@@ -10,3 +10,4 @@
 - [ ] Clean out the doccker files and all the other junk in the root that wont get used
 - [ ] Add the home page content
 - [ ] Setup a proper fb app
+- [ ] It is not saving the idea that Jordan is logged in on Safari. Then, once logged in it is not showing the View buttons

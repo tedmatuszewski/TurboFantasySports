@@ -35,7 +35,7 @@
               <td>{{rider.name}}</td>
               <td><RacerLink :id="rider.id"></RacerLink></td>
               <td>{{rider.class}}</td>
-              <td><button class="btn btn-sm btn-danger" :disabled="isRosterLocked" v-on:click="removeRiderClick(rider)">Remove</button></td>
+              <td><button class="btn btn-sm btn-danger" :disabled="!isRosterEditable" v-on:click="removeRiderClick(rider)">Remove</button></td>
             </tr>
           </tbody>
         </table>
@@ -95,6 +95,7 @@
   import Config from "../data/config.json";
   import RacerLink from "../components/RacerLink.vue";
   import Vue3EasyDataTable from 'vue3-easy-data-table';
+  import { getPreviousRace } from '../models/RaceNavigator';
 
   const headers = [
     { text: "Number", value: "number", sortable: true },
@@ -116,13 +117,11 @@
   let context = null;
   let riderModal = null;
   let confirmModal = null;
-
-  const isRosterLocked = computed(() => {
-    return false;
-  });
+  let prev = getPreviousRace();
+  let isRosterEditable = ref(false);
 
   const isAddRiderDisabled = computed(() => {
-    if ((isRosterLocked == false) || (myRidersList.length >= Config.maxRiders)) {
+    if ((isRosterEditable.value == false) || (myRidersList.length >= Config.maxRiders)) {
       return true;
     } else {
       return false;
@@ -136,6 +135,7 @@
 
     league.value = await context.Leagues.get(route.params.id);
     members.value = await context.Members.getByLeagueGuid(route.params.id);
+    isRosterEditable.value = await context.Results.hasResults(route.params.id, prev.key);
 
     let allTeams = await context.Teams.getByLeague(route.params.id);
     let myTeam = allTeams.filter(t => t.Member == auth0.user.value.sub);
@@ -169,7 +169,7 @@
 
   async function addRiderModalClick() {
     if(myRidersList.length >= Config.maxRiders && itemsSelected.value.length > 0) {
-      alert("You can only have 6 riders on your team.");
+      alert("You can only have " + Config.maxRiders + " riders on your team.");
       return;
     }
 
@@ -188,11 +188,6 @@
     });
 
     riderModal.hide();
-  }
-
-  function selectRider(rider) {
-    addRidersList.forEach(r => r.selected = false);
-    rider.selected = true;
   }
 
   async function removeRiderClick(rider){

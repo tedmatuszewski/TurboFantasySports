@@ -34,6 +34,7 @@
     import { VueperSlides, VueperSlide } from 'vueperslides'
     import 'vueperslides/dist/vueperslides.css'
     import races from '../data/races.json';
+    import { getNextUpcomingRaceIndex, isNextUpcomingRace } from '../models/RaceNavigator';
     import { reactive  } from "vue";
     import config from '../data/config.json';
 
@@ -54,25 +55,6 @@
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
         return new Date(dateString).toLocaleDateString(undefined, options);
-    }
-
-    function isNextUpcomingRace(race) {
-        const now = new Date();
-        const raceDate = new Date(race.date);
-
-        if (raceDate <= now) return false;
-
-        const upcomingRace = races.filter(r => new Date(r.date) > now)[0];
-        
-        return race.key === upcomingRace.key;
-    }
-
-    function getNextUpcomingRaceIndex() {
-        for(let i = 0; i<races.length; i++) {
-            if (isNextUpcomingRace(races[i])) {
-                return (i+1);
-            }
-        }
     }
 
     function getRaceLink(race) {

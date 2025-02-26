@@ -36,6 +36,22 @@ export default function (credential) {
             }
 
             return result;
+        },
+        hasResults: async function(league, race) {
+            const entitiesIter = client.listEntities({
+                queryOptions: {
+                    filter: `League eq '${league}' and Race eq '${race}'`,
+                    select: ["PartitionKey"]
+                }
+            });
+
+            let result = [];
+
+            for await (const entity of entitiesIter) {
+                result.push(entity);
+            }
+
+            return result.length > 0;
         }
     };
 }

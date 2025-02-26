@@ -1,16 +1,15 @@
 <template>
-  <div class="next-steps">
-    <h2 class="my-5 text-center">Available leagues</h2>
+  <div class="py-5">
+    <h2 class="text-center">Available leagues</h2>
+    <p class="text-center text-muted h5">Click the join button to join one of the available leagues. After clicking join you will see a view button. Click that to navigate to the league home page.</p>
 
-    <div v-for="(pair, index) in leaguePairs" :key="index" class="row mb-4">
-      <div class="row">
+    <div v-for="(pair, index) in leaguePairs" :key="index" class="row my-5">
         <div v-for="league in pair" :key="league.Id" class="col-md-6 mb-4">
           <h6 class="mb-3">{{ league.Name }}</h6>
           <p>{{ league.Description }}</p>
           <router-link v-if="league.isMember(auth0.user.value.sub)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
           <button v-else @click="joinLeague(league)" class="btn btn-primary">Join</button>
         </div>
-      </div>
     </div>
   </div>
 </template>

@@ -1,6 +1,5 @@
 <template>
-  <div class="text-center">
-    <img src="../assets/2025-a2-jumbo.jpg" alt="Turbo Fantasy Supercross" />
+  <div class="hero-image">
   </div>
 </template>
 
@@ -11,7 +10,11 @@ export default {
 </script>
 
 <style scoped>
-  img {
-    width:100%;
+  .hero-image {
+    height: 100vh;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url(../assets/2025-a2-jumbo.jpg); 
   }
 </style>

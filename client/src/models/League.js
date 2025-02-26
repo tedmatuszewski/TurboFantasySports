@@ -5,14 +5,4 @@ export default class League {
       this.RowKey = entity.rowKey;
       this.Members = [];
     }
-
-    setMembers(members) {
-      members = members.filter(member => member.LeagueGuid === this.Id);
-
-      this.Members = members;
-    }
-
-    isMember(sub) {
-      return  this.Members.some(member => member.UserGuid === sub);
-    }
   }

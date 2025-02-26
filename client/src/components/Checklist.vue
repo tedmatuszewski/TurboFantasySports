@@ -1,7 +1,7 @@
 <template>
     <div class="row py-4">
         <div class="col-md-7">
-            <h2>The only true Fantasy SMX Platform.</h2>
+            <h2>The only true Fantasy SMX platform.</h2>
 
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Create one league, play with any of your friends</li>

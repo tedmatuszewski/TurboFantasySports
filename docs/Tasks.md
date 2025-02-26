@@ -6,10 +6,11 @@
 - [x] Make it so that the results page in the client app shows the results of the week
 - [x] Make the area to the right of your roster show a panel that has your current position and any other stats I can come up with
 - [x] Add Paypal donate button to footer
+- [x] It is not saving the idea that Jordan is logged in on Safari. Then, once logged in it is not showing the View buttons
+- [x] Add the home page content
+- [x] Add in a message that shows when you are not logged in that says that you need to login to see available leagues
 - [ ] Add max num of riders to config and enforce
 - [ ] Clean out the docker files and all the other junk in the root that wont get used
-- [ ] Add the home page content
-- [ ] Add in a message that shows when you are not logged in that says that you need to login to see available leagues
-- [ ] Setup a proper fb app
-- [ ] It is not saving the idea that Jordan is logged in on Safari. Then, once logged in it is not showing the View buttons
+- [ ] Set up a proper fb app
 - [ ] Add link to the race on racerx to the races slider
+- [ ] Add a contact page 

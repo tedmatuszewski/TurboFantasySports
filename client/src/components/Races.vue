@@ -18,8 +18,8 @@
                             <h5 class="card-title">{{ race.name }} <span v-if="isNextUpcomingRace(race)" class="badge rounded-pill text-bg-warning">Next Race</span></h5>
                             <h6 class="card-subtitle mb-2 text-body-secondary">{{ formatDate(race.date) }}</h6>
                             <p class="card-text">{{ race.class }}</p>
-                            <router-link v-bind:style="{ visibility: showResultLink(race) ? 'hidden' : 'visible' }" :to="{ name: 'result', params: { race: race.key } }">Results</router-link>
-          <!-- <a href="#" class="card-link">Another link</a> -->
+                            <a target="_blank" :href="getRaceLink(race)" class="card-link mr-3">Info</a>
+                            <router-link v-if="showResultLink(race)" :to="{ name: 'result', params: { race: race.key } }">Results</router-link>
                         </div>
                     </div>
                 </template>
@@ -35,6 +35,7 @@
     import 'vueperslides/dist/vueperslides.css'
     import races from '../data/races.json';
     import { reactive  } from "vue";
+    import config from '../data/config.json';
 
     const props = defineProps({
         race: { type: String }
@@ -74,14 +75,20 @@
         }
     }
 
+    function getRaceLink(race) {
+        // https://racerxonline.com/sx/2025/daytona
+        const year = new Date().getFullYear();
+        return config.racerx + "/sx/" + year + "/" + race.key;
+    }
+
     function showResultLink(race) {
         const now = new Date();
         const raceDate = new Date(race.date);
         
         if (raceDate <= now) {
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 </script>

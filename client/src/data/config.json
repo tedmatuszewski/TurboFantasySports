@@ -1,5 +1,6 @@
 {
     "racerxRiderLink": "https://racerxonline.com/rider/",
     "partitionKey": "1",
-    "maxRiders": 6
+    "maxRiders": 6,
+    "racerx": "https://racerxonline.com"
 }

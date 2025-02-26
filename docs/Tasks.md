@@ -11,6 +11,7 @@
 - [x] Add in a message that shows when you are not logged in that says that you need to login to see available leagues
 - [x] Add link to the race on racerx to the races slider
 - [x] Add max num of riders to config and enforce
+- [ ] Setup Pinia stores
+- [ ] Add a contact page 
 - [ ] Clean out the docker files and all the other junk in the root that wont get used
 - [ ] Set up a proper fb app
-- [ ] Add a contact page 

@@ -26,6 +26,9 @@
             <li class="nav-item">
               <a href="https://cash.app/$tmaski45/" class="nav-link">Buy me a Beer!</a>
             </li>
+            <li class="nav-item">
+              <router-link :to="{ name: 'contact' } " class="nav-link">Contact</router-link>
+            </li>
           </ul>
           <ul class="navbar-nav d-none d-md-block">
             <li v-if="!isAuthenticated && !isLoading" class="nav-item">

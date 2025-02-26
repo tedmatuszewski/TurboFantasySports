@@ -1,3 +1,5 @@
+# In Progress
+
 - [x] Rename/delete all tables in storage account to have consistent and intuitive names
 - [x] Fix code as a result of the storage account renaming
 - [x] Fill in results data for each week as per the excel
@@ -11,7 +13,20 @@
 - [x] Add in a message that shows when you are not logged in that says that you need to login to see available leagues
 - [x] Add link to the race on racerx to the races slider
 - [x] Add max num of riders to config and enforce
+- [x] Add a contact page 
 - [ ] Setup Pinia stores
-- [ ] Add a contact page 
 - [ ] Clean out the docker files and all the other junk in the root that wont get used
 - [ ] Set up a proper fb app
+- [ ] Create ability to swap the current temp accounts for the real ones
+- [ ] Deploy screen scraper and schedule it to be ran every Monday(?)
+
+# Planned
+
+- [ ] Create a page for doing the draft
+
+# Future
+
+- [ ] Setup a league create page
+- [ ] Setup PayPal business and make it so that you have to pay to create a league
+- [ ] Make each league have it's own dedicated table for results
+- [ ] Make it so that the riders get pulled from a table in the storage account

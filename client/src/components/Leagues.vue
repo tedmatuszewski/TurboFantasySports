@@ -5,10 +5,14 @@
 
     <div v-for="(pair, index) in leaguePairs" :key="index" class="row my-5">
         <div v-for="league in pair" :key="league.Id" class="col-md-6 mb-4">
-          <h6 class="mb-3">{{ league.Name }}</h6>
-          <p>{{ league.Description }}</p>
-          <router-link v-if="league.isMember(auth0.user.value.sub)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
-          <button v-else @click="joinLeague(league)" class="btn btn-primary">Join</button>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ league.Name }}</h5>
+              <p class="card-text">{{ league.Description }}</p>
+              <router-link v-if="league.isMember(auth0.user.value.sub)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
+              <button v-else @click="joinLeague(league)" class="btn btn-primary">Join</button>
+            </div>
+          </div>
         </div>
     </div>
   </div>

@@ -11,7 +11,7 @@ export default {
 
 <style scoped>
   .hero-image {
-    height: 100vh;
+    height: 35vh;
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;

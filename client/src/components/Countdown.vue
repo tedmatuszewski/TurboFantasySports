@@ -29,7 +29,7 @@
 <script setup>
     import { defineProps, reactive,ref } from 'vue';
     import races from '../data/races.json';
-    import Config from "../data/config.json";
+    import Config from "../config.json";
     const props = defineProps({
         id: { type: String }
     });

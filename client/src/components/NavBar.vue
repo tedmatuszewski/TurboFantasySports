@@ -56,10 +56,10 @@
               <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-header">{{ user.name }}</div>
                 <router-link to="/profile" class="dropdown-item dropdown-profile">
-                  <font-awesome-icon class="mr-3" icon="user" />Profile
+                  <i class="mr-3 fa fa-user"></i> Profile
                 </router-link>
                 <a id="qsLogoutBtn" href="#" class="dropdown-item" @click.prevent="logout">
-                  <font-awesome-icon class="mr-3" icon="power-off" />Log out
+                  <i class="mr-3 fa fa-power-off"></i> Log out
                 </a>
               </div>
             </li>
@@ -86,12 +86,12 @@
               </span>
             </li>
             <li>
-              <font-awesome-icon icon="user" class="mr-3" />
+              <i class="fa fa-user mr-3"></i>
               <router-link to="/profile">Profile</router-link>
             </li>
 
             <li>
-              <font-awesome-icon icon="power-off" class="mr-3" />
+              <i class="mr-3 fa fa-power-off" />
               <a id="qsLogoutBtn" href="#" class @click.prevent="logout">Log out</a>
             </li>
           </ul>

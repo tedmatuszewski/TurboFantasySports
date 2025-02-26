@@ -92,7 +92,7 @@
   import Races from "../components/Races.vue";
   import Position from "../components/Position.vue";
   import Countdown from "../components/Countdown.vue";
-  import Config from "../data/config.json";
+  import Config from "../config.json";
   import RacerLink from "../components/RacerLink.vue";
   import Vue3EasyDataTable from 'vue3-easy-data-table';
   import { getPreviousRace } from '../models/RaceNavigator';

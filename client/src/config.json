@@ -1,0 +1,10 @@
+{
+    "racerxRiderLink": "https://racerxonline.com/rider/",
+    "partitionKey": "1",
+    "maxRiders": 6,
+    "racerx": "https://racerxonline.com",
+    "auth0": {
+        "domain": "dev-ibgv5y2iaaxv47oz.us.auth0.com",
+        "clientId": "gxQ3VNcGLct7Pb0lGA8I8kfvAgKZQNr0"
+    }
+}

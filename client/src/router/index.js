@@ -1,4 +1,4 @@
-import { createRouter as createVueRouter, createWebHashHistory, Router } from "vue-router";
+import { createRouter as createVueRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Profile from "../views/Profile.vue";
 import League from "../views/League.vue";
@@ -7,9 +7,8 @@ import Standings from "../views/Standings.vue";
 import Contact from "../views/Contact.vue";
 import Matchup from "../views/Matchup.vue";
 import { createAuthGuard } from "@auth0/auth0-vue";
-import { App } from 'vue';
 
-export function createRouter(app: App): Router {
+export function createRouter(app) {
   return createVueRouter({
     routes: [
       {

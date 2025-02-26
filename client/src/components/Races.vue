@@ -36,13 +36,13 @@
     import races from '../data/races.json';
     import { getNextUpcomingRaceIndex, isNextUpcomingRace } from '../models/RaceNavigator';
     import { reactive  } from "vue";
-    import config from '../data/config.json';
+    import config from '../config.json';
 
     const props = defineProps({
         race: { type: String }
     });
 
-    let initSlide = reactive(getNextUpcomingRaceIndex());
+    let initSlide = getNextUpcomingRaceIndex();
 
     if(props.race !== undefined) {
         initSlide = 1;

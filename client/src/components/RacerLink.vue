@@ -6,7 +6,7 @@
 
 <script setup>
     import { defineProps } from 'vue';
-    import Config from "../data/config.json";
+    import Config from "../config.json";
     const props = defineProps({
         id: { type: String }
     });

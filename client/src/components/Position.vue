@@ -24,7 +24,7 @@
     import { ref,onMounted,computed, reactive  } from "vue";
     import { useRoute } from 'vue-router';
     import riderBank from '../data/riders.json';
-    import Config from "../data/config.json";
+    import Config from "../config.json";
     import { useAuth0 } from '@auth0/auth0-vue';
 
     const auth0 = useAuth0();

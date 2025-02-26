@@ -1,21 +1,24 @@
 <template>
-  <div class="container">
-    <div class="row align-items-center profile-header">
-      <div class="col-md-2 mb-3">
-        <img
-          :src="user?.picture"
-          alt="User's profile picture"
-          class="rounded-circle img-fluid profile-picture"
-        />
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-4-md">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ user?.name }}</h5>
+            <p class="card-text">{{ user?.sub }}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Name: {{ user?.name }}</li>
+            <li class="list-group-item">Given Name: {{ user?.given_name }}</li>
+            <li class="list-group-item">Family Name: {{ user?.family_name }}</li>
+            <li class="list-group-item">Nickname: {{ user?.nickname }}</li>
+            <li class="list-group-item">Email Verified: {{ user?.email_verified }}</li>
+          </ul>
+          <div class="card-footer">
+            <small class="text-body-secondary">Last updated {{ user?.updated_at }}</small>
+          </div>
+        </div>
       </div>
-      <div class="col-md text-center text-md-left">
-        <h2>{{ user?.name }}</h2>
-        <p class="lead text-muted">{{ user?.email }}</p>
-      </div>
-    </div>
-
-    <div class="row">
-      <highlightjs language="json" :code="JSON.stringify(user, null, 2)" />
     </div>
   </div>
 </template>

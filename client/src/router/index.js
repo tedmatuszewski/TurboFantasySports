@@ -6,6 +6,7 @@ import Result from "../views/Result.vue";
 import Standings from "../views/Standings.vue";
 import Contact from "../views/Contact.vue";
 import Matchup from "../views/Matchup.vue";
+import Privacy from "../views/Privacy.vue";
 import { createAuthGuard } from "@auth0/auth0-vue";
 
 export function createRouter(app) {
@@ -21,6 +22,11 @@ export function createRouter(app) {
         name: "profile",
         component: Profile,
         beforeEnter: createAuthGuard(app)
+      },
+      {
+        path: "/privacy",
+        name: "privacy",
+        component: Privacy
       },
       {
         path: "/league/:id",

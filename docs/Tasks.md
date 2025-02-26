@@ -14,8 +14,8 @@
 - [x] Add link to the race on racerx to the races slider
 - [x] Add max num of riders to config and enforce
 - [x] Add a contact page 
+- [x] Clean out the docker files and all the other junk in the root that wont get used
 - [ ] Setup Pinia stores
-- [ ] Clean out the docker files and all the other junk in the root that wont get used
 - [ ] Set up a proper fb app
 - [ ] Create ability to swap the current temp accounts for the real ones
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)

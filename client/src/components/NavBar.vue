@@ -27,6 +27,9 @@
               <a href="https://cash.app/$tmaski45/" class="nav-link">Buy me a Beer!</a>
             </li>
             <li class="nav-item">
+              <router-link :to="{ name: 'privacy' } " class="nav-link">Privacy</router-link>
+            </li>
+            <li class="nav-item">
               <router-link :to="{ name: 'contact' } " class="nav-link">Contact</router-link>
             </li>
           </ul>

@@ -1,13 +1,15 @@
 - [x] Rename/delete all tables in storage account to have consistent and intuitive names
 - [x] Fix code as a result of the storage account renaming
 - [x] Fill in results data for each week as per the excel
-- [ ] Continue to break down the inner workings of the [supercross live pages](Supercross-Live.md)
-- [ ] Redo the Race class in the function app to read from the json race results files
+- [x] Continue to break down the inner workings of the [supercross live pages](Supercross-Live.md)
+- [x] Redo the Race class in the function app to read from the json race results files
 - [x] Make it so that the results page in the client app shows the results of the week
 - [x] Make the area to the right of your roster show a panel that has your current position and any other stats I can come up with
-- [ ] Add Paypal donate button to footer
+- [x] Add Paypal donate button to footer
 - [ ] Add max num of riders to config and enforce
-- [ ] Clean out the doccker files and all the other junk in the root that wont get used
+- [ ] Clean out the docker files and all the other junk in the root that wont get used
 - [ ] Add the home page content
+- [ ] Add in a message that shows when you are not logged in that says that you need to login to see available leagues
 - [ ] Setup a proper fb app
 - [ ] It is not saving the idea that Jordan is logged in on Safari. Then, once logged in it is not showing the View buttons
+- [ ] Add link to the race on racerx to the races slider

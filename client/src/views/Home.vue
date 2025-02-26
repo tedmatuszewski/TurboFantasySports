@@ -2,6 +2,12 @@
   <div>
     <hero />
     
+    <div class="container py-3">
+      <Checklist />
+    </div>
+
+    <BulletCallout />
+
     <div class="container">
       <leagues />
     </div>
@@ -11,15 +17,8 @@
 <script setup>
   import Hero from "../components/Hero.vue";
   import Leagues from "../components/Leagues.vue"
-
-  // let riders = await cont.Riders.getAll();
-  // let races = await cont.Races.getAll();
-  // let members = await cont.Members.getAll();
-
-  // console.log(riders);
-  // console.log(leagues);
-  // console.log(races);
-  // console.log(members);
+  import BulletCallout from "../components/BulletCallout.vue";
+  import Checklist from "../components/Checklist.vue";
 </script>
 
 <style lang="css" scoped>

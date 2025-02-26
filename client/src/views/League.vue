@@ -35,7 +35,7 @@
               <td>{{rider.name}}</td>
               <td><RacerLink :id="rider.id"></RacerLink></td>
               <td>{{rider.class}}</td>
-              <td><button class="btn btn-sm btn-danger" v-on:click="removeRiderClick(rider)">Remove</button></td>
+              <td><button class="btn btn-sm btn-danger" :disabled="isRosterLocked" v-on:click="removeRiderClick(rider)">Remove</button></td>
             </tr>
           </tbody>
         </table>
@@ -117,7 +117,17 @@
   let riderModal = null;
   let confirmModal = null;
 
-  const isAddRiderDisabled = computed(() => myRidersList.length >= Config.maxRiders);
+  const isRosterLocked = computed(() => {
+    return false;
+  });
+
+  const isAddRiderDisabled = computed(() => {
+    if ((isRosterLocked == false) || (myRidersList.length >= Config.maxRiders)) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 
   onMounted(async () => {
     context = await StorageContext();

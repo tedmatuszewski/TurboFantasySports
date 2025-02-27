@@ -27,37 +27,15 @@
 </template>
 
 <script setup>
-    import { defineProps, reactive,ref } from 'vue';
-    import races from '../data/races.json';
-    const props = defineProps({
-        id: { type: String }
-    });
+    import { defineProps, ref } from 'vue';
+    import { getNextUpcomingRace } from '../models/RaceNavigator';
+    const props = defineProps({ id: { type: String } });
 
     let days= 0;
     let hours = 0;
     let minutes = 0;
     let seconds = ref(0);
     let nextRace = getNextUpcomingRace();
-
-    function isNextUpcomingRace(race) {
-        const now = new Date();
-        const raceDate = new Date(race.date);
-
-        if (raceDate <= now) return false;
-
-        const upcomingRace = races.filter(r => new Date(r.date) > now)[0];
-        
-        return race.key === upcomingRace.key;
-    }
-
-    function getNextUpcomingRace() {
-        for(let i = 0; i<races.length; i++) {
-            if (isNextUpcomingRace(races[i])) {
-                return races[i];
-            }
-        }
-    }
-
     let deadline = new Date(nextRace.date).getTime();
 
     let x = setInterval(function() {

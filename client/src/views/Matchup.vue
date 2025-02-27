@@ -54,7 +54,6 @@
   onMounted(async () => {
     context = await StorageContext();
     
-      //let results = await context.Results.getByLeague(route.params.id);
       let teams = await context.Teams.getByLeague(route.params.id);
       let members = await context.Members.getByLeague(route.params.id);
 

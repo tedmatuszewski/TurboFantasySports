@@ -15,10 +15,10 @@
 - [x] Add max num of riders to config and enforce
 - [x] Add a contact page 
 - [x] Clean out the docker files and all the other junk in the root that wont get used
-- [ ] Change countdown to use the race navigator
+- [x] Change countdown to use the race navigator
+- [x] Set up a proper fb app
+- [x] Create ability to swap the current temp accounts for the real ones
 - [ ] Setup Pinia stores
-- [ ] Set up a proper fb app
-- [ ] Create ability to swap the current temp accounts for the real ones
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)
 
 # Planned

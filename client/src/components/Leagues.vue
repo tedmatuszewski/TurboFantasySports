@@ -58,16 +58,16 @@
   });
 
   function isMember(league) {
-    var member = members.value.find(m => m.LeagueGuid === league.RowKey && m.UserGuid === auth0.user.value.sub);
+    var member = members.value.find(m => m.League === league.RowKey && m.Email === auth0.user.value.email);
 
     return member !== undefined;
   }
 
   async function joinLeague(league) {
     let response = await context.Members.create({
-      LeagueGuid: league.RowKey,
-      UserGuid: auth0.user.value.sub,
-      TeamName: "Team " + auth0.user.value.name
+      League: league.RowKey,
+      Email: auth0.user.value.email,
+      TeamName: "Team " + auth0.user.value.nickname
     });
     
     members.value.push(response);

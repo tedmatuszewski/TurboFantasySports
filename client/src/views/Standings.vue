@@ -42,10 +42,10 @@
     context = await StorageContext();
     
     let results = await context.Results.getByLeague(route.params.id);
-    let members = await context.Members.getByLeagueGuid(route.params.id);
+    let members = await context.Members.getByLeague(route.params.id);
 
     members.forEach(member => {
-      let rr = results.filter(result => result.Member === member.UserGuid);
+      let rr = results.filter(result => result.Member === member.RowKey);
 
       table.push({
         TeamName: member.TeamName,

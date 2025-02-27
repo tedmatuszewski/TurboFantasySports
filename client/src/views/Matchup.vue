@@ -56,7 +56,7 @@
     
       //let results = await context.Results.getByLeague(route.params.id);
       let teams = await context.Teams.getByLeague(route.params.id);
-      let members = await context.Members.getByLeagueGuid(route.params.id);
+      let members = await context.Members.getByLeague(route.params.id);
 
       members.forEach((member, i) => {
         let rr = teams.filter(t => t.Member === member.UserGuid);

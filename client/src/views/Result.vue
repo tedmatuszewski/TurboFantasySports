@@ -73,10 +73,10 @@
     tables.length = 0;
     
     let results = await context.Results.getByLeagueAndRace(route.params.id, route.params.race);
-    let members = await context.Members.getByLeagueGuid(route.params.id);
+    let members = await context.Members.getByLeague(route.params.id);
 
     members.forEach((member, i) => {
-      let rr = results.filter(result => result.Member === member.UserGuid);
+      let rr = results.filter(result => result.Member === member.RowKey);
       let table = {
         place: i,
         member: member,

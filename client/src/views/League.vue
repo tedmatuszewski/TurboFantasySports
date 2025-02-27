@@ -119,6 +119,7 @@
   let confirmModal = null;
   let prev = getPreviousRace();
   let isRosterEditable = ref(false);
+  let member;
 
   const isAddRiderDisabled = computed(() => {
     if ((isRosterEditable.value == false) || (myRidersList.length >= Config.maxRiders)) {
@@ -134,11 +135,12 @@
     confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'), {});
 
     league.value = await context.Leagues.get(route.params.id);
-    members.value = await context.Members.getByLeagueGuid(route.params.id);
+    members.value = await context.Members.getByLeague(route.params.id);
     isRosterEditable.value = await context.Results.hasResults(route.params.id, prev.key);
 
+    member = await context.Members.getByLeagueAndEmail(route.params.id, auth0.user.value.email);
     let allTeams = await context.Teams.getByLeague(route.params.id);
-    let myTeam = allTeams.filter(t => t.Member == auth0.user.value.sub);
+    let myTeam = allTeams.filter(t => t.Member == member.RowKey);
     
     riderBank.sort((a, b) => a.name.localeCompare(b.name));
     riderBank.forEach(rider => {
@@ -182,7 +184,7 @@
 
       await context.Teams.create({
         League: route.params.id,
-        Member: auth0.user.value.sub,
+        Member: member.RowKey,
         Rider: sel.id
       });
     });
@@ -201,7 +203,7 @@
     addRidersList.push(sel);
     myRidersList.splice(index, 1);
 
-    let toDelete = await context.Teams.getByLeagueAndOwnerAndNumber(route.params.id, auth0.user.value.sub, sel.id);
+    let toDelete = await context.Teams.getByLeagueAndOwnerAndNumber(route.params.id, member.RowKey, sel.id);
 
     toDelete.forEach(async d => {
       await context.Teams.remove(d.RowKey);

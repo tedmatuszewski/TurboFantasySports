@@ -29,7 +29,6 @@
 <script setup>
     import { defineProps, reactive,ref } from 'vue';
     import races from '../data/races.json';
-    import Config from "../config.json";
     const props = defineProps({
         id: { type: String }
     });
@@ -70,19 +69,8 @@
         minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60)); 
         seconds.value = Math.floor((t % (1000 * 60)) / 1000); 
 
-        // document.getElementById("day").innerHTML =days ; 
-        // document.getElementById("hour").innerHTML =hours; 
-        // document.getElementById("minute").innerHTML = minutes; 
-        // document.getElementById("second").innerHTML =seconds; 
-
         if (t < 0) {
             clearInterval(x); 
-
-            // document.getElementById("time-up").innerHTML = "TIME UP"; 
-            // document.getElementById("day").innerHTML ='0'; 
-            // document.getElementById("hour").innerHTML ='0'; 
-            // document.getElementById("minute").innerHTML ='0' ; 
-            // document.getElementById("second").innerHTML = '0'; 
         } 
     }, 1000);  
 </script>

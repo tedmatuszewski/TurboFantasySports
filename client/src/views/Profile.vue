@@ -7,18 +7,23 @@
             <h5 class="card-title">{{ user?.name }}</h5>
             <p class="card-text">{{ user?.sub }}</p>
           </div>
+          
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Name: {{ user?.name }}</li>
-            <li class="list-group-item">Given Name: {{ user?.given_name }}</li>
-            <li class="list-group-item">Family Name: {{ user?.family_name }}</li>
+            <li class="list-group-item">Email: {{ user?.email }}</li> 
             <li class="list-group-item">Nickname: {{ user?.nickname }}</li>
             <li class="list-group-item">Email Verified: {{ user?.email_verified }}</li>
           </ul>
+
           <div class="card-footer">
             <small class="text-body-secondary">Last updated {{ user?.updated_at }}</small>
           </div>
         </div>
       </div>
+    </div>
+
+    <div style="display:none;">
+      {{ JSON.stringify(user, null, 2) }}
     </div>
   </div>
 </template>

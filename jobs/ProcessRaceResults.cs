@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using UglyToad.PdfPig;
-using UglyToad.PdfPig.Content;
 
 namespace TurboFantasySports
 {
@@ -32,53 +30,92 @@ namespace TurboFantasySports
             var credential = new TableSharedKeyCredential(accountName, storageAccountKey);
             var resultsClient = new TableClient(new Uri(storageUri), "Results", credential);
             var teamsClient = new TableClient(new Uri(storageUri), "Teams", credential);
-            var partition = "1";
-            var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[1]/a";
-            var result250Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[3]/ul/li[1]/a";
-            var burl = "https://racerxonline.com";
-            var race = "arlington";
-            var url = $"{burl}/sx/2025/{race}";
-            var web = new HtmlWeb();
-            var doc = web.Load(url);
-            var result450Href = doc.DocumentNode.SelectSingleNode(result450Link).Attributes["href"].Value;
-            var result250Href = doc.DocumentNode.SelectSingleNode(result250Link).Attributes["href"].Value;
-            var result450 = GetRaceResults($"{burl}{result450Href}");
-            var result250 = GetRaceResults($"{burl}{result250Href}");
-            var results = result250.Concat(result450).ToList();
-            var teams = teamsClient.Query<TableEntity>();
 
-            foreach(var team in teams) 
+            UpdateTableData(resultsClient, teamsClient);
+
+            // var partition = "1";
+            // var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[1]/a";
+            // var result250Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[3]/ul/li[1]/a";
+            // var burl = "https://racerxonline.com";
+            // var race = "arlington";
+            // var url = $"{burl}/sx/2025/{race}";
+            // var web = new HtmlWeb();
+            // var doc = web.Load(url);
+            // var result450Href = doc.DocumentNode.SelectSingleNode(result450Link).Attributes["href"].Value;
+            // var result250Href = doc.DocumentNode.SelectSingleNode(result250Link).Attributes["href"].Value;
+            // var result450 = GetRaceResults($"{burl}{result450Href}");
+            // var result250 = GetRaceResults($"{burl}{result250Href}");
+            // var results = result250.Concat(result450).ToList();
+            // var teams = teamsClient.Query<TableEntity>();
+
+            // foreach(var team in teams) 
+            // {
+            //     var rider = team.GetString("Rider");
+            //     var league = team.GetString("League");
+            //     var member = team.GetString("Member");
+            //     var result = results.SingleOrDefault(r => r.Value == rider);
+            //     var position = 0;
+            //     var points = 0;
+
+            //     if(result.Equals(default(KeyValuePair<int, string>)) == false) 
+            //     {
+            //         position = result.Key;
+            //         points = ConvertPositionToPoints(position);
+            //     }
+
+            //     var tableEntity = new TableEntity(partition, Guid.NewGuid().ToString())
+            //     {
+            //         { "Rider", rider },
+            //         { "League", league },
+            //         { "Member", member },
+            //         { "Place", position },
+            //         { "Points", points },
+            //         { "Race", race }
+            //     };
+
+            //     resultsClient.AddEntity(tableEntity);
+                
+            //    _logger.LogInformation($"Processed result for rider {rider} in position {position} with {points} points.");
+            //}
+
+            //_logger.LogInformation($"Successfully processed results request for {race}.");
+            return new OkObjectResult("Successfully ran function");
+        }
+
+        
+        private void UpdateTableData(TableClient resultsClient, TableClient teamsClient)
+        {
+            Pageable<TableEntity> queryResultsFilter = resultsClient.Query<TableEntity>();
+
+            var mapping = new Dictionary<string, string> {
+                { "madeup4", "095a3bae-4f35-4725-950f-1ef6c517be2b" },
+                { "madeup5", "297462b0-b36c-4a6e-aa33-454d8c445f8a" },
+                { "madeup7", "6a078a96-e2f4-4caf-8ae0-a38547a1cbba" },
+                { "madeup2", "6a7395a7-5ab9-423e-bf64-7f2a830b441f" },
+                { "madeup6", "74389f62-332a-47f5-9291-32f87ba8f3c4" },
+                { "facebook|10230824544294701", "7c485c51-1671-4df3-8349-85ec3149ca1e" },
+                { "facebook|10221474549733347", "9c348298-43e5-4b4a-864d-3eb12163d142" },
+                { "madeup1", "b15cd754-a18c-4f0a-9838-5aa7ad25dc1c" },
+                { "madeup3", "cad4701c-34c2-4272-8322-17cd8fb12a79" },
+                { "facebook|10231970315453351", "4b5693ce-f34a-4ba0-b71d-4302c7cb17b6" }
+            };
+
+
+            foreach (TableEntity qEntity in queryResultsFilter)
             {
-                var rider = team.GetString("Rider");
-                var league = team.GetString("League");
-                var member = team.GetString("Member");
-                var result = results.SingleOrDefault(r => r.Value == rider);
-                var position = 0;
-                var points = 0;
+                var old = qEntity.GetString("Member");
 
-                if(result.Equals(default(KeyValuePair<int, string>)) == false) 
+                if(mapping.ContainsKey(old) == false)
                 {
-                    position = result.Key;
-                    points = ConvertPositionToPoints(position);
+                    continue;
                 }
 
-                var tableEntity = new TableEntity(partition, Guid.NewGuid().ToString())
-                {
-                    { "Rider", rider },
-                    { "League", league },
-                    { "Member", member },
-                    { "Place", position },
-                    { "Points", points },
-                    { "Race", race }
-                };
+                var member = mapping[old];
 
-                resultsClient.AddEntity(tableEntity);
-                
-                _logger.LogInformation($"Processed result for rider {rider} in position {position} with {points} points.");
+                qEntity["Member"] = member;
+
+                resultsClient.UpdateEntity(qEntity, ETag.All);
             }
-
-            _logger.LogInformation($"Successfully processed results request for {race}.");
-            return new OkObjectResult("Welcome to Azure Functions!");
         }
 
         private int ConvertPositionToPoints(int position) 
@@ -159,19 +196,6 @@ namespace TurboFantasySports
             return result;
         }
 
-            // using (PdfDocument document = PdfDocument.Open(@"C:\Users\tznqxt\Downloads\Overall_Results_861585.pdf"))
-            // {
-            //     foreach (Page page in document.GetPages())
-            //     {
-            //         string pageText = page.Text;
-
-            //         foreach (Word word in page.GetWords())
-            //         {
-            //             Console.WriteLine(word.Text);
-            //         }
-            //     }
-            // }
-
             // string jsonFilePath = "C:\\Users\\tznqxt\\source\\repos\\Github\\TurboFantasySports\\jobs\\data\\Races\\2025\\arlington.json";
             // string jsonString = File.ReadAllText(jsonFilePath);
             // var json = JsonSerializer.Deserialize<List<dynamic>>(jsonString);
@@ -236,30 +260,6 @@ namespace TurboFantasySports
             //             Console.WriteLine(ex.Message);
             //         }
             //     }
-            // }
-
-            // Pageable<TableEntity> queryResultsFilter = resultsClient.Query<TableEntity>();
-
-            // foreach (TableEntity qEntity in queryResultsFilter)
-            // {
-            //     var rider = qEntity.GetString("Rider");
-            //     var owner = qEntity.GetString("Member");
-            //     var race = qEntity.GetString("Race");
-            //     var place = qEntity.GetInt32("Place");
-            //     var points = qEntity.GetInt32("Points");
-            //     var key = qEntity.RowKey;
-
-            //     var tableEntity = new TableEntity("1", key)
-            //     {
-            //         { "Rider", rider },
-            //         { "League", "aaf63116-02e6-473d-c778-c55287563a82" },
-            //         { "Member", owner },
-            //         { "Race", race },
-            //         { "Place", place },
-            //         { "Points", points }
-            //     };
-
-            //     resultsClient.UpdateEntity(tableEntity, ETag.All);
             // }
     }
 }

@@ -19,14 +19,23 @@ export default function (credential) {
 
             return result;
         },
-        getByLeagueGuid: async function(leagueGuid) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `LeagueGuid eq '${leagueGuid}'` } });
+        getByLeague: async function(leagueGuid) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}'` } });
             let result = [];
 
             for await (const entity of entitiesIter) {
-                if (entity.LeagueGuid === leagueGuid) {
-                    result.push(new Member(entity));
-                }
+                result.push(new Member(entity));
+            }
+
+            return result;
+        },
+        getByLeagueAndEmail: async function(league, email) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Email eq '${email}'` } });
+            let result = null;
+
+            for await (const entity of entitiesIter) {
+                result = new Member(entity);
+                break;
             }
 
             return result;

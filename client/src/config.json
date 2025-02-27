@@ -6,5 +6,6 @@
     "auth0": {
         "domain": "dev-ibgv5y2iaaxv47oz.us.auth0.com",
         "clientId": "gxQ3VNcGLct7Pb0lGA8I8kfvAgKZQNr0"
-    }
+    },
+    "storageAccount": "https://tedpersonalwebsite.table.core.windows.net"
 }

@@ -1,12 +1,19 @@
 import { TableClient } from "@azure/data-tables";
 import Result from '../../models/Result';
+import credential from '../credential';
+import { defineStore } from 'pinia';
+import config from '../../config';
 
-export default function (credential) {
-    const table = "Results";
-    const account = "tedpersonalwebsite";
-    const client = new TableClient(`https://${account}.table.core.windows.net`, table, credential);
+// https://learn.microsoft.com/en-us/javascript/api/overview/azure/data-tables-readme?view=azure-node-latest
+const table = "Results";
+const client = new TableClient(config.storageAccount, table, credential);
 
-    return {
+export default defineStore(table, {
+    state: () => ({
+        data: [],
+    }),
+    getters: { },
+    actions: {
         getAll: async function() {
             const entitiesIter = client.listEntities();
             let result = [];
@@ -53,5 +60,5 @@ export default function (credential) {
 
             return result.length > 0;
         }
-    };
-}
+    }
+  });

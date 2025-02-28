@@ -19,8 +19,8 @@
 - [x] Set up a proper fb app
 - [x] Create ability to swap the current temp accounts for the real ones
 - [x] Setup Pinia stores
-- [ ] Remove the join buttons
-- [ ] Add in a favicon
+- [x] Remove the join buttons
+- [x] Add in a favicon
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)
 
 # Planned

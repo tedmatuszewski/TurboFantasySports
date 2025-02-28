@@ -2,7 +2,6 @@
   <div class="py-5">
     <div v-if="isAuthenticated">
       <h2 class="text-center">Available leagues</h2>
-      <p class="text-center text-muted h5">Click the join button to join one of the available leagues. After clicking join you will see a view button. Click that to navigate to the league home page.</p>
 
       <div v-for="(pair, index) in leaguePairs" :key="index" class="row my-5">
           <div v-for="league in pair" :key="league.Id" class="col-md-6 mb-4">

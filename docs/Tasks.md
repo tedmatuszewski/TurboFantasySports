@@ -25,7 +25,10 @@
 
 # Planned
 
-- [ ] Setup dashboard for league admin
+- [ ] Add ability to change your teams name
+- [ ] Add debug button to show the raw user profile info
+- [ ] Proof read and do better on all in app help sections
+- [ ] Build dashboard for league admin
   - [ ] Add/remove league members
   - [ ] Add/remove riders from teams
   - [ ] Setup initial league
@@ -33,10 +36,11 @@
   - [ ] Change league name and description
   - [ ] A "Draft" page where you can add riders to teams
     - [ ] Random drawing order
-- [ ] Setup a league create page
+- [ ] Build a league create page
 - [ ] Make it so that the riders get pulled from a table in the storage account
 
 # Future
 
 - [ ] Setup PayPal business and make it so that you have to pay to create a league
 - [ ] Make each league have it's own dedicated table for results
+- [ ] Put in ads

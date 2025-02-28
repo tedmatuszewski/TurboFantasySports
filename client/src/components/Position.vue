@@ -67,18 +67,16 @@
             if(totals[r.Member] === undefined) {
                 totals[r.Member] = 0;
             }
-
+            
             totals[r.Member] += r.Points;
         });
-
+        
         let standings = Object.entries(totals)
             .map(([member, points]) => ({ member, points }))
             .sort((a, b) => b.points - a.points);
-
-        place.value = standings.findIndex(s => s.member === auth0.user.value.sub);
         
-        totalPoints.value = results.filter(r => r.Member === auth0.user.value.sub).reduce((acc, result) => acc + result.Points, 0);
-
+        place.value = standings.findIndex(s => s.member === member.RowKey);
+        totalPoints.value = results.filter(r => r.Member === member.RowKey).reduce((acc, result) => acc + result.Points, 0);
         numOf250Riders.value = myRiders.filter(t => t.class === 250).length;
         numOf450Riders.value = myRiders.filter(t => t.class === 450).length;
     });

@@ -33,10 +33,10 @@
   - [ ] Change league name and description
   - [ ] A "Draft" page where you can add riders to teams
     - [ ] Random drawing order
+- [ ] Setup a league create page
+- [ ] Make it so that the riders get pulled from a table in the storage account
 
 # Future
 
-- [ ] Setup a league create page
 - [ ] Setup PayPal business and make it so that you have to pay to create a league
 - [ ] Make each league have it's own dedicated table for results
-- [ ] Make it so that the riders get pulled from a table in the storage account

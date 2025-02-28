@@ -11,7 +11,6 @@
                 <h5 class="card-title">{{ league.Name }}</h5>
                 <p class="card-text">{{ league.Description }}</p>
                 <router-link v-if="isMember(league)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
-                <button v-else @click="joinLeague(league)" class="btn btn-primary">Join</button>
               </div>
             </div>
           </div>
@@ -61,15 +60,5 @@
     var member = members.value.find(m => m.League === league.RowKey && m.Email === auth0.user.value.email);
 
     return member !== undefined;
-  }
-
-  async function joinLeague(league) {
-    let response = await context.Members.create({
-      League: league.RowKey,
-      Email: auth0.user.value.email,
-      TeamName: "Team " + auth0.user.value.nickname
-    });
-    
-    members.value.push(response);
   }
 </script>

@@ -10,23 +10,13 @@ const client = new TableClient(config.storageAccount, table, credential);
 
 export default defineStore(table, {
     state: () => ({
-        data: [],
+        data: {}
     }),
     getters: { },
     actions: {
-        getAll: async function() {
-            const entitiesIter = client.listEntities();
+        async getByLeagueAndRace(league, race) {
             let result = [];
-            
-            for await (const entity of entitiesIter) {
-              result.push(new Result(entity));
-            }
-
-            return result;
-        },
-        getByLeagueAndRace: async function(league, race) {
             const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Race eq '${race}'` } });
-            let result = [];
             
             for await (const entity of entitiesIter) {
                 result.push(new Result(entity));
@@ -34,9 +24,9 @@ export default defineStore(table, {
 
             return result;
         },
-        getByLeague: async function(league) {
+        async getByLeague(league) {
             const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
-            let result = [];
+            var result = [];
             
             for await (const entity of entitiesIter) {
                 result.push(new Result(entity));
@@ -44,7 +34,7 @@ export default defineStore(table, {
 
             return result;
         },
-        hasResults: async function(league, race) {
+        async hasResults(league, race) {
             const entitiesIter = client.listEntities({
                 queryOptions: {
                     filter: `League eq '${league}' and Race eq '${race}'`,

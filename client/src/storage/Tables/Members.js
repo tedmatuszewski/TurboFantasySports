@@ -11,31 +11,31 @@ const client = new TableClient(config.storageAccount, table, credential);
 
 export default defineStore(table, {
     state: () => ({
-        data: [],
+        data: []
     }),
     getters: { },
     actions: {
         async getAll() {
             const entitiesIter = client.listEntities();
-            let result = [];
+            let results = [];
 
             for await (const entity of entitiesIter) {
-                result.push(new Member(entity));
+                results.push(new Member(entity));
             }
 
-            return result;
+            return results;
         },
-        getByLeague: async function(leagueGuid) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${leagueGuid}'` } });
-            let result = [];
+        async getByLeague(league) {
+            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
+            let results = [];
 
             for await (const entity of entitiesIter) {
-                result.push(new Member(entity));
+                results.push(new Member(entity));
             }
 
-            return result;
+            return results;
         },
-        getByLeagueAndEmail: async function(league, email) {
+        async getByLeagueAndEmail(league, email) {
             const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Email eq '${email}'` } });
             let result = null;
 
@@ -46,9 +46,9 @@ export default defineStore(table, {
 
             return result;
         },
-        create: async function(entity) {
+        async create(entity) {
             entity.RowKey = generateGuid();
-            entity.PartitionKey = "1";
+            entity.PartitionKey = config.partitionKey;
 
             await client.createEntity(entity);
 

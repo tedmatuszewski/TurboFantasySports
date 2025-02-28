@@ -1,4 +1,4 @@
-# In Progress
+# In Progress/Complete
 
 - [x] Rename/delete all tables in storage account to have consistent and intuitive names
 - [x] Fix code as a result of the storage account renaming
@@ -23,7 +23,14 @@
 
 # Planned
 
-- [ ] Create a page for doing the draft
+- [ ] Setup dashboard for league admin
+  - [ ] Add/remove league members
+  - [ ] Add/remove riders from teams
+  - [ ] Setup initial league
+  - [ ] Delete league
+  - [ ] Change league name and description
+  - [ ] A "Draft" page where you can add riders to teams
+    - [ ] Random drawing order
 
 # Future
 

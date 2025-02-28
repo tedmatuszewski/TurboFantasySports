@@ -10,7 +10,7 @@ const client = new TableClient(config.storageAccount, table, credential);
 
 export default defineStore(table, {
     state: () => ({
-        leagues: [],
+        data: [],
     }),
     getters: { },
     actions: {
@@ -20,14 +20,14 @@ export default defineStore(table, {
             return new League(entity);
         },
         async getAll() {
-            let result = [];
             const entitiesIter = client.listEntities();
-
+            let results = [];
+            
             for await (const entity of entitiesIter) {
-                result.push(new League(entity));
+                results.push(new League(entity));
             }
 
-            return result;
+            return results;
         }
     }
   });

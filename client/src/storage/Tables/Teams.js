@@ -25,12 +25,12 @@ export default defineStore(table, {
 
             return result;
         },
-        get: async function(rowKey) {
-            const entity = await client.getEntity("1", rowKey);
+        async get(rowKey) {
+           const entity = await client.getEntity(config.partitionKey, rowKey);
             
             return new League(entity);
         },
-        getByLeagueAndOwnerAndNumber: async function(league, member, rider) {
+        async getByLeagueAndOwnerAndNumber(league, member, rider) {
             const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Member eq '${member}' and Rider eq '${rider}'` } });
             let result = [];
 
@@ -40,7 +40,7 @@ export default defineStore(table, {
 
             return result;
         },
-        getByLeagueAndMember: async function(league, member) {
+        async getByLeagueAndMember(league, member) {
             const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Member eq '${member}'` } });
             let result = [];
 
@@ -50,7 +50,7 @@ export default defineStore(table, {
 
             return result;
         },
-        getByLeague: async function(league) {
+        async getByLeague(league) {
             const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
             let result = [];
 
@@ -60,16 +60,16 @@ export default defineStore(table, {
 
             return result;
         },
-        create: async function(entity) {
+        async create(entity) {
             entity.RowKey = generateGuid();
-            entity.PartitionKey = "1";
+            entity.PartitionKey = config.partitionKey;
 
             await client.createEntity(entity);
             
             return new Team(entity);
         },
-        remove: async function(key) {
-            await client.deleteEntity("1", key);
-        },
+        async remove(key) {
+            await client.deleteEntity(config.partitionKey, key);
+        }
     }
   });

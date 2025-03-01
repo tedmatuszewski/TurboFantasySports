@@ -134,12 +134,12 @@
     riderModal = new bootstrap.Modal(document.getElementById('riderModal'), {});
     confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'), {});
 
-    league.value = await context.Leagues.get(route.params.id);
-    members.value = await context.Members.getByLeague(route.params.id);
-    isRosterEditable.value = await context.Results.hasResults(route.params.id, prev.key);
+    league.value = context.Leagues.getSingle(route.params.id);
+    members.value = context.Members.getByLeague2(route.params.id);
+    isRosterEditable.value = context.Results.hasResults2(route.params.id, prev.key);
+    member = context.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
 
-    member = await context.Members.getByLeagueAndEmail(route.params.id, auth0.user.value.email);
-    let allTeams = await context.Teams.getByLeague(route.params.id);
+    let allTeams = await context.Teams.getByLeague2(route.params.id);
     let myTeam = allTeams.filter(t => t.Member == member.RowKey);
     
     riderBank.sort((a, b) => a.name.localeCompare(b.name));
@@ -203,7 +203,7 @@
     addRidersList.push(sel);
     myRidersList.splice(index, 1);
 
-    let toDelete = await context.Teams.getByLeagueAndOwnerAndNumber(route.params.id, member.RowKey, sel.id);
+    let toDelete = await context.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.id);
 
     toDelete.forEach(async d => {
       await context.Teams.remove(d.RowKey);

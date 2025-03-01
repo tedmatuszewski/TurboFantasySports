@@ -13,16 +13,20 @@
   </div>
 </template>
 
-<script>
+<script setup>
     import NavBar from "./components/NavBar.vue";
     import Error from "./components/Error.vue";
+    import { StorageContext } from './storage/StorageContext';
+    import { onMounted } from 'vue';
 
-    export default {
-        components: {
-            NavBar,
-            Error
-        }
-    };
+    onMounted(async () => {
+        let context = await StorageContext();
+
+        await context.Leagues.fillData();
+        await context.Members.fillData();
+        await context.Results.fillData();
+        await context.Teams.fillData();
+    });
 </script>
 
 <style>

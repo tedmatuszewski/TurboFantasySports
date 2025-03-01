@@ -43,6 +43,8 @@
     if(isAuthenticated) {
       members.value = context.Members.data;
       leagues.value = context.Leagues.data;
+
+      console.log(members.value);
     }
   });
 

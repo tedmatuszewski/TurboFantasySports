@@ -21,6 +21,10 @@
 - [x] Setup Pinia stores
 - [x] Remove the join buttons
 - [x] Add in a favicon
+- [ ] Figure out how to cache the results of the requests to the storage accounts
+- [ ] Add PWA manifest
+- [ ] Trade rider workflow
+- [ ] Add App Insights
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)
 
 # Planned
@@ -44,3 +48,5 @@
 - [ ] Setup PayPal business and make it so that you have to pay to create a league
 - [ ] Make each league have it's own dedicated table for results
 - [ ] Put in ads
+- [ ] Support for tracking skins
+- [ ] 

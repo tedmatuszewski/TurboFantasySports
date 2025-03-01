@@ -10,45 +10,30 @@ const client = new TableClient(config.storageAccount, table, credential);
 
 export default defineStore(table, {
     state: () => ({
-        data: {}
+        data: []
     }),
-    getters: { },
+    getters: { 
+        getByLeague2: (state) => {
+            return (league) => state.data.filter(x => x.League === league);
+        },
+        getByLeagueAndRace2: (state) => {
+            return (league, race) => state.data.filter(x => x.League === league && x.Race === race);
+        },
+        hasResults2: (state) => {
+            return (league, race) => state.data.filter(x => x.League === league && x.Race === race).length > 0;
+        }
+    },
     actions: {
-        async getByLeagueAndRace(league, race) {
-            let result = [];
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Race eq '${race}'` } });
+        async fillData(){
+            this.data.length = 0;
+
+            const entitiesIter = client.listEntities();
             
             for await (const entity of entitiesIter) {
-                result.push(new Result(entity));
+                this.data.push(new Result(entity));
             }
 
-            return result;
-        },
-        async getByLeague(league) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
-            var result = [];
-            
-            for await (const entity of entitiesIter) {
-                result.push(new Result(entity));
-            }
-
-            return result;
-        },
-        async hasResults(league, race) {
-            const entitiesIter = client.listEntities({
-                queryOptions: {
-                    filter: `League eq '${league}' and Race eq '${race}'`,
-                    select: ["PartitionKey"]
-                }
-            });
-
-            let result = [];
-
-            for await (const entity of entitiesIter) {
-                result.push(entity);
-            }
-
-            return result.length > 0;
+            return this.data;
         }
     }
   });

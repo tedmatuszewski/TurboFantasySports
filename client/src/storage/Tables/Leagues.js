@@ -12,22 +12,25 @@ export default defineStore(table, {
     state: () => ({
         data: [],
     }),
-    getters: { },
-    actions: {
-        async get(rowKey) {
-            const entity = await client.getEntity("1", rowKey);
-            
-            return new League(entity);
+    getters: { 
+        getSingle: (state) => {
+            return (rowKey) => state.data.find(league => league.RowKey === rowKey);
         },
-        async getAll() {
+        getAll: (state) => {
+            return state.data;
+        }
+    },
+    actions: {
+        async fillData() {
+            this.data.length = 0;
+
             const entitiesIter = client.listEntities();
-            let results = [];
-            
+
             for await (const entity of entitiesIter) {
-                results.push(new League(entity));
+                this.data.push(new League(entity));
             }
 
-            return results;
+            return this.data;
         }
     }
   });

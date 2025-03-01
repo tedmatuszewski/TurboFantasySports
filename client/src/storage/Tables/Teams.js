@@ -13,52 +13,31 @@ export default defineStore(table, {
     state: () => ({
         data: [],
     }),
-    getters: { },
+    getters: { 
+        getByLeague2: (state) => {
+            return (league) => state.data.filter(x => x.League === league);
+        },
+        getOne: (state) => {
+            return (rowKey) => state.data.find(x => x.RowKey === rowKey);
+        },
+        getByLeagueAndOwnerAndNumber2: (state) => {
+            return (league, member, rider) => state.data.filter(x => x.League === league && x.Member === member && x.Rider === rider);
+        },
+        getByLeagueAndMember2: (state) => {
+            return (league, member) => state.data.filter(x => x.League === league && x.Member === member);
+        }
+    },
     actions: {
-        getAll: async function() {
+        async fillData() {
+            this.data.length = 0;
+
             const entitiesIter = client.listEntities();
-            let result = [];
 
             for await (const entity of entitiesIter) {
-                result.push(new Team(entity));
+                this.data.push(new Team(entity));
             }
 
-            return result;
-        },
-        async get(rowKey) {
-           const entity = await client.getEntity(config.partitionKey, rowKey);
-            
-            return new League(entity);
-        },
-        async getByLeagueAndOwnerAndNumber(league, member, rider) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Member eq '${member}' and Rider eq '${rider}'` } });
-            let result = [];
-
-            for await (const entity of entitiesIter) {
-                result.push(new Team(entity));
-            }
-
-            return result;
-        },
-        async getByLeagueAndMember(league, member) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Member eq '${member}'` } });
-            let result = [];
-
-            for await (const entity of entitiesIter) {
-                result.push(new Team(entity));
-            }
-
-            return result;
-        },
-        async getByLeague(league) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
-            let result = [];
-
-            for await (const entity of entitiesIter) {
-                result.push(new Team(entity));
-            }
-
-            return result;
+            return this.data;
         },
         async create(entity) {
             entity.RowKey = generateGuid();
@@ -66,9 +45,17 @@ export default defineStore(table, {
 
             await client.createEntity(entity);
             
-            return new Team(entity);
+            let team = new Team(entity);
+            this.data.push(team);
+
+            return team;
         },
         async remove(key) {
+            let index = this.data.findIndex(x => x.RowKey === key);
+            if (index >= 0) {
+                this.data.splice(index, 1);
+            }
+
             await client.deleteEntity(config.partitionKey, key);
         }
     }

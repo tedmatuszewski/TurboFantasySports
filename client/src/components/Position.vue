@@ -54,9 +54,9 @@
     onMounted(async () => {
         context = await StorageContext();
 
-        let member = await context.Members.getByLeagueAndEmail(route.params.id, auth0.user.value.email);
-        let team = await context.Teams.getByLeagueAndMember(route.params.id, member.RowKey);
-        let results = await context.Results.getByLeague(route.params.id);
+        let member = await context.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
+        let team = await context.Teams.getByLeagueAndMember2(route.params.id, member.RowKey);
+        let results = await context.Results.getByLeague2(route.params.id);
         let ids = team.map(t => t.Rider);
         let totals = {};
         let myRiders = riderBank.filter(rider => {

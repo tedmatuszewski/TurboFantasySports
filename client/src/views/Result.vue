@@ -72,9 +72,9 @@
   async function loadPage(){
     tables.length = 0;
     
-    let results = await context.Results.getByLeagueAndRace(route.params.id, route.params.race);
-    let members = await context.Members.getByLeague(route.params.id);
-
+    let results = context.Results.getByLeagueAndRace2(route.params.id, route.params.race);
+    let members = context.Members.getByLeague2(route.params.id);
+    
     members.forEach((member, i) => {
       let rr = results.filter(result => result.Member === member.RowKey);
       let table = {

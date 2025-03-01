@@ -13,38 +13,28 @@ export default defineStore(table, {
     state: () => ({
         data: []
     }),
-    getters: { },
+    getters: { 
+        getByLeague2: (state) => {
+            return (league) => state.data.filter(x => x.League === league);
+        },
+        getByLeagueAndEmail2: (state) => {
+            return (league, email) => state.data.find(x => x.League === league && x.Email === email);
+        },
+        getAll: (state) => {
+            return state.data;
+        }
+    },
     actions: {
-        async getAll() {
+        async fillData() {
+            this.data.length = 0;
+
             const entitiesIter = client.listEntities();
-            let results = [];
 
             for await (const entity of entitiesIter) {
-                results.push(new Member(entity));
+                this.data.push(new Member(entity));
             }
 
-            return results;
-        },
-        async getByLeague(league) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}'` } });
-            let results = [];
-
-            for await (const entity of entitiesIter) {
-                results.push(new Member(entity));
-            }
-
-            return results;
-        },
-        async getByLeagueAndEmail(league, email) {
-            const entitiesIter = client.listEntities({ queryOptions: { filter: `League eq '${league}' and Email eq '${email}'` } });
-            let result = null;
-
-            for await (const entity of entitiesIter) {
-                result = new Member(entity);
-                break;
-            }
-
-            return result;
+            return this.data;
         },
         async create(entity) {
             entity.RowKey = generateGuid();
@@ -52,7 +42,10 @@ export default defineStore(table, {
 
             await client.createEntity(entity);
 
-            return new Member(entity);
+            let member = new Member(entity);
+            this.data.push(member);
+
+            return member;
         }
     }
   });

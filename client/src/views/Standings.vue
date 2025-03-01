@@ -41,8 +41,8 @@
   onMounted(async () => {
     context = await StorageContext();
     
-    let results = await context.Results.getByLeague(route.params.id);
-    let members = await context.Members.getByLeague(route.params.id);
+    let results = await context.Results.getByLeague2(route.params.id);
+    let members = await context.Members.getByLeague2(route.params.id);
 
     members.forEach(member => {
       let rr = results.filter(result => result.Member === member.RowKey);

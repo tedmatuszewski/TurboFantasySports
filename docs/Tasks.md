@@ -21,10 +21,10 @@
 - [x] Setup Pinia stores
 - [x] Remove the join buttons
 - [x] Add in a favicon
-- [ ] Figure out how to cache the results of the requests to the storage accounts
+- [x] Figure out how to cache the results of the requests to the storage accounts
 - [ ] Add PWA manifest
-- [ ] Trade rider workflow
 - [ ] Add App Insights
+- [ ] Trade rider workflow
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)
 
 # Planned

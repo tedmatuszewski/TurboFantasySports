@@ -5,6 +5,7 @@ import config from "./config.json";
 import 'vue3-easy-data-table/dist/style.css';
 import App from './App.vue';
 import { createPinia } from 'pinia';
+import './registerServiceWorker'
 
 const app = createApp(App);
 const pinia = createPinia();

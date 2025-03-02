@@ -23,7 +23,7 @@
 - [x] Add in a favicon
 - [x] Figure out how to cache the results of the requests to the storage accounts
 - [x] Add PWA manifest
-- [ ] Add App Insights
+- [x] Add App Insights
 - [ ] Trade rider workflow
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)
 

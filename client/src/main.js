@@ -5,7 +5,7 @@ import config from "./config.json";
 import 'vue3-easy-data-table/dist/style.css';
 import App from './App.vue';
 import { createPinia } from 'pinia';
-import { AppInsightsPlugin, AppInsightsPluginOptions } from "vue3-application-insights";
+import { AppInsightsPlugin } from "vue3-application-insights";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -19,7 +19,7 @@ const aiOptions = {
 
 app
   .use(pinia)
-  .use()
+  .use(router)
   .use(AppInsightsPlugin, aiOptions)
   .use(
     createAuth0({

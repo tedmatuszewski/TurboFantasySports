@@ -183,13 +183,16 @@ namespace TurboFantasySports
                 var position = cells[0].InnerText;
                 var i = cells[1].InnerHtml;
                 var htmlDoc = new HtmlDocument();
+                var intPosition = 0;
+
+                int.TryParse(position, out intPosition);
 
                 htmlDoc.LoadHtml(i);
 
                 var htmlBody = htmlDoc.DocumentNode.SelectSingleNode("//a[@class='headshot']");
                 var ii = htmlBody.Attributes["href"].Value.Replace("/rider/", "").Replace("/races", "");
 
-                result.Add(new KeyValuePair<int, string>(int.Parse(position), ii));
+                result.Add(new KeyValuePair<int, string>(intPosition, ii));
                 _logger.LogInformation($"{position} {ii}");
             }
 

@@ -38,7 +38,7 @@
   });
 
   onMounted(async () => {
-    context = await StorageContext();
+    context = StorageContext();
 
     if(isAuthenticated) {
       members.value = context.Members.data;

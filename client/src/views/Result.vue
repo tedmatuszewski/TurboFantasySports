@@ -64,7 +64,7 @@
   });
 
   onMounted(async () => {
-    context = await StorageContext();
+    context = StorageContext();
     
     loadPage();
   });

@@ -39,7 +39,7 @@
   let context;
 
   onMounted(async () => {
-    context = await StorageContext();
+    context = StorageContext();
     
     let results = await context.Results.getByLeague2(route.params.id);
     let members = await context.Members.getByLeague2(route.params.id);

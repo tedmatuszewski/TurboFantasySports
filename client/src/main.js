@@ -5,13 +5,22 @@ import config from "./config.json";
 import 'vue3-easy-data-table/dist/style.css';
 import App from './App.vue';
 import { createPinia } from 'pinia';
+import { AppInsightsPlugin, AppInsightsPluginOptions } from "vue3-application-insights";
 
 const app = createApp(App);
 const pinia = createPinia();
+const router = createRouter(app);
+
+const aiOptions = {
+  connectionString: config.appInsights.instrumentationKey,
+  router: router,
+  trackAppErrors: true,
+};
 
 app
   .use(pinia)
-  .use(createRouter(app))
+  .use()
+  .use(AppInsightsPlugin, aiOptions)
   .use(
     createAuth0({
       domain: config.auth0.domain,

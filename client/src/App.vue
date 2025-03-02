@@ -20,7 +20,7 @@
     import { onMounted } from 'vue';
 
     onMounted(async () => {
-        let context = await StorageContext();
+        let context = StorageContext();
 
         await context.Leagues.fillData();
         await context.Members.fillData();

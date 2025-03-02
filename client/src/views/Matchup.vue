@@ -52,7 +52,7 @@
   let context;
 
   onMounted(async () => {
-    context = await StorageContext();
+    context = StorageContext();
     
       let teams = context.Teams.getByLeague2(route.params.id);
       let members = context.Members.getByLeague2(route.params.id);

@@ -52,7 +52,7 @@
     });
 
     onMounted(async () => {
-        context = await StorageContext();
+        context = StorageContext();
 
         let member = await context.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
         let team = await context.Teams.getByLeagueAndMember2(route.params.id, member.RowKey);

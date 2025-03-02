@@ -22,7 +22,7 @@
 - [x] Remove the join buttons
 - [x] Add in a favicon
 - [x] Figure out how to cache the results of the requests to the storage accounts
-- [ ] Add PWA manifest
+- [x] Add PWA manifest
 - [ ] Add App Insights
 - [ ] Trade rider workflow
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)

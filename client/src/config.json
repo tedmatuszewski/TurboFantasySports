@@ -7,5 +7,8 @@
         "domain": "dev-ibgv5y2iaaxv47oz.us.auth0.com",
         "clientId": "gxQ3VNcGLct7Pb0lGA8I8kfvAgKZQNr0"
     },
-    "storageAccount": "https://tedpersonalwebsite.table.core.windows.net"
+    "storageAccount": "https://tedpersonalwebsite.table.core.windows.net",
+    "appInsights": {
+        "instrumentationKey": "InstrumentationKey=050c5a90-a26e-4fc3-857f-09b918d0640e;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/;ApplicationId=f8b31c1c-663a-4fc8-a7a1-c35816d5e518"
+    }
 }

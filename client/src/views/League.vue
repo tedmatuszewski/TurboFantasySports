@@ -130,7 +130,7 @@
   });
 
   onMounted(async () => {
-    context = await StorageContext();
+    context = StorageContext();
     riderModal = new bootstrap.Modal(document.getElementById('riderModal'), {});
     confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'), {});
 
@@ -139,7 +139,7 @@
     isRosterEditable.value = context.Results.hasResults2(route.params.id, prev.key);
     member = context.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
 
-    let allTeams = await context.Teams.getByLeague2(route.params.id);
+    let allTeams = context.Teams.getByLeague2(route.params.id);
     let myTeam = allTeams.filter(t => t.Member == member.RowKey);
     
     riderBank.sort((a, b) => a.name.localeCompare(b.name));

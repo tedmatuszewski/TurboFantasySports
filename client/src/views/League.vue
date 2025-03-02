@@ -40,7 +40,7 @@
           </tbody>
         </table>
 
-        <button class="btn btn-primary btn-block" v-on:click="showModalClick()" :disabled="isAddRiderDisabled">Add Rider</button>
+        <button class="btn btn-primary btn-block" v-on:click="showModalClick()">View Available Riders</button>
       </div>
       
       <div class="col-md-4">

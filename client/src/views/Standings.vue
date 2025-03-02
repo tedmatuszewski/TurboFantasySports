@@ -30,19 +30,17 @@
 </template>
 
 <script setup>
-  import { StorageContext } from '../storage/StorageContext';
+  import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
   import { ref,onMounted,computed, reactive, watch } from "vue";
   
+  const storage = useStorage();
   const route = useRoute();
   let table = reactive([]);
-  let context;
 
   onMounted(async () => {
-    context = StorageContext();
-    
-    let results = await context.Results.getByLeague2(route.params.id);
-    let members = await context.Members.getByLeague2(route.params.id);
+    let results = storage.Results.getByLeague2(route.params.id);
+    let members = storage.Members.getByLeague2(route.params.id);
 
     members.forEach(member => {
       let rr = results.filter(result => result.Member === member.RowKey);

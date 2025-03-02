@@ -84,7 +84,7 @@
 </template>
 
 <script setup>
-  import { StorageContext } from '../storage/StorageContext';
+  import { useStorage } from '../storage/StorageContext';
   import { ref,onMounted,computed, reactive  } from "vue";
   import { useRoute } from 'vue-router';
   import { useAuth0 } from '@auth0/auth0-vue';
@@ -104,6 +104,7 @@
     { text: "Class", value: "class", sortable: true}
   ];
 
+  const storage = useStorage();
   let itemsSelected = ref([]);
   const searchField = ref("name");
   const searchValue = ref("");
@@ -130,16 +131,15 @@
   });
 
   onMounted(async () => {
-    context = StorageContext();
     riderModal = new bootstrap.Modal(document.getElementById('riderModal'), {});
     confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'), {});
 
-    league.value = context.Leagues.getSingle(route.params.id);
-    members.value = context.Members.getByLeague2(route.params.id);
-    isRosterEditable.value = context.Results.hasResults2(route.params.id, prev.key);
-    member = context.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
+    league.value = storage.Leagues.getSingle(route.params.id);
+    members.value = storage.Members.getByLeague2(route.params.id);
+    isRosterEditable.value = storage.Results.hasResults2(route.params.id, prev.key);
+    member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
 
-    let allTeams = context.Teams.getByLeague2(route.params.id);
+    let allTeams = storage.Teams.getByLeague2(route.params.id);
     let myTeam = allTeams.filter(t => t.Member == member.RowKey);
     
     riderBank.sort((a, b) => a.name.localeCompare(b.name));
@@ -182,7 +182,7 @@
       myRidersList.push(sel);
       addRidersList.splice(index, 1);
 
-      await context.Teams.create({
+      await  storage.Teams.create({
         League: route.params.id,
         Member: member.RowKey,
         Rider: sel.id
@@ -203,10 +203,10 @@
     addRidersList.push(sel);
     myRidersList.splice(index, 1);
 
-    let toDelete = await context.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.id);
+    let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.id);
 
     toDelete.forEach(async d => {
-      await context.Teams.remove(d.RowKey);
+      await  storage.Teams.remove(d.RowKey);
     })
   }
 </script>

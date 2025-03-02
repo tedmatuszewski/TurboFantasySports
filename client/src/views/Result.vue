@@ -48,32 +48,30 @@
   import Races from "../components/Races.vue";
   import races from '../data/races.json';
   import Riders from '../data/riders.json';
-  import { StorageContext } from '../storage/StorageContext';
+  import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
   import { ref,onMounted,computed, reactive, watch } from "vue";
   
+  const storage = useStorage();
   const route = useRoute();
   let tables = reactive([]);
   let race = races.find(r => r.key === route.params.race);
-  let context;
 
   watch(() => route.params.race, async (newRace) => {
     race = races.find(r => r.key === newRace);
     
-    loadPage();
+    await loadPage();
   });
 
   onMounted(async () => {
-    context = StorageContext();
-    
-    loadPage();
+    await loadPage();
   });
 
   async function loadPage(){
     tables.length = 0;
     
-    let results = context.Results.getByLeagueAndRace2(route.params.id, route.params.race);
-    let members = context.Members.getByLeague2(route.params.id);
+    let results =  storage.Results.getByLeagueAndRace2(route.params.id, route.params.race);
+    let members =  storage.Members.getByLeague2(route.params.id);
     
     members.forEach((member, i) => {
       let rr = results.filter(result => result.Member === member.RowKey);

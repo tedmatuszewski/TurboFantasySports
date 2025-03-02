@@ -16,17 +16,17 @@
 <script setup>
     import NavBar from "./components/NavBar.vue";
     import Error from "./components/Error.vue";
-    import { StorageContext } from './storage/StorageContext';
+    import { useStorage } from './storage/StorageContext';
     import { onMounted } from 'vue';
 
-    onMounted(async () => {
-        let context = StorageContext();
+    const storage = useStorage();
 
-        await context.Leagues.fillData();
-        await context.Members.fillData();
-        await context.Results.fillData();
-        await context.Teams.fillData();
-    });
+    // onMounted(async () => {
+        storage.Leagues.fillData();
+        storage.Members.fillData();
+        storage.Results.fillData();
+        storage.Teams.fillData();
+    //});
 </script>
 
 <style>

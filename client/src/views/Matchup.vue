@@ -43,19 +43,17 @@
 
 <script setup>
   import Riders from '../data/riders.json';
-  import { StorageContext } from '../storage/StorageContext';
+  import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
   import { ref,onMounted,computed, reactive, watch } from "vue";
   
+  const storage = useStorage();
   const route = useRoute();
   let tables = reactive([]);
-  let context;
 
   onMounted(async () => {
-    context = StorageContext();
-    
-      let teams = context.Teams.getByLeague2(route.params.id);
-      let members = context.Members.getByLeague2(route.params.id);
+      let teams =  storage.Teams.getByLeague2(route.params.id);
+      let members =  storage.Members.getByLeague2(route.params.id);
 
       members.forEach((member, i) => {
         let rr = teams.filter(t => t.Member === member.RowKey);

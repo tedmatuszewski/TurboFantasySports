@@ -24,7 +24,7 @@
 
 <script setup>
   import { ref,onMounted,computed,watch } from "vue";
-  import { StorageContext } from "../storage/StorageContext";
+  import { useStorage } from "../storage/StorageContext";
   import { useAuth0 } from '@auth0/auth0-vue';
   
   const auth0 = useAuth0();
@@ -38,11 +38,11 @@
   });
 
   onMounted(async () => {
-    context = StorageContext();
+    
 
     if(isAuthenticated) {
-      members.value = context.Members.data;
-      leagues.value = context.Leagues.data;
+      members.value =  storage.Members.data;
+      leagues.value =  storage.Leagues.data;
 
       console.log(members.value);
     }

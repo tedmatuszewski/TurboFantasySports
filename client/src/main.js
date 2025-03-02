@@ -23,7 +23,8 @@ const aiOptions = {
   router: router,
   trackAppErrors: true,
   onLoaded: function (sdk) {
-      sdk.context.user.authenticatedId = auth0.user.value.email;
+    const auth01 = createAuth0();
+    sdk.context.user.authenticatedId = auth01.user.value.email;
   }
 };
 

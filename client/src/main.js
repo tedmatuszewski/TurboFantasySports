@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import { createApp, watch } from "vue";
 import { createRouter } from "./router";
 import { createAuth0 } from "@auth0/auth0-vue";
 import config from "./config.json";
@@ -22,9 +22,14 @@ const aiOptions = {
   connectionString: config.appInsights.instrumentationKey,
   router: router,
   trackAppErrors: true,
-  onLoaded: function (sdk) {
-    const auth01 = createAuth0();
-    sdk.context.user.authenticatedId = auth01.user.value.email;
+  trackInitialPageView: true,
+  onLoaded: async function (sdk) {
+    watch(() => auth0.user.value, (newValue) => {
+        if (newValue) {
+          sdk.context.user.authenticatedId = newValue.email;
+        }
+      },
+      { immediate: true });
   }
 };
 

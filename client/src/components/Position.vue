@@ -1,11 +1,15 @@
 <template>
     <div class="pricing card-deck flex-column flex-md-row my-3">
         <div class="card card-pricing text-center px-3 mb-4">
-            <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-primary text-white shadow-sm">Standings</span>
+            <span class="h6 w-60 mx-auto px-4 py-1 rounded-bottom bg-primary text-white shadow-sm">My Team</span>
             <div class="bg-transparent card-header pt-4 border-0">
                 <h1 class="h1 font-weight-normal text-primary text-center mb-0"><span class="price">{{ pointsDisplay }}</span><span class="h6 text-muted ml-2">place</span></h1>
             </div>
             <div class="card-body pt-0">
+                <ul class="list-unstyled mb-4">
+                    <li>{{ member?.TeamName }}</li>
+                </ul>
+                
                 <ul class="list-unstyled mb-4">
                     <li>You have {{ numOf250Riders }} 250 riders</li>
                     <li>You have {{ numOf450Riders }} 450 riders</li>
@@ -14,6 +18,7 @@
                 </ul>
                 <router-link :to="{ name: 'standings', params: { id: route.params.id } }" class="btn btn-secondary mb-3">Points Standings</router-link>
                 <router-link :to="{ name: 'matchup', params: { id: route.params.id } }" class="btn btn-secondary mb-3">Current Matchup</router-link>
+                <button v-on:click="btnChangeTeamNameClick" class="btn btn-secondary mb-3">Change Team Name</button>
             </div>
         </div>
     </div> 
@@ -34,7 +39,7 @@
     let numOf450Riders = ref(0);
     let totalPoints = ref(0);
     let place = ref(0);
-    let context = null;
+    let member = null;
 
     const pointsDisplay = computed(() => {
         switch (place.value) {
@@ -52,8 +57,17 @@
         }
     });
 
+    function btnChangeTeamNameClick() {
+        let newName = prompt("Enter new team name", member?.TeamName);
+
+        if(newName !== null) {
+            member.TeamName = newName;
+            storage.Members.update(member);
+        }
+    }
+
     onMounted(async () => {
-        let member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
+        member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
         let team = storage.Teams.getByLeagueAndMember2(route.params.id, member.RowKey);
         let results = storage.Results.getByLeague2(route.params.id);
         let ids = team.map(t => t.Rider);

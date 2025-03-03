@@ -46,6 +46,19 @@ export default defineStore(table, {
             this.data.push(member);
 
             return member;
+        },
+        async update(member) {
+            var entity = member.toEntity();
+            
+            await client.updateEntity(entity, "Replace");
+            
+            const index = this.data.findIndex(x => x.RowKey === entity.rowKey);
+
+            if (index !== -1) {
+                this.data[index] = new Member(entity);
+            }
+
+            return this.data[index];
         }
     }
   });

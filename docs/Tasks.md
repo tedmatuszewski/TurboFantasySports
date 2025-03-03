@@ -32,6 +32,7 @@
 
 # Planned
 
+- [ ] Put in ads
 - [ ] Add debug button to show the raw user profile info
 - [ ] Proof read and do better on all in app help sections
 - [ ] Build dashboard for league admin
@@ -49,6 +50,5 @@
 
 - [ ] Setup PayPal business and make it so that you have to pay to create a league
 - [ ] Make each league have it's own dedicated table for results
-- [ ] Put in ads
 - [ ] Support for tracking skins
 - [ ] 

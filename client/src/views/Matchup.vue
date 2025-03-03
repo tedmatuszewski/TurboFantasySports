@@ -1,15 +1,15 @@
 <template>
   <div class="container my-4">
-    <div class="row">
-      <div class="col">
-        <h3>Current Matchup</h3>
+    <div class="row my-2">
+      <div class="col-sm">
+        <h3 class="text-center text-sm-left">Current Matchup</h3>
       </div>
-      <div class="col text-right">
-          <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary mr-3">League Home</router-link>
-          <router-link :to="{ name: 'standings', params: { id: route.params.id } }" class="btn btn-primary">Standings</router-link>
+      <div class="col-sm text-center text-sm-right">
+          <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary">League Home</router-link>
+          <router-link :to="{ name: 'standings', params: { id: route.params.id } }" class="btn btn-primary ml-3">Standings</router-link>
       </div>
     </div>
-    
+
     <div class="alert alert-primary" role="alert">
       This page shows the current roster of all the teams in the league. What is shown on this page will be the roster for the next upcoming race.
     </div>

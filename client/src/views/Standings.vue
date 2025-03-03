@@ -1,12 +1,12 @@
 <template>
   <div class="container my-4">
-    <div class="row">
-      <div class="col">
-        <h3>Current Standings</h3>
+    <div class="row my-2">
+      <div class="col-md">
+        <h3 class="text-center text-md-left">Current Standings</h3>
       </div>
-      <div class="col text-right">
-          <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary mr-3">League Home</router-link>
-          <router-link :to="{ name: 'matchup', params: { id: route.params.id } }" class="btn btn-primary">Matchup</router-link>
+      <div class="col-md text-center text-md-right">
+          <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary">League Home</router-link>
+          <router-link :to="{ name: 'matchup', params: { id: route.params.id } }" class="btn btn-primary ml-3">Matchup</router-link>
       </div>
     </div>
 

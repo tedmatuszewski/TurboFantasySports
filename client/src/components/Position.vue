@@ -16,9 +16,9 @@
                     <li>You have {{ (numOf250Riders + numOf450Riders) }} of {{ Config.maxRiders }} spots filled</li>
                     <li>Your current score is {{ totalPoints }}</li>
                 </ul>
-                <router-link :to="{ name: 'standings', params: { id: route.params.id } }" class="btn btn-secondary mb-3">Points Standings</router-link>
-                <router-link :to="{ name: 'matchup', params: { id: route.params.id } }" class="btn btn-secondary mb-3">Current Matchup</router-link>
-                <button v-on:click="btnChangeTeamNameClick" class="btn btn-secondary mb-3">Change Team Name</button>
+                <router-link :to="{ name: 'standings', params: { id: route.params.id } }" class="btn btn-secondary btn-block mb-2">Points Standings</router-link>
+                <router-link :to="{ name: 'matchup', params: { id: route.params.id } }" class="btn btn-secondary btn-block mb-2">Current Matchup</router-link>
+                <button v-on:click="btnChangeTeamNameClick" class="btn btn-secondary btn-block">Change Team Name</button>
             </div>
         </div>
     </div> 

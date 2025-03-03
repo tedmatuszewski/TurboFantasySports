@@ -24,11 +24,11 @@
 - [x] Figure out how to cache the results of the requests to the storage accounts
 - [x] Add PWA manifest
 - [x] Add App Insights
+- [x] Add ability to change your teams name
 - [ ] Remove the "add a fifth one" LOL
 - [ ] Put a button on standings page so you can get to the match up and vice versa
 - [ ] Trade rider workflow
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)
-- [ ] Add ability to change your teams name
 
 # Planned
 

@@ -5,7 +5,8 @@
         <h3>Current Matchup</h3>
       </div>
       <div class="col text-right">
-          <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary">League Home</router-link>
+          <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary mr-3">League Home</router-link>
+          <router-link :to="{ name: 'standings', params: { id: route.params.id } }" class="btn btn-primary">Standings</router-link>
       </div>
     </div>
     

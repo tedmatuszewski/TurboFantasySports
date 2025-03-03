@@ -25,8 +25,8 @@
 - [x] Add PWA manifest
 - [x] Add App Insights
 - [x] Add ability to change your teams name
-- [ ] Remove the "add a fifth one" LOL
-- [ ] Put a button on standings page so you can get to the match up and vice versa
+- [x] Put a button on standings page so you can get to the match up and vice versa
+- [x] Remove the "add a fifth one" LOL
 - [ ] Trade rider workflow
 - [ ] Deploy screen scraper and schedule it to be ran every Monday(?)
 

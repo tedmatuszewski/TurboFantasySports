@@ -48,6 +48,13 @@
       </div> 
     </div>
 
+    <div class="row">
+      <div class="col-md-6 py-5">
+        <Feed></Feed>
+      </div>
+    </div>
+      
+
     <div class="modal" tabindex="-1" id="riderModal">
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
@@ -96,6 +103,7 @@
   import RacerLink from "../components/RacerLink.vue";
   import Vue3EasyDataTable from 'vue3-easy-data-table';
   import { getPreviousRace } from '../models/RaceNavigator';
+  import Feed from "../components/Feed.vue";
 
   const headers = [
     { text: "Number", value: "number", sortable: true },
@@ -187,6 +195,12 @@
         Member: member.RowKey,
         Rider: sel.id
       });
+
+      await storage.Feeds.create({
+        League: route.params.id,
+        Member: member.RowKey,
+        Action: `Added rider ${sel.name} to their team`
+      });
     });
 
     riderModal.hide();
@@ -207,7 +221,12 @@
 
     toDelete.forEach(async d => {
       await  storage.Teams.remove(d.RowKey);
-    })
+      await storage.Feeds.create({
+        League: route.params.id,
+        Member: member.RowKey,
+        Action: `Removed rider ${sel.name} from their team`
+      });
+    });
   }
 </script>
 

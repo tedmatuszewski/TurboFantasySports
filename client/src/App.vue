@@ -26,6 +26,7 @@
         storage.Members.fillData();
         storage.Results.fillData();
         storage.Teams.fillData();
+        storage.Feeds.fillData();
     //});
 </script>
 

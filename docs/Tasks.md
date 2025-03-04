@@ -33,6 +33,7 @@
 # Planned
 
 - [ ] Put in ads
+- [ ] Add in a running log of all actions within the system
 - [ ] Add debug button to show the raw user profile info
 - [ ] Proof read and do better on all in app help sections
 - [ ] Build dashboard for league admin

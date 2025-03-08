@@ -183,8 +183,21 @@
   }
 
   async function addRiderModalClick() {
-    if(myRidersList.length >= Config.maxRiders && itemsSelected.value.length > 0) {
-      alert("You can only have " + Config.maxRiders + " riders on your team.");
+    if(itemsSelected.value.length === 0) {
+      alert("You must select at least one rider to add to your team.");
+
+      return;
+    }
+
+    if(myRidersList.length >= Config.maxRiders) {
+      alert("You already have " + Config.maxRiders + " riders on your team. You must drop riders before you can add more.");
+
+      return;
+    }
+
+    if((myRidersList.length + itemsSelected.value.length) >= Config.maxRiders) {
+      alert("You have selected to many riders. You can only have " + Config.maxRiders + " riders on your team.");
+
       return;
     }
 

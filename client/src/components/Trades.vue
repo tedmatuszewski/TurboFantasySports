@@ -1,50 +1,44 @@
 <template>
   <div id="tracking">
     <div class="text-center tracking-status-intransit">
-        <p class="tracking-status text-tight">Action Log</p>
+        <p class="tracking-status text-tight">Pending Trades</p>
     </div>
     <div class="tracking-list">
-        <div class="tracking-item" v-for="item in feed">
-          <div class="tracking-icon status-intransit">
-              <i class="fas fa-circle"></i>
-          </div>
-          <div class="tracking-date">{{ formatDate(item.timestamp) }}<span>{{ formatTime(item.timestamp) }}</span></div>
-          <div class="tracking-content">{{ getMemberName(item.Member) }}<span>{{ item.Action }}</span></div>
-        </div>
+      Pending Trades Content
     </div>
   </div>
 </template>
 
 <script setup>
-  import { ref,onMounted,computed,watch } from "vue";
-  import { useStorage } from "../storage/StorageContext";
-  import { useAuth0 } from '@auth0/auth0-vue';
+  // import { ref,onMounted,computed,watch } from "vue";
+  // import { useStorage } from "../storage/StorageContext";
+  // import { useAuth0 } from '@auth0/auth0-vue';
   
-  const storage = useStorage();
+  // const storage = useStorage();
   
-  let feed = ref([]);
-  let members = ref([]);
+  // let feed = ref([]);
+  // let members = ref([]);
 
-  onMounted(async () => {
-    feed.value =  storage.Feeds.data;
-    members.value = storage.Members.data;
-  });
+  // onMounted(async () => {
+  //   feed.value =  storage.Feeds.data;
+  //   members.value = storage.Members.data;
+  // });
 
-  function getMemberName(id) {
-    let member = members.value.find(m => m.RowKey == id);
+  // function getMemberName(id) {
+  //   let member = members.value.find(m => m.RowKey == id);
 
-    return member ? member.TeamName : '';
-  }
+  //   return member ? member.TeamName : '';
+  // }
 
-  function formatDate(date) {
-    const options = { day: '2-digit', month: 'short' };
-    return new Date(date).toLocaleDateString('en-US', options);
-  }
+  // function formatDate(date) {
+  //   const options = { day: '2-digit', month: 'short' };
+  //   return new Date(date).toLocaleDateString('en-US', options);
+  // }
 
-  function formatTime(date) {
-    const options = { hour: '2-digit', minute: '2-digit', hour12: true };
-    return new Date(date).toLocaleTimeString('en-US', options);
-  }
+  // function formatTime(date) {
+  //   const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+  //   return new Date(date).toLocaleTimeString('en-US', options);
+  // }
   
 </script>
 
@@ -94,9 +88,7 @@
  background-color:#214977
 }
 .tracking-list {
- border:1px solid #e5e5e5;
- overflow-y: auto;
- max-height: 400px;
+ border:1px solid #e5e5e5
 }
 .tracking-item {
  border-left:1px solid #e5e5e5;

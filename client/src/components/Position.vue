@@ -57,12 +57,18 @@
         }
     });
 
-    function btnChangeTeamNameClick() {
+    async function btnChangeTeamNameClick() {
         let newName = prompt("Enter new team name", member?.TeamName);
+        let oldName = member?.TeamName;
 
         if(newName !== null) {
             member.TeamName = newName;
-            storage.Members.update(member);
+            await storage.Members.update(member);
+            await storage.Feeds.create({
+                League: route.params.id,
+                Member: member.RowKey,
+                Action: `Changed team name from ${oldName} to ${newName}`
+            });
         }
     }
 

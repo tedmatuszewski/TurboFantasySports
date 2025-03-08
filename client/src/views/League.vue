@@ -52,6 +52,10 @@
       <div class="col-md-6 py-5">
         <Feed></Feed>
       </div>
+      
+      <div class="col-md-6 py-5">
+        <Trades v-if="Config.showTrades"></Trades>
+      </div>
     </div>
       
 
@@ -104,6 +108,7 @@
   import Vue3EasyDataTable from 'vue3-easy-data-table';
   import { getPreviousRace } from '../models/RaceNavigator';
   import Feed from "../components/Feed.vue";
+  import Trades from "../components/Trades.vue";
 
   const headers = [
     { text: "Number", value: "number", sortable: true },
@@ -220,12 +225,8 @@
     let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.id);
 
     toDelete.forEach(async d => {
-      await  storage.Teams.remove(d.RowKey);
-      await storage.Feeds.create({
-        League: route.params.id,
-        Member: member.RowKey,
-        Action: `Removed rider ${sel.name} from their team`
-      });
+      await storage.Teams.remove(d.RowKey);
+      await storage.Feeds.create({ League: route.params.id, Member: member.RowKey, Action: `Removed rider ${sel.name} from their team` });
     });
   }
 </script>

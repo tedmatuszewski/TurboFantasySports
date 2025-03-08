@@ -194,8 +194,8 @@
 
       return;
     }
-
-    if((myRidersList.length + itemsSelected.value.length) >= Config.maxRiders) {
+console.log(myRidersList.length, itemsSelected.value.length);
+    if((myRidersList.length + itemsSelected.value.length) > Config.maxRiders) {
       alert("You have selected to many riders. You can only have " + Config.maxRiders + " riders on your team.");
 
       return;

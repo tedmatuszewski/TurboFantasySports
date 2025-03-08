@@ -137,7 +137,7 @@
 { "name": "Hunter Schlosser", "number": 173,"id":"hunter-schlosser","class":450},
 { "name": "Mitchell Zaremba", "number": 183,"id":"mitchell-zaremba","class":450},
 { "name": "Logan Leitzel", "number": 208,"id":"logan-leitzel","class":450},
-{ "name": "Dylan Wood","nu mber": 262,"id":"dylan-wood","class":450},
+{ "name": "Dylan Wood","number": 262,"id":"dylan-wood","class":450},
 { "name": "Cory Carsten", "number": 281,"id":"cory-carsten","class":450},
 { "name": "Theodore Pauli", "number": 282,"id":"theodore-pauli","class":450},
 { "name": "Konnor Visger", "number": 299,"id":"konnor-visger","class":450},
@@ -152,10 +152,10 @@
 { "name": "Austin Cozadd", "number": 512,"id":"austin-cozadd","class":450},
 { "name": "Mason Kerr", "number": 597,"id":"mason-kerr","class":450},
 { "name": "Robert Piazza", "number": 637,"id":"robert-piazza","class":450},
-{ "name": "Colby Copp","nu mber": 645,"id":"colby-copp","class":450},
+{ "name": "Colby Copp","number": 645,"id":"colby-copp","class":450},
 { "name": "Tristan Lane", "number": 711,"id":"tristan-lane","class":450},
 { "name": "Carter Stephenson", "number": 824,"id":"carter-stephenson","class":450},
 { "name": "Zack Williams", "number": 874,"id":"zack-williams","class":450},
-{ "name": "Josh Greco","nu mber": 976,"id":"josh-greco","class":450},
+{ "name": "Josh Greco","number": 976,"id":"josh-greco","class":450},
 { "name": "Preston Taylor", "number": 996,"id":"preston-taylor","class":450}
 ]

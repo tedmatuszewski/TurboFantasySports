@@ -92,7 +92,6 @@
 { "name": "Garret Marchbanks", "number":36, "id": "garrett-marchbanks", "class": 250 },
 { "name": "Lance Kobusch", "number":195, "id": "lance-kobusch", "class": 250 },
 { "name": "Enzo Lopes", "number":166, "id": "enzo-lopes", "class": 250 },
-{ "name": "Gaven Towers", "number":115, "id": "gavin-towers", "class": 250 },
 { "name": "Henry Miller", "number":55, "id": "henry-miller", "class": 250 },
 { "name": "Marshal Weltin", "number":35, "id": "marshal-weltin", "class": 250 },
 { "name": "Justin Starling", "number":	122, "id": "justin-starling", "class": 450 },
@@ -104,5 +103,6 @@
 { "name": "Anthony Rodriguez", "number": 267, "id": "anthony-rodriguez", "class": 450 },
 { "name": "Lorenzo Locurcio", "number": 74, "id": "lorenzo-locurcio", "class": 250 },
 { "name": "Ayden Shive", "number": 137, "id": "ayden-shive", "class": 250 },
-{ "name": "Trevor Colip", "number": 89, "id": "trevor-colip", "class": 250 }
+{ "name": "Trevor Colip", "number": 89, "id": "trevor-colip", "class": 250 },
+{ "name": "Dominique Thury", "number": 964, "id": "dominique-thury", "class": 250 }
 ]

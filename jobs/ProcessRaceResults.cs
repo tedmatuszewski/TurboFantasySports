@@ -37,7 +37,7 @@ namespace TurboFantasySports
             var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[1]/a";
             var result250Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[3]/ul/li[1]/a";
             var burl = "https://racerxonline.com";
-            var race = "daytona";
+            var race = "indianapolis";
             var url = $"{burl}/sx/2025/{race}";
             var web = new HtmlWeb();
             var doc = web.Load(url);

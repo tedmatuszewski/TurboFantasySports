@@ -58,7 +58,6 @@
       </div>
     </div>
       
-
     <div class="modal" tabindex="-1" id="riderModal">
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">

@@ -23,21 +23,54 @@ namespace TurboFantasySports
         [Function("ProcessRaceResults")]
         public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
+            //CreateRaces();
             // https://www.nuget.org/packages/Azure.Data.Tables/
+
+            //UpdateTableData(resultsClient, teamsClient);
+            IngestRaceResults("arlington");
+
+            return new OkObjectResult("Successfully ran function");
+        }
+
+        private void CreateRaces()
+        {
+            string jsonFilePath = "C:\\Users\\tznqxt\\source\\repos\\Github\\TurboFantasySports\\client\\src\\data\\races.json";
+            string jsonString = File.ReadAllText(jsonFilePath);
+            var races = JsonSerializer.Deserialize<List<Race>>(jsonString);
+            var accountName = "tedpersonalwebsite";
+            var storageAccountKey = "fVAszloqYcVBsKrqpzKOgdnYeInUZCHsX6bIU1l5h5oJ86oyMZzl159Q9o5Xuk4fWB97TQkK02Yv+ASt4/Zw3A==";
+            var storageUri = $"https://{accountName}.table.core.windows.net";
+            var credential = new TableSharedKeyCredential(accountName, storageAccountKey);
+            var racesClient = new TableClient(new Uri(storageUri), "Races", credential);
+
+            foreach(var race in races) 
+            {
+                string name = race.name;
+                
+                var tableEntity = new TableEntity("1", Guid.NewGuid().ToString())
+                {
+                    { "Name", name },
+                    { "Date", race.date },
+                    { "Lites", race.@class },
+                    { "Racerx", race.key }
+                };
+
+                racesClient.AddEntity(tableEntity);
+            }
+        }
+
+        private void IngestRaceResults(string race) {
             var accountName = "tedpersonalwebsite";
             var storageAccountKey = "fVAszloqYcVBsKrqpzKOgdnYeInUZCHsX6bIU1l5h5oJ86oyMZzl159Q9o5Xuk4fWB97TQkK02Yv+ASt4/Zw3A==";
             var storageUri = $"https://{accountName}.table.core.windows.net";
             var credential = new TableSharedKeyCredential(accountName, storageAccountKey);
             var resultsClient = new TableClient(new Uri(storageUri), "Results", credential);
             var teamsClient = new TableClient(new Uri(storageUri), "Teams", credential);
-
-            //UpdateTableData(resultsClient, teamsClient);
-
+            var racesClient = new TableClient(new Uri(storageUri), "Races", credential);
             var partition = "1";
             var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[1]/a";
             var result250Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[3]/ul/li[1]/a";
             var burl = "https://racerxonline.com";
-            var race = "indianapolis";
             var url = $"{burl}/sx/2025/{race}";
             var web = new HtmlWeb();
             var doc = web.Load(url);
@@ -47,6 +80,11 @@ namespace TurboFantasySports
             var result250 = GetRaceResults($"{burl}{result250Href}");
             var results = result250.Concat(result450).ToList();
             var teams = teamsClient.Query<TableEntity>();
+
+            var raceRecord = racesClient.Query<TableEntity>()
+                .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
+                .OrderBy(t => DateTime.Parse(t.GetString("Date")))
+                .LastOrDefault();
 
             foreach(var team in teams) 
             {
@@ -73,16 +111,14 @@ namespace TurboFantasySports
                     { "Race", race }
                 };
 
-                resultsClient.AddEntity(tableEntity);
+                //resultsClient.AddEntity(tableEntity);
                 
                _logger.LogInformation($"Processed result for rider {rider} in position {position} with {points} points.");
             }
 
             _logger.LogInformation($"Successfully processed results request for {race}.");
-            return new OkObjectResult("Successfully ran function");
         }
 
-        
         private void UpdateTableData(TableClient resultsClient, TableClient teamsClient)
         {
             Pageable<TableEntity> queryResultsFilter = resultsClient.Query<TableEntity>();
@@ -264,5 +300,13 @@ namespace TurboFantasySports
             //         }
             //     }
             // }
+    }
+
+    public class Race 
+    {
+        public string name { get; set; }
+        public string date { get; set; }
+        public string @class { get; set; }
+        public string key { get; set; }
     }
 }

@@ -8,14 +8,7 @@
 
     <BulletCallout />
 
-    <div class="container">
-      <!-- Home Page Ad -->
-      <ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-1641621719114473"
-          data-ad-slot="1623933238"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
+    <div class="container adHomePage">
     </div>
 
     <div class="container">
@@ -29,6 +22,11 @@
   import Leagues from "../components/Leagues.vue"
   import BulletCallout from "../components/BulletCallout.vue";
   import Checklist from "../components/Checklist.vue";
+  import { onMounted } from "vue";
+
+  onMounted(() => {
+    document.querySelector(".adHomePage").innerHTML = document.querySelector("#adHomePage").innerHTML;
+  });
 </script>
 
 <style lang="css" scoped>

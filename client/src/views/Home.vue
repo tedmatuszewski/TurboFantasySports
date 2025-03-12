@@ -9,7 +9,7 @@
     <BulletCallout />
 
     <div class="container adHomePage">
-      <Adsense adStyle="display:inline-block;height:300px;width:100%;"
+      <Adsense adStyle="display:inline-block;height:200px"
            clientId="ca-pub-1641621719114473"
            slotId="1623933238"
            fullWidthResponsive="true">

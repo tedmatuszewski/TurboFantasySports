@@ -9,6 +9,11 @@
     <BulletCallout />
 
     <div class="container adHomePage">
+      <Adsense adStyle="display:inline-block;height:300px"
+           clientId="ca-pub-1641621719114473"
+           slotId="1623933238"
+           fullWidthResponsive="true">
+      </Adsense>
     </div>
 
     <div class="container">
@@ -22,11 +27,7 @@
   import Leagues from "../components/Leagues.vue"
   import BulletCallout from "../components/BulletCallout.vue";
   import Checklist from "../components/Checklist.vue";
-  import { onMounted } from "vue";
-
-  onMounted(() => {
-    document.querySelector(".adHomePage").innerHTML = document.querySelector("#adHomePage").innerHTML;
-  });
+  import { Adsense } from 'vue3-google-adsense';
 </script>
 
 <style lang="css" scoped>

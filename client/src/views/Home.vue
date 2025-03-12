@@ -9,14 +9,13 @@
     <BulletCallout />
 
     <div class="container">
-      <amp-ad width="100vw" height="320"
-          type="adsense"
+      <!-- Home Page Ad -->
+      <ins class="adsbygoogle"
+          style="display:block"
           data-ad-client="ca-pub-1641621719114473"
           data-ad-slot="1623933238"
-          data-auto-format="rspv"
-          data-full-width="">
-        <div overflow=""></div>
-      </amp-ad>
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
     </div>
 
     <div class="container">

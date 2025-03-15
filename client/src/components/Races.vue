@@ -44,16 +44,12 @@
     let races = storage.Races.data;
     let initSlide = storage.Races.getNextUpcomingRaceIndex();
 
-console.log(props.race);
-
     if(props.race !== undefined) {
         let race = races.find(r => r.RowKey === props.race);
         let index = races.indexOf(race);
 
         initSlide = index;
     }
-
-    console.log(initSlide);
 
     function isNextUpcomingRace(race) {
         return storage.Races.isNextUpcomingRace(race);

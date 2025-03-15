@@ -18,7 +18,22 @@ namespace TurboFantasySports
         public ProcessRaceResults(ILogger<ProcessRaceResults> logger)
         {
             _logger = logger;
+            storageUri = $"https://{accountName}.table.core.windows.net";
+            var credential = new TableSharedKeyCredential(accountName, storageAccountKey);
+            resultsClient = new TableClient(new Uri(storageUri), "Results", credential);
+            teamsClient = new TableClient(new Uri(storageUri), "Teams", credential);
+            racesClient = new TableClient(new Uri(storageUri), "Races", credential);
+            outcomesClient = new TableClient(new Uri(storageUri), "Outcomes", credential);
         }
+
+        string partition = "1";
+        string accountName = "tedpersonalwebsite";
+        string storageAccountKey = "fVAszloqYcVBsKrqpzKOgdnYeInUZCHsX6bIU1l5h5oJ86oyMZzl159Q9o5Xuk4fWB97TQkK02Yv+ASt4/Zw3A==";
+        string storageUri;
+        TableClient resultsClient;
+        TableClient teamsClient;
+        TableClient racesClient;
+        TableClient outcomesClient;
 
         [Function("ProcessRaceResults")]
         public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
@@ -26,9 +41,9 @@ namespace TurboFantasySports
             //CreateRaces();
             // https://www.nuget.org/packages/Azure.Data.Tables/
 
-            //UpdateTableData(resultsClient, teamsClient);
-            IngestRaceResults("arlington");
-
+            UpdateTableData();
+            //IngestRaceResults();
+            
             return new OkObjectResult("Successfully ran function");
         }
 
@@ -37,11 +52,6 @@ namespace TurboFantasySports
             string jsonFilePath = "C:\\Users\\tznqxt\\source\\repos\\Github\\TurboFantasySports\\client\\src\\data\\races.json";
             string jsonString = File.ReadAllText(jsonFilePath);
             var races = JsonSerializer.Deserialize<List<Race>>(jsonString);
-            var accountName = "tedpersonalwebsite";
-            var storageAccountKey = "fVAszloqYcVBsKrqpzKOgdnYeInUZCHsX6bIU1l5h5oJ86oyMZzl159Q9o5Xuk4fWB97TQkK02Yv+ASt4/Zw3A==";
-            var storageUri = $"https://{accountName}.table.core.windows.net";
-            var credential = new TableSharedKeyCredential(accountName, storageAccountKey);
-            var racesClient = new TableClient(new Uri(storageUri), "Races", credential);
 
             foreach(var race in races) 
             {
@@ -59,15 +69,18 @@ namespace TurboFantasySports
             }
         }
 
-        private void IngestRaceResults(string race) {
-            var accountName = "tedpersonalwebsite";
-            var storageAccountKey = "fVAszloqYcVBsKrqpzKOgdnYeInUZCHsX6bIU1l5h5oJ86oyMZzl159Q9o5Xuk4fWB97TQkK02Yv+ASt4/Zw3A==";
-            var storageUri = $"https://{accountName}.table.core.windows.net";
-            var credential = new TableSharedKeyCredential(accountName, storageAccountKey);
-            var resultsClient = new TableClient(new Uri(storageUri), "Results", credential);
-            var teamsClient = new TableClient(new Uri(storageUri), "Teams", credential);
-            var racesClient = new TableClient(new Uri(storageUri), "Races", credential);
-            var partition = "1";
+        private void IngestRaceResults(string race = null) 
+        {    
+            var raceRecord = racesClient.Query<TableEntity>()
+                .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
+                .OrderBy(t => DateTime.Parse(t.GetString("Date")))
+                .LastOrDefault();
+
+            if( race == null) 
+            {
+                race = raceRecord.GetString("Racerx");
+            }
+
             var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[1]/a";
             var result250Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[3]/ul/li[1]/a";
             var burl = "https://racerxonline.com";
@@ -81,10 +94,18 @@ namespace TurboFantasySports
             var results = result250.Concat(result450).ToList();
             var teams = teamsClient.Query<TableEntity>();
 
-            var raceRecord = racesClient.Query<TableEntity>()
-                .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
-                .OrderBy(t => DateTime.Parse(t.GetString("Date")))
-                .LastOrDefault();
+            foreach(var result in results)
+            {
+                outcomesClient.AddEntity(new TableEntity(partition, Guid.NewGuid().ToString())
+                {
+                    { "Rider", result.Value },
+                    { "Race", raceRecord.GetString("RowKey") },
+                    { "Place", result.Key },
+                    { "Points", ConvertPositionToPoints(result.Key) },
+                });
+
+               _logger.LogInformation($"Adding race outcome for {result.Value} in position {result.Key}.");
+            }    
 
             foreach(var team in teams) 
             {
@@ -111,7 +132,7 @@ namespace TurboFantasySports
                     { "Race", race }
                 };
 
-                //resultsClient.AddEntity(tableEntity);
+                resultsClient.AddEntity(tableEntity);
                 
                _logger.LogInformation($"Processed result for rider {rider} in position {position} with {points} points.");
             }
@@ -119,36 +140,17 @@ namespace TurboFantasySports
             _logger.LogInformation($"Successfully processed results request for {race}.");
         }
 
-        private void UpdateTableData(TableClient resultsClient, TableClient teamsClient)
+        private void UpdateTableData()
         {
-            Pageable<TableEntity> queryResultsFilter = resultsClient.Query<TableEntity>();
-
-            var mapping = new Dictionary<string, string> {
-                { "madeup4", "095a3bae-4f35-4725-950f-1ef6c517be2b" },
-                { "madeup5", "297462b0-b36c-4a6e-aa33-454d8c445f8a" },
-                { "madeup7", "6a078a96-e2f4-4caf-8ae0-a38547a1cbba" },
-                { "madeup2", "6a7395a7-5ab9-423e-bf64-7f2a830b441f" },
-                { "madeup6", "74389f62-332a-47f5-9291-32f87ba8f3c4" },
-                { "facebook|10230824544294701", "7c485c51-1671-4df3-8349-85ec3149ca1e" },
-                { "facebook|10221474549733347", "9c348298-43e5-4b4a-864d-3eb12163d142" },
-                { "madeup1", "b15cd754-a18c-4f0a-9838-5aa7ad25dc1c" },
-                { "madeup3", "cad4701c-34c2-4272-8322-17cd8fb12a79" },
-                { "facebook|10231970315453351", "4b5693ce-f34a-4ba0-b71d-4302c7cb17b6" }
-            };
-
+            var queryResultsFilter = resultsClient.Query<TableEntity>();
+            var races = racesClient.Query<TableEntity>();
 
             foreach (TableEntity qEntity in queryResultsFilter)
             {
-                var old = qEntity.GetString("Member");
-
-                if(mapping.ContainsKey(old) == false)
-                {
-                    continue;
-                }
-
-                var member = mapping[old];
-
-                qEntity["Member"] = member;
+                var old = qEntity.GetString("Race");
+                var race = races.SingleOrDefault(r => r.GetString("Racerx") == old);
+   
+                qEntity["Race"] = race.RowKey;
 
                 resultsClient.UpdateEntity(qEntity, ETag.All);
             }

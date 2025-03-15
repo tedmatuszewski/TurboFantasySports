@@ -2,14 +2,14 @@
   <div class="container my-4">
     <div class="row">
       <div class="col">
-        <h3>{{ race.name }} Race Results</h3>
+        <h3>{{ race.Name }} Race Results</h3>
       </div>
       <div class="col text-right">
           <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary">League Home</router-link>
       </div>
     </div>
 
-    <races :race="race.key"></races>
+    <races :race="race.RowKey"></races>
     
     <div class="row">
       <div class="col-md-6" v-for="(table, i) in tables" :value="table.member.UserGuid">
@@ -46,7 +46,6 @@
 
 <script setup>
   import Races from "../components/Races.vue";
-  import races from '../data/races.json';
   import Riders from '../data/riders.json';
   import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
@@ -54,11 +53,13 @@
   
   const storage = useStorage();
   const route = useRoute();
+
   let tables = reactive([]);
-  let race = races.find(r => r.key === route.params.race);
+  let races = storage.Races.data;
+  let race = races.find(r => r.RowKey === route.params.race);
 
   watch(() => route.params.race, async (newRace) => {
-    race = races.find(r => r.key === newRace);
+    race = races.find(r => r.RowKey === newRace);
     
     await loadPage();
   });

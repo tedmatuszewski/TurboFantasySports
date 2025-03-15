@@ -35,6 +35,7 @@
     const storage = useStorage();
     const auth0 = useAuth0();
     const route = useRoute();
+
     let numOf250Riders = ref(0);
     let numOf450Riders = ref(0);
     let totalPoints = ref(0);
@@ -74,6 +75,7 @@
 
     onMounted(async () => {
         member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
+        
         let team = storage.Teams.getByLeagueAndMember2(route.params.id, member.RowKey);
         let results = storage.Results.getByLeague2(route.params.id);
         let ids = team.map(t => t.Rider);

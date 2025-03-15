@@ -28,15 +28,17 @@
 
 <script setup>
     import { defineProps, ref } from 'vue';
-    import { getNextUpcomingRace } from '../models/RaceNavigator';
+    import { useStorage } from '../storage/StorageContext';
+
     const props = defineProps({ id: { type: String } });
+    const storage = useStorage();
 
     let days= 0;
     let hours = 0;
     let minutes = 0;
     let seconds = ref(0);
-    let nextRace = getNextUpcomingRace();
-    let deadline = new Date(nextRace.date).getTime();
+    let nextRace = storage.Races.getNextUpcomingRace();
+    let deadline = new Date(nextRace.Date).getTime();
 
     let x = setInterval(function() {
         let currentTime = new Date().getTime();                

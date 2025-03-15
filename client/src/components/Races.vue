@@ -15,11 +15,11 @@
                 <template #content>
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                            <h5 class="card-title">{{ race.name }} <span v-if="isNextUpcomingRace(race)" class="badge rounded-pill text-bg-warning">Next Race</span></h5>
-                            <h6 class="card-subtitle mb-2 text-body-secondary">{{ formatDate(race.date) }}</h6>
-                            <p class="card-text">{{ race.class }}</p>
+                            <h5 class="card-title">{{ race.Name }} <span v-if="isNextUpcomingRace(race)" class="badge rounded-pill text-bg-warning">Next Race</span></h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">{{ formatDate(race.Date) }}</h6>
+                            <p class="card-text">{{ race.Lites }}</p>
                             <a target="_blank" :href="getRaceLink(race)" class="card-link mr-3">Info</a>
-                            <router-link v-if="showResultLink(race)" :to="{ name: 'result', params: { race: race.key } }">Results</router-link>
+                            <router-link v-if="showResultLink(race)" :to="{ name: 'result', params: { race: race.RowKey } }">Results</router-link>
                         </div>
                     </div>
                 </template>
@@ -33,23 +33,30 @@
     import { defineProps } from 'vue';
     import { VueperSlides, VueperSlide } from 'vueperslides'
     import 'vueperslides/dist/vueperslides.css'
-    import races from '../data/races.json';
-    import { getNextUpcomingRaceIndex, isNextUpcomingRace } from '../models/RaceNavigator';
-    import { reactive  } from "vue";
     import config from '../config.json';
+    import { useStorage } from '../storage/StorageContext';
 
     const props = defineProps({
         race: { type: String }
     });
 
-    let initSlide = getNextUpcomingRaceIndex();
+    let storage = useStorage();
+    let races = storage.Races.data;
+    let initSlide = storage.Races.getNextUpcomingRaceIndex();
+
+console.log(props.race);
 
     if(props.race !== undefined) {
-        initSlide = 1;
-        let race = races.find(r => r.key === props.race);
+        let race = races.find(r => r.RowKey === props.race);
         let index = races.indexOf(race);
 
         initSlide = index;
+    }
+
+    console.log(initSlide);
+
+    function isNextUpcomingRace(race) {
+        return storage.Races.isNextUpcomingRace(race);
     }
 
     function formatDate(dateString) {
@@ -60,12 +67,12 @@
     function getRaceLink(race) {
         // https://racerxonline.com/sx/2025/daytona
         const year = new Date().getFullYear();
-        return config.racerx + "/sx/" + year + "/" + race.key;
+        return config.racerx + "/sx/" + year + "/" + race.Racerx;
     }
 
     function showResultLink(race) {
         const now = new Date();
-        const raceDate = new Date(race.date);
+        const raceDate = new Date(race.Date);
         
         if (raceDate <= now) {
             return true;

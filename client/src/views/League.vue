@@ -56,7 +56,7 @@
       <div class="col-md-6 py-5">
         <Trades v-if="Config.showTrades"></Trades>
       </div>
-    </div>
+    </div> 
       
     <div class="modal" tabindex="-1" id="riderModal">
       <div class="modal-dialog modal-dialog-scrollable">
@@ -105,7 +105,6 @@
   import Config from "../config.json";
   import RacerLink from "../components/RacerLink.vue";
   import Vue3EasyDataTable from 'vue3-easy-data-table';
-  import { getPreviousRace } from '../models/RaceNavigator';
   import Feed from "../components/Feed.vue";
   import Trades from "../components/Trades.vue";
 
@@ -117,7 +116,7 @@
   ];
 
   const storage = useStorage();
-  let itemsSelected = ref([]);
+  const itemsSelected = ref([]);
   const searchField = ref("name");
   const searchValue = ref("");
   const auth0 = useAuth0();
@@ -127,20 +126,11 @@
   let myRidersList = reactive([]);
   let league = ref(null);
   let members = ref(null);
-  let context = null;
   let riderModal = null;
   let confirmModal = null;
-  let prev = getPreviousRace();
+  let prev = storage.Races.getPreviousRace();
   let isRosterEditable = ref(false);
   let member;
-
-  const isAddRiderDisabled = computed(() => {
-    if ((isRosterEditable.value == false) || (myRidersList.length >= Config.maxRiders)) {
-      return true;
-    } else {
-      return false;
-    }
-  });
 
   onMounted(async () => {
     riderModal = new bootstrap.Modal(document.getElementById('riderModal'), {});
@@ -148,7 +138,7 @@
 
     league.value = storage.Leagues.getSingle(route.params.id);
     members.value = storage.Members.getByLeague2(route.params.id);
-    isRosterEditable.value = storage.Results.hasResults2(route.params.id, prev.key);
+    isRosterEditable.value = storage.Results.hasResults2(route.params.id, prev.RowKey);
     member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
 
     let allTeams = storage.Teams.getByLeague2(route.params.id);
@@ -193,7 +183,7 @@
 
       return;
     }
-console.log(myRidersList.length, itemsSelected.value.length);
+    
     if((myRidersList.length + itemsSelected.value.length) > Config.maxRiders) {
       alert("You have selected to many riders. You can only have " + Config.maxRiders + " riders on your team.");
 

@@ -46,7 +46,6 @@
 
 <script setup>
   import Races from "../components/Races.vue";
-  import Riders from '../data/riders.json';
   import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
   import { ref,onMounted,computed, reactive, watch } from "vue";
@@ -90,8 +89,8 @@
   }
 
   function getRiderName(id) {
-    let rider = Riders.find(r => r.id === id);
-    return rider ? rider.name : '';
+    let rider = storage.Riders.data.find(r => r.RowKey === id);
+    return rider ? rider.Name : '';
   }
 </script>
 

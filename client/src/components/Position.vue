@@ -28,7 +28,6 @@
     import { useStorage } from '../storage/StorageContext';
     import { ref,onMounted,computed, reactive  } from "vue";
     import { useRoute } from 'vue-router';
-    import riderBank from '../data/riders.json';
     import Config from "../config.json";
     import { useAuth0 } from '@auth0/auth0-vue';
 
@@ -78,10 +77,11 @@
         
         let team = storage.Teams.getByLeagueAndMember2(route.params.id, member.RowKey);
         let results = storage.Results.getByLeague2(route.params.id);
+        let riders = storage.Riders.data;
         let ids = team.map(t => t.Rider);
         let totals = {};
-        let myRiders = riderBank.filter(rider => {
-            return ids.indexOf(rider.id) !== -1;
+        let myRiders = riders.filter(rider => {
+            return ids.indexOf(rider.RowKey) !== -1;
         });
 
         results.forEach(r => {
@@ -98,8 +98,8 @@
         
         place.value = standings.findIndex(s => s.member === member.RowKey);
         totalPoints.value = results.filter(r => r.Member === member.RowKey).reduce((acc, result) => acc + result.Points, 0);
-        numOf250Riders.value = myRiders.filter(t => t.class === 250).length;
-        numOf450Riders.value = myRiders.filter(t => t.class === 450).length;
+        numOf250Riders.value = myRiders.filter(t => t.Class === 250).length;
+        numOf450Riders.value = myRiders.filter(t => t.Class === 450).length;
     });
 </script>
 

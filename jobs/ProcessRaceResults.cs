@@ -24,6 +24,7 @@ namespace TurboFantasySports
             teamsClient = new TableClient(new Uri(storageUri), "Teams", credential);
             racesClient = new TableClient(new Uri(storageUri), "Races", credential);
             outcomesClient = new TableClient(new Uri(storageUri), "Outcomes", credential);
+            ridersClient = new TableClient(new Uri(storageUri), "Riders", credential);
         }
 
         string partition = "1";
@@ -34,6 +35,7 @@ namespace TurboFantasySports
         TableClient teamsClient;
         TableClient racesClient;
         TableClient outcomesClient;
+        TableClient ridersClient;
 
         [Function("ProcessRaceResults")]
         public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
@@ -41,8 +43,9 @@ namespace TurboFantasySports
             //CreateRaces();
             // https://www.nuget.org/packages/Azure.Data.Tables/
 
-            UpdateTableData();
+            //UpdateTableData();
             //IngestRaceResults();
+            //IngestJsonFile();
             
             return new OkObjectResult("Successfully ran function");
         }
@@ -237,78 +240,34 @@ namespace TurboFantasySports
             return result;
         }
 
-            // string jsonFilePath = "C:\\Users\\tznqxt\\source\\repos\\Github\\TurboFantasySports\\jobs\\data\\Races\\2025\\arlington.json";
-            // string jsonString = File.ReadAllText(jsonFilePath);
-            // var json = JsonSerializer.Deserialize<List<dynamic>>(jsonString);
+        private void IngestJsonFile()
+        {
+            string jsonFilePath = "C:\\Users\\tznqxt\\source\\repos\\Github\\TurboFantasySports\\client\\src\\data\\riders.json";
+            string jsonString = File.ReadAllText(jsonFilePath);
+            var json = JsonSerializer.Deserialize<List<Race>>(jsonString);
 
-            // foreach (var record in json)
-            // {
-            //     try
-            //     {
-            //         // Process each record
-            //         string number = record.number;
-            //         string position = record.position;
+            foreach (var record in json)
+            {
+                var tableEntity = new TableEntity("1", record.id)
+                {
+                    { "Name", record.name },
+                    { "Number", record.number },
+                    { "Class", record.@class },
+                    { "IsInjured", false }
+                };
 
-            //         var tableEntity = new TableEntity("1", Guid.NewGuid().ToString())
-            //         {
-            //             { "League", "aaf63116-02e6-473d-c778-c55287563a82" },
-            //             { "Rider", rider },
-            //             { "Member", member }
-
-            //             { "Rider", rider },
-            //             { "Member", owner },
-            //             { "Race", race },
-            //             { "Place", place },
-            //             { "Points", points }
-            //         };
-
-            //         resultsClient.AddEntity(tableEntity);
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         Console.WriteLine(ex.Message);
-            //     }
-            // }
-
-            //var race = new Detroit();
-
-
-            // using (var reader = new StreamReader("C:\\Users\\tznqxt\\Downloads\\teams.csv"))
-            // using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            // {
-            //     var records = csv.GetRecords<dynamic>().ToList();
-
-            //      foreach (var record in records)
-            //      {
-            //         try
-            //         {
-            //             // Process each record
-            //             string rider = record.Rider;
-            //             string league = record.League;
-            //             string member = record.Team;
-
-            //             var tableEntity = new TableEntity("1", Guid.NewGuid().ToString())
-            //             {
-            //                 { "Rider", rider },
-            //                 { "League", league },
-            //                 { "Member", member }
-            //             };
-
-            //             teamsClient.AddEntity(tableEntity);
-            //         }b
-            //         catch (Exception ex)
-            //         {
-            //             Console.WriteLine(ex.Message);
-            //         }
-            //     }
-            // }
+                ridersClient.AddEntity(tableEntity);
+            }
+        }
     }
 
     public class Race 
     {
+        public string id {get;set;}
         public string name { get; set; }
         public string date { get; set; }
-        public string @class { get; set; }
+        public int number {get;set;}
+        public int @class { get; set; }
         public string key { get; set; }
     }
 }

@@ -30,11 +30,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="rider in myRidersList" :value="rider.number">
-              <td>{{rider.number}}</td>
-              <td>{{rider.name}}</td>
-              <td><RacerLink :id="rider.id"></RacerLink></td>
-              <td>{{rider.class}}</td>
+            <tr v-for="rider in myRidersList" :value="rider.Number">
+              <td>{{rider.Number}}</td>
+              <td>{{rider.Name}}</td>
+              <td><RacerLink :id="rider.RowKey"></RacerLink></td>
+              <td>{{rider.Class}}</td>
               <td><button class="btn btn-sm btn-danger" :disabled="!isRosterEditable" v-on:click="removeRiderClick(rider)">Remove</button></td>
             </tr>
           </tbody>
@@ -98,7 +98,6 @@
   import { ref,onMounted,computed, reactive  } from "vue";
   import { useRoute } from 'vue-router';
   import { useAuth0 } from '@auth0/auth0-vue';
-  import riderBank from '../data/riders.json';
   import Races from "../components/Races.vue";
   import Position from "../components/Position.vue";
   import Countdown from "../components/Countdown.vue";
@@ -109,10 +108,10 @@
   import Trades from "../components/Trades.vue";
 
   const headers = [
-    { text: "Number", value: "number", sortable: true },
-    { text: "Rider", value: "name", sortable: true},
+    { text: "Number", value: "Number", sortable: true },
+    { text: "Rider", value: "Name", sortable: true},
     { text: "", value: "link"},
-    { text: "Class", value: "class", sortable: true}
+    { text: "Class", value: "Class", sortable: true}
   ];
 
   const storage = useStorage();
@@ -144,10 +143,9 @@
     let allTeams = storage.Teams.getByLeague2(route.params.id);
     let myTeam = allTeams.filter(t => t.Member == member.RowKey);
     
-    riderBank.sort((a, b) => a.name.localeCompare(b.name));
-    riderBank.forEach(rider => {
-      let all = allTeams.map(a => a.Rider).indexOf(rider.id);
-      let mine = myTeam.map(a => a.Rider).indexOf(rider.id);
+    storage.Riders.data.forEach(rider => {
+      let all = allTeams.map(a => a.Rider).indexOf(rider.RowKey);
+      let mine = myTeam.map(a => a.Rider).indexOf(rider.RowKey);
       
       if(all === -1) {
         addRidersList.push(rider);

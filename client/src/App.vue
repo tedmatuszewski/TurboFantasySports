@@ -26,6 +26,7 @@
     storage.Teams.fillData();
     storage.Feeds.fillData();
     storage.Races.fillData();
+    storage.Riders.fillData();
 </script>
 
 <style>

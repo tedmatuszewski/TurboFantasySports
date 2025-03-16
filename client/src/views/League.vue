@@ -78,7 +78,7 @@
                 @click-row="rowClick"
                 :hide-footer="true">
               <template #item-link="{ id }">
-                <RacerLink :id="id"></RacerLink>
+                <RacerLink :id="RowKey"></RacerLink>
               </template>
             </Vue3EasyDataTable>
           </div>

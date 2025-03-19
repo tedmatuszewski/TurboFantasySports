@@ -38,80 +38,178 @@ namespace TurboFantasySports
         [Function("ProcessEntryLists")]
         public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
-            IngestRaceResults();
+            //var riderList = GetRacerxRiderList();
+            var data = ridersClient.Query<TableEntity>().ToList();
+            var entryList = GetEntryList("anaheim-1");
+            UpdateData(entryList, data);
             
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList("san-diego");
+            UpdateData(entryList, data);
+
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList("anaheim-2");
+            UpdateData(entryList, data);
+            
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList("glendale");
+            UpdateData(entryList, data);
+            
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList("tampa");
+            UpdateData(entryList, data);
+            
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList("detroit");
+            UpdateData(entryList, data);
+            
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList("arlington");
+            UpdateData(entryList, data);
+            
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList("daytona");
+            UpdateData(entryList, data);
+            
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList("indianapolis");
+            UpdateData(entryList, data);
+            
+            data = ridersClient.Query<TableEntity>().ToList();
+            entryList = GetEntryList();
+            UpdateData(entryList, data);
+
+            _logger.LogInformation($"Successfully processed riders");
+
             return new OkObjectResult("Successfully ran function");
         }
 
-        private void IngestRaceResults(string race = null) 
-        {    
+        private void UpdateData(List<RiderRow> entryList, List<TableEntity> data) 
+        {
+            foreach(var entry in entryList)
+            {
+                var entity = data.FirstOrDefault(t => t.RowKey == entry.Rider);
+
+                if(entry.Class.Contains("showdown"))
+                {
+                    entry.Class = entity.GetString("Class");
+                }
+
+                if(entity == null)
+                {
+                    _logger.LogInformation($"Rider {entry.Rider} not found in database.");
+
+                    var tableEntity = new TableEntity(partition, entry.Rider)
+                    {
+                        { "Name", entry.Name },
+                        { "Number", entry.Number },
+                        { "ImageUrl", entry.ImageUrl },
+                        { "Injury", entry.Injury },
+                        { "Class", entry.Class },
+                        { "Entries", 1 }
+                    };
+
+                    ridersClient.AddEntity(tableEntity);
+                    
+                    _logger.LogInformation($"Added rider {entry.Rider} to database.");
+                }
+                else
+                {    
+                    entity["Name"] = entry.Name;
+                    entity["Number"] = entry.Number;
+                    entity["ImageUrl"] = entry.ImageUrl;
+                    entity["Injury"] = entry.Injury;
+                    entity["Class"] = entry.Class;
+                    entity["Entries"] = entity.GetInt32("Entries") + 1;
+
+                    ridersClient.UpdateEntity(entity, ETag.All);
+                    
+                    _logger.LogInformation($"Updated rider {entry.Rider} in database.");
+                }
+            }    
+        }
+
+        private List<RiderRow> GetRacerxRiderList() {
+            var riders = new List<RiderRow>();
+            var url = "https://racerxonline.com/sx/teams";
+            var web = new HtmlWeb();
+            var doc = web.Load(url);
+            var teams = doc.DocumentNode.SelectNodes("//*[@id=\"content\"]/div[2]/div/div");
+
+            foreach(var team in teams) {
+                var lass = team.SelectSingleNode("h3").InnerText;
+                var riderTags = team.SelectNodes("ul/li");
+
+                foreach(var rider in riderTags) {
+                    var riderRow = new RiderRow();
+                    var riderTag = rider.SelectSingleNode("a");
+                    var imageTag = rider.SelectSingleNode("a/span/img");
+                    var badge = rider.SelectSingleNode("a/span/div[@class=\"badge\"]");
+
+                    riderRow.Rider = riderTag.Attributes["href"].Value.Replace("/rider/", "");
+                    riderRow.ImageUrl = imageTag.Attributes["data-src"].Value;
+                    riderRow.Name = rider.SelectSingleNode("a/span[2]").InnerText.Trim();
+                    riderRow.Class = lass;
+                    riderRow.Number = null;
+
+                    if(badge != null) {
+                        riderRow.Injury = badge.Attributes["title"].Value;
+                    } else {
+                        riderRow.Injury = null;
+                    }
+
+                    riders.Add(riderRow);
+                }
+            }
+
+            return riders;
+        }
+
+        private List<RiderRow> GetEntryList(string race = null)
+        {  
             var entity = racesClient.Query<TableEntity>()
-                .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
+                .Where(t => DateTime.Parse(t.GetString("Date")) > DateTime.Now)
                 .OrderBy(t => DateTime.Parse(t.GetString("Date")))
-                .LastOrDefault();
-            var riders = ridersClient.Query<TableEntity>();
+                .FirstOrDefault();
 
             if( race == null) 
             {
                 race = entity.GetString("Racerx");
             }
 
-            var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[13]/a";
-            var result250Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[3]/ul/li[13]/a";
             var burl = "https://racerxonline.com";
             var url = $"{burl}/sx/2025/{race}";
             var web = new HtmlWeb();
             var doc = web.Load(url);
-            var result450Href = doc.DocumentNode.SelectSingleNode(result450Link).Attributes["href"].Value;
-            var result250Href = doc.DocumentNode.SelectSingleNode(result250Link).Attributes["href"].Value;
-            var result450 = GetEntryList($"{burl}{result450Href}", 450);
-            var result250 = GetEntryList($"{burl}{result250Href}", 250);
+            var entryListLinks = doc.DocumentNode.SelectNodes("//a[contains(@href, 'entry-list')]");
+            var result250 = new List<RiderRow>();
+            var result450 = new List<RiderRow>();
+
+            foreach(var link in entryListLinks) {
+                var href = link.Attributes["href"].Value;
+                var segments = href.Split('/');
+                var lites = segments.FirstOrDefault(s => s.Contains("250"));
+                var heavies = segments.FirstOrDefault(s => s.Contains("450"));
+                
+                if(lites != null) {
+                    result250 = ProcessEntryList($"{burl}{href}", lites);
+                } else {
+                    result450 = ProcessEntryList($"{burl}{href}", heavies);
+                }
+            }
+            
             var results = result250.Concat(result450).ToList();
-            var teams = ridersClient.Query<TableEntity>();
 
-            foreach(var result in results)
-            {
-                var rider = riders.FirstOrDefault(t => t.RowKey == result.Rider);
+            // var result450Link = entryListLinks.FirstOrDefault(l => l.Attributes["href"].Value.Contains("450")).Attributes["href"].Value;
+            // var result250Link = entryListLinks.FirstOrDefault(l => l.Attributes["href"].Value.Contains("250")).Attributes["href"].Value;
+            // var result450 = ProcessEntryList($"{burl}{result450Link}", 450);
+            // var result250 = ProcessEntryList($"{burl}{result250Link}", 250);
+            // var results = result250.Concat(result450).ToList();
 
-                if(rider == null)
-                {
-                    _logger.LogInformation($"Rider {result.Rider} not found in database.");
-
-                    var tableEntity = new TableEntity("1", result.Rider)
-                    {
-                        { "Name", result.Name },
-                        { "Number", result.Number },
-                        { "ImageUrl", result.ImageUrl },
-                        { "Injury", result.Injury },
-                        { "Class", result.Class }
-                    };
-
-                    ridersClient.AddEntity(tableEntity);
-                    
-                    _logger.LogInformation($"Added rider {result.Rider} to database.");
-                }
-                    else if(rider.GetString("Name") != result.Name || rider.GetInt32("Number") != result.Number || rider.GetInt32("Class") != result.Class || rider.GetString("ImageUrl") != result.ImageUrl || rider.GetString("Injury") != result.Injury)
-                {    
-                    rider["Name"] = result.Name;
-                    rider["Number"] = result.Number;
-                    rider["ImageUrl"] = result.ImageUrl;
-                    rider["Injury"] = result.Injury;
-                    rider["Class"] = result.Class;
-
-                    ridersClient.UpdateEntity(rider, ETag.All);
-                    
-                    _logger.LogInformation($"Updated rider {result.Rider} in database.");
-                }
-                else
-                {
-                    _logger.LogInformation($"Rider {result.Rider} already in database.");
-                }
-            }    
-
-            _logger.LogInformation($"Successfully processed results entry list for {race}.");
+            return results;
         }
 
-        private List<RiderRow> GetEntryList(string url, int classId)
+        private List<RiderRow> ProcessEntryList(string url, string lass)
         {
             var web = new HtmlWeb();
             var doc = web.Load(url);
@@ -121,13 +219,13 @@ namespace TurboFantasySports
 
             foreach(var row in table)
             {
-                var number = 0;
                 var cells = row.SelectNodes("td").ToList();
                 var numberText = cells[0].InnerText;
                 var cell1 = cells[1].InnerHtml;
                 var htmlDoc = new HtmlDocument();
                 var injury = (string)null;
 
+                int number;
                 int.TryParse(numberText, out number);
 
                 htmlDoc.LoadHtml(cell1);
@@ -136,17 +234,16 @@ namespace TurboFantasySports
                 var imageTag = htmlDoc.DocumentNode.SelectSingleNode("//a[1]/img");
                 var nameTag = htmlDoc.DocumentNode.SelectSingleNode("//a[2]");
 
-                if(riderTag == null || imageTag == null || nameTag == null)
+                if(riderTag == null)
                 {
                     continue;
                 }
 
+                var injuryTag = riderTag.SelectSingleNode("//div");
                 var rider = riderTag.Attributes["href"].Value.Replace("/rider/", "").Replace("/races", "");
                 var image = imageTag.Attributes["data-src"].Value;
                 var name = nameTag.InnerText;
-                
 
-                var injuryTag = riderTag.SelectSingleNode("//div");
                 if(injuryTag != null)
                 {
                     injury = injuryTag.Attributes["title"].Value;
@@ -155,10 +252,10 @@ namespace TurboFantasySports
                 result.Add(new RiderRow {
                     Number = number,
                     Rider = rider?.Trim(),
+                    Class = lass,
                     ImageUrl = image?.Trim(),
                     Name = name?.Trim(),
-                    Injury = injury?.Trim(),
-                    Class = classId
+                    Injury = injury?.Trim()
                 });
 
                 _logger.LogInformation($"Processed {rider}");
@@ -175,6 +272,7 @@ namespace TurboFantasySports
         public string? ImageUrl {get; set; }
         public string? Injury {get; set; }
         public string? Name { get; set; }
-        public int? Class {get; set;}
+        public string Class {get; set;}
+        public int Entries {get; set;}
     }
 }

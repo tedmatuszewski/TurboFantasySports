@@ -5,6 +5,7 @@ import Teams from './Tables/Teams';
 import Feeds from "./Tables/Feeds";
 import Races from "./Tables/Races";
 import Riders from "./Tables/Riders";
+import Outcomes from "./Tables/Outcomes";
 
 export function useStorage() {
     return {
@@ -14,6 +15,7 @@ export function useStorage() {
         Teams: Teams(),
         Feeds: Feeds(),
         Races: Races(),
-        Riders: Riders()
+        Riders: Riders(),
+        Outcomes: Outcomes()
     };
 }

@@ -40,7 +40,7 @@
           </tbody>
         </table>
 
-        <button class="btn btn-primary btn-block" v-on:click="showModalClick()">View Available Riders</button>
+        <router-link :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block">View Available Riders</router-link>
       </div>
       
       <div class="col-md-4">
@@ -57,39 +57,6 @@
         <Trades v-if="Config.showTrades"></Trades>
       </div>
     </div> 
-      
-    <div class="modal" tabindex="-1" id="riderModal">
-      <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Riders</h5>
-          </div>
-
-          <div class="modal-body">
-            <input type="text" class="form-control mb-3" placeholder="Search for a rider" v-model="searchValue">
-
-            <Vue3EasyDataTable
-                :headers="headers"
-                :items="addRidersList"
-                :search-field="searchField"
-                :search-value="searchValue"
-                :rows-per-page="100"
-                v-model:items-selected="itemsSelected"
-                @click-row="rowClick"
-                :hide-footer="true">
-              <template #item-link="{ id }">
-                <RacerLink :id="RowKey"></RacerLink>
-              </template>
-            </Vue3EasyDataTable>
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" v-on:click="addRiderModalClick">Add Rider</button>
-            <button type="button" class="btn btn-secondary" v-on:click="closeRiderModalClick">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -103,53 +70,28 @@
   import Countdown from "../components/Countdown.vue";
   import Config from "../config.json";
   import RacerLink from "../components/RacerLink.vue";
-  import Vue3EasyDataTable from 'vue3-easy-data-table';
   import Feed from "../components/Feed.vue";
   import Trades from "../components/Trades.vue";
 
-  const headers = [
-    { text: "Number", value: "Number", sortable: true },
-    { text: "Rider", value: "Name", sortable: true},
-    { text: "", value: "link"},
-    { text: "Class", value: "Class", sortable: true}
-  ];
-
   const storage = useStorage();
-  const itemsSelected = ref([]);
-  const searchField = ref("name");
-  const searchValue = ref("");
   const auth0 = useAuth0();
   const route = useRoute();
-  
-  let addRidersList = reactive([]);
+
+  let member = null;
   let myRidersList = reactive([]);
   let league = ref(null);
-  let members = ref(null);
-  let riderModal = null;
-  let confirmModal = null;
   let prev = storage.Races.getPreviousRace();
   let isRosterEditable = ref(false);
-  let member;
 
   onMounted(async () => {
-    riderModal = new bootstrap.Modal(document.getElementById('riderModal'), {});
-    confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'), {});
-
     league.value = storage.Leagues.getSingle(route.params.id);
-    members.value = storage.Members.getByLeague2(route.params.id);
     isRosterEditable.value = storage.Results.hasResults2(route.params.id, prev.RowKey);
+    
     member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
-
-    let allTeams = storage.Teams.getByLeague2(route.params.id);
-    let myTeam = allTeams.filter(t => t.Member == member.RowKey);
+    let team = storage.Teams.getByLeagueAndMember2(route.params.id, member.RowKey);
     
     storage.Riders.data.forEach(rider => {
-      let all = allTeams.map(a => a.Rider).indexOf(rider.RowKey);
-      let mine = myTeam.map(a => a.Rider).indexOf(rider.RowKey);
-      
-      if(all === -1) {
-        addRidersList.push(rider);
-      }
+      let mine = team.map(a => a.Rider).indexOf(rider.RowKey);
       
       if (mine > -1) {
         myRidersList.push(rider);
@@ -157,77 +99,23 @@
     });
   });
 
-  function rowClick(row, e) {
-    e.srcElement.closest("tr").querySelector("input[type=checkbox]").click();
-  }
-
-  function showModalClick() {
-    riderModal.show();
-  }
-
-  function closeRiderModalClick() {
-    riderModal.hide();
-  }
-
-  async function addRiderModalClick() {
-    if(itemsSelected.value.length === 0) {
-      alert("You must select at least one rider to add to your team.");
-
-      return;
-    }
-
-    if(myRidersList.length >= Config.maxRiders) {
-      alert("You already have " + Config.maxRiders + " riders on your team. You must drop riders before you can add more.");
-
-      return;
-    }
-    
-    if((myRidersList.length + itemsSelected.value.length) > Config.maxRiders) {
-      alert("You have selected to many riders. You can only have " + Config.maxRiders + " riders on your team.");
-
-      return;
-    }
-
-    itemsSelected.value.map(i => i.id).forEach(async id => {
-      let sel = addRidersList.find(r => r.id == id);
-      let index = addRidersList.indexOf(sel);
-
-      myRidersList.push(sel);
-      addRidersList.splice(index, 1);
-
-      await  storage.Teams.create({
-        League: route.params.id,
-        Member: member.RowKey,
-        Rider: sel.id
-      });
-
-      await storage.Feeds.create({
-        League: route.params.id,
-        Member: member.RowKey,
-        Action: `Added rider ${sel.name} to their team`
-      });
-    });
-
-    riderModal.hide();
-  }
-
   async function removeRiderClick(rider){
     if(confirm("Are you sure that you want to remove this rider from your team? Removing this rider will put them back in the pool of available riders for anyone else to scoop up.") == false) {
       return;
     }
-
-    let sel = myRidersList.find(r => r.id == rider.id);
+    let sel = myRidersList.find(r => r.RowKey == rider.RowKey);
     let index = myRidersList.indexOf(sel);
     
-    addRidersList.push(sel);
     myRidersList.splice(index, 1);
-
-    let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.id);
+    
+    console.log(route.params.id, member.RowKey,sel.RowKey);
+    let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.RowKey);
 
     toDelete.forEach(async d => {
       await storage.Teams.remove(d.RowKey);
-      await storage.Feeds.create({ League: route.params.id, Member: member.RowKey, Action: `Removed rider ${sel.name} from their team` });
     });
+
+    await storage.Feeds.create({ League: route.params.id, Member: member.RowKey, Action: `Removed rider ${sel.Name} from their team` });
   }
 </script>
 

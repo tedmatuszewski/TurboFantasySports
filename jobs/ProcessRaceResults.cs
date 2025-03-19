@@ -43,8 +43,17 @@ namespace TurboFantasySports
             //CreateRaces();
             // https://www.nuget.org/packages/Azure.Data.Tables/
 
+            var races = racesClient.Query<TableEntity>()
+                .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
+                .OrderBy(t => DateTime.Parse(t.GetString("Date")))
+                .ToList();
+
+            foreach(var race in races) {
+                var rx = race.GetString("Racerx");
+                IngestRaceResults(rx);
+            }
             //UpdateTableData();
-            //IngestRaceResults();
+            IngestRaceResults();
             //IngestJsonFile();
             
             return new OkObjectResult("Successfully ran function");
@@ -74,14 +83,20 @@ namespace TurboFantasySports
 
         private void IngestRaceResults(string race = null) 
         {    
-            var raceRecord = racesClient.Query<TableEntity>()
+            var races = racesClient.Query<TableEntity>()
                 .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
                 .OrderBy(t => DateTime.Parse(t.GetString("Date")))
-                .LastOrDefault();
+                .ToList();
+
+            string raceKey = null;
 
             if( race == null) 
             {
-                race = raceRecord.GetString("Racerx");
+                raceKey = races.LastOrDefault().RowKey;
+            }
+            else 
+            {
+                raceKey = races.LastOrDefault(r => r.GetString("Racerx") == race).RowKey;
             }
 
             var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[1]/a";
@@ -102,7 +117,7 @@ namespace TurboFantasySports
                 outcomesClient.AddEntity(new TableEntity(partition, Guid.NewGuid().ToString())
                 {
                     { "Rider", result.Value },
-                    { "Race", raceRecord.GetString("RowKey") },
+                    { "Race", raceKey },
                     { "Place", result.Key },
                     { "Points", ConvertPositionToPoints(result.Key) },
                 });
@@ -110,35 +125,35 @@ namespace TurboFantasySports
                _logger.LogInformation($"Adding race outcome for {result.Value} in position {result.Key}.");
             }    
 
-            foreach(var team in teams) 
-            {
-                var rider = team.GetString("Rider");
-                var league = team.GetString("League");
-                var member = team.GetString("Member");
-                var result = results.SingleOrDefault(r => r.Value == rider);
-                var position = 0;
-                var points = 0;
+            // foreach(var team in teams) 
+            // {
+            //     var rider = team.GetString("Rider");
+            //     var league = team.GetString("League");
+            //     var member = team.GetString("Member");
+            //     var result = results.SingleOrDefault(r => r.Value == rider);
+            //     var position = 0;
+            //     var points = 0;
 
-                if(result.Equals(default(KeyValuePair<int, string>)) == false) 
-                {
-                    position = result.Key;
-                    points = ConvertPositionToPoints(position);
-                }
+            //     if(result.Equals(default(KeyValuePair<int, string>)) == false) 
+            //     {
+            //         position = result.Key;
+            //         points = ConvertPositionToPoints(position);
+            //     }
 
-                var tableEntity = new TableEntity(partition, Guid.NewGuid().ToString())
-                {
-                    { "Rider", rider },
-                    { "League", league },
-                    { "Member", member },
-                    { "Place", position },
-                    { "Points", points },
-                    { "Race", race }
-                };
+            //     var tableEntity = new TableEntity(partition, Guid.NewGuid().ToString())
+            //     {
+            //         { "Rider", rider },
+            //         { "League", league },
+            //         { "Member", member },
+            //         { "Place", position },
+            //         { "Points", points },
+            //         { "Race", race }
+            //     };
 
-                resultsClient.AddEntity(tableEntity);
+            //     resultsClient.AddEntity(tableEntity);
                 
-               _logger.LogInformation($"Processed result for rider {rider} in position {position} with {points} points.");
-            }
+            //    _logger.LogInformation($"Processed result for rider {rider} in position {position} with {points} points.");
+            // }
 
             _logger.LogInformation($"Successfully processed results request for {race}.");
         }

@@ -14,7 +14,10 @@ export default defineStore(table, {
         data: [],
     }),
     getters: { 
-        
+        count: (state) => {
+            const uniqueKeys = new Set(state.data.map(race => race.RowKey));
+            return uniqueKeys.size;
+        },
     },
     actions: {
         async fillData() {

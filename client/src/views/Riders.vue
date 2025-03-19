@@ -24,10 +24,10 @@
     </div>
 
     <div class="row">
-      <div class="col">
-        <h3>Riders</h3>
+      <div class="col-md">
+        <h3 class="text-center text-md-left">Riders</h3>
       </div>
-      <div class="col text-right">
+      <div class="col-md text-center text-md-right">
           <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary">League Home</router-link>
           <button :disabled="canClickAdd" v-on:click="addRidersClick" class="btn btn-danger ml-3">Add Rider(s)</button>
       </div>

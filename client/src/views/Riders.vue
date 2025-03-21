@@ -23,6 +23,14 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-6">
+        <ul class="list-group list-group-horizontal mb-3">
+          <li class="list-group-item">TP = Total Points</li>
+        </ul>
+      </div>
+    </div>
+
     <div class="row my-2">
       <div class="col-md">
         <h3 class="text-center text-md-left">Riders</h3>

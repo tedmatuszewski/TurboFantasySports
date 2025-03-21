@@ -6,6 +6,15 @@ export default class Rider {
       this.Injury = entity.Injury;
       this.ImageUrl = entity.ImageUrl;
       this.Entries = entity.Entries;
+      this.TotalPoints = entity.TotalPoints;
+      this.TotalPlaces = entity.TotalPlaces;
+      this.Wins = entity.Wins;
+      this.Podiums = entity.Podiums;
+      this.TopFives = entity.TopFives;
+      this.TopTens = entity.TopTens;
+      this.AveragePoints = entity.AveragePoints;
+      this.AveragePlace = entity.AveragePlace;
+      this.TotalOutcomes = entity.TotalOutcomes;
       this.RowKey = entity.rowKey;
       this.PartitionKey = entity.partitionKey;
       this.etag = entity.etag;

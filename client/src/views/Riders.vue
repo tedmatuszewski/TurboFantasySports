@@ -17,7 +17,7 @@
         <div class="col-md-6">
 
         <ul class="list-group list-group-horizontal mb-3">
-          <li class="list-group-item">RPI = Races Positioned In</li>
+          <li class="list-group-item">MEQF = Main Events Qualified For</li>
           <li class="list-group-item">E = Number of Races Entered</li>
         </ul>
       </div>
@@ -73,9 +73,14 @@
     { text: "", value: "link"},
     { text: "Class", value: "Class", sortable: true },
     { text: "E", value: "Entries", sortable: true },
-    { text: "AFP/R", value: "Afpr", sortable: true },
-    { text: "ARP/R", value: "Arpr", sortable: true },
-    { text: "RPI", value: "Rpi", sortable: true }
+    { text: "MEQF", value: "TotalOutcomes", sortable: true },
+    { text: "TP", value: "TotalPoints", sortable: true },
+    { text: "AFP/R", value: "AveragePoints", sortable: true },
+    { text: "ARP/R", value: "AveragePlace", sortable: true },
+    { text: "Wins", value: "Wins", sortable: true },
+    { text: "Top3", value: "Podiums", sortable: true },
+    { text: "Top5", value: "TopFives", sortable: true },
+    { text: "Top10", value: "TopTens", sortable: true },
   ];
 
   const storage = useStorage();
@@ -89,7 +94,6 @@
   
   let member = ref(null);
   let riders = ref([]);
-  let outcomes = ref([]);
   let riderModal = null;
 
   const availableSpots = computed(() => {
@@ -106,20 +110,11 @@
     member.value = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
     teams.value = storage.Teams.getByLeague2(route.params.id);
     team.value = storage.Teams.getByLeagueAndMember2(route.params.id, member.value.RowKey);
-    outcomes.value = storage.Outcomes.data;
 
-    storage.Riders.data.forEach(rider => {
-      let all = teams.value.map(a => a.Rider).indexOf(rider.RowKey);
-      let totalPoints = outcomes.value.filter(o => o.Rider == rider.RowKey).reduce((a, b) => a + b.Points, 0);
-      let totalPosition = outcomes.value.filter(o => o.Rider == rider.RowKey).reduce((a, b) => a + b.Place, 0);
-      let races = outcomes.value.filter(o => o.Rider == rider.RowKey).length;
-      
-      if(all === -1) {
-        rider.Afpr = (totalPoints/rider.Entries).toFixed(2);
-        rider.Arpr = (totalPosition/rider.Entries).toFixed(2);
-        rider.Rpi = races;
+    let taken = teams.value.map(a => a.Rider);
+    
+    storage.Riders.data.filter(r => taken.indexOf(r.RowKey) === -1).forEach(rider => {
         riders.value.push(rider);
-      }
     });
   });
 

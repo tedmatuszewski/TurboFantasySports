@@ -239,7 +239,7 @@ namespace TurboFantasySports
                 var position = cells[0].InnerText;
                 var i = cells[1].InnerHtml;
                 var htmlDoc = new HtmlDocument();
-                var intPosition = 0;
+                var intPosition = 22; // Likely dnf. Make their position 22 since that is last place.
 
                 int.TryParse(position, out intPosition);
 

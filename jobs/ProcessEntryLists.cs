@@ -77,7 +77,10 @@ namespace TurboFantasySports
             
             var outcomes = outcomesClient.Query<TableEntity>().ToList();
             var data = ridersClient.Query<TableEntity>().ToList();
-            var entryList = GetEntryList();
+            var entryList1 = GetEntryList();
+            var entryList2 = GetEntryList("arlington");
+            var entryList = entryList1.Concat(entryList2).ToList();
+
             UpdateData(entryList, data, outcomes);
 
             _logger.LogInformation($"Successfully processed riders");
@@ -91,16 +94,16 @@ namespace TurboFantasySports
             {
                 var entity = data.FirstOrDefault(t => t.RowKey == entry.Rider);
                 var riderOutcomes = outcomes.Where(t => t.GetString("Rider") == entry.Rider).ToList();
-                var entries = entity.GetInt32("Entries") + 1;
-                var totalPoints = riderOutcomes.Sum(t => t.GetInt32("Points"));
-                var totalPlaces = riderOutcomes.Sum(t => t.GetInt32("Place"));
+                var entries = entity.GetInt32("Entries"); // + 1;
+                var totalPoints = riderOutcomes.Sum(t => t.GetInt32("Points")) ?? 0;
+                var totalPlaces = riderOutcomes.Sum(t => t.GetInt32("Place")) ?? 0;
                 var totalWins = riderOutcomes.Count(t => t.GetInt32("Place") == 1);
                 var totalPodiums = riderOutcomes.Count(t => t.GetInt32("Place") <= 3);
                 var totalTop5 = riderOutcomes.Count(t => t.GetInt32("Place") <= 5);
                 var totalTop10 = riderOutcomes.Count(t => t.GetInt32("Place") <= 10);
                 var totalOutcomes = riderOutcomes.Count();
-                var averagePoints = entries > 0 ? totalPoints / entries : 0;
-                var averagePlace = entries > 0 ? totalPlaces / entries : 0;
+                var averagePoints = totalOutcomes > 0 ? Math.Round((float)totalPoints / (float)totalOutcomes, 2) : 0;
+                var averagePlace = totalOutcomes > 0 ? Math.Round((float)totalPlaces / (float)totalOutcomes, 2) : 0;
                 
                 if(entry.Class.Contains("showdown"))
                 {
@@ -120,6 +123,7 @@ namespace TurboFantasySports
                         { "Class", entry.Class },
                         { "Entries", 0 },
                         { "TotalPoints",  totalPoints },
+                        { "TotalPlaces", totalPlaces },
                         { "Wins",  totalWins },
                         { "Podiums",  totalPodiums },
                         { "TopFives",  totalTop5 },
@@ -142,6 +146,7 @@ namespace TurboFantasySports
                     entity["Class"] = entry.Class;
                     entity["Entries"] = entries;
                     entity["TotalPoints"] = totalPoints;
+                    entity["TotalPlaces"] = totalPlaces;
                     entity["Wins"] = totalWins;
                     entity["Podiums"] = totalPodiums;
                     entity["TopFives"] = totalTop5;

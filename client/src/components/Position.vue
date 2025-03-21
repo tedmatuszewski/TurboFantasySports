@@ -98,8 +98,8 @@
         
         place.value = standings.findIndex(s => s.member === member.RowKey);
         totalPoints.value = results.filter(r => r.Member === member.RowKey).reduce((acc, result) => acc + result.Points, 0);
-        numOf250Riders.value = myRiders.filter(t => t.Class === 250).length;
-        numOf450Riders.value = myRiders.filter(t => t.Class === 450).length;
+        numOf250Riders.value = myRiders.filter(t => t.Class.indexOf("250") !== -1).length;
+        numOf450Riders.value = myRiders.filter(t => t.Class.indexOf("450") !== -1).length;
     });
 </script>
 

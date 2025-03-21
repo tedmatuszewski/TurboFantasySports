@@ -39,57 +39,69 @@ namespace TurboFantasySports
         public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
             //var riderList = GetRacerxRiderList();
-            var data = ridersClient.Query<TableEntity>().ToList();
-            var entryList = GetEntryList("anaheim-1");
-            UpdateData(entryList, data);
+            // var data = ridersClient.Query<TableEntity>().ToList();
+            // var entryList = GetEntryList("anaheim-1");
+            // UpdateData(entryList, data);
             
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("san-diego");
-            UpdateData(entryList, data);
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("san-diego");
+            // UpdateData(entryList, data);
 
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("anaheim-2");
-            UpdateData(entryList, data);
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("anaheim-2");
+            // UpdateData(entryList, data);
             
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("glendale");
-            UpdateData(entryList, data);
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("glendale");
+            // UpdateData(entryList, data);
             
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("tampa");
-            UpdateData(entryList, data);
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("tampa");
+            // UpdateData(entryList, data);
             
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("detroit");
-            UpdateData(entryList, data);
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("detroit");
+            // UpdateData(entryList, data);
             
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("arlington");
-            UpdateData(entryList, data);
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("arlington");
+            // UpdateData(entryList, data);
             
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("daytona");
-            UpdateData(entryList, data);
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("daytona");
+            // UpdateData(entryList, data);
             
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("indianapolis");
-            UpdateData(entryList, data);
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("indianapolis");
+            // UpdateData(entryList, data);
             
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList();
-            UpdateData(entryList, data);
+            var outcomes = outcomesClient.Query<TableEntity>().ToList();
+            var data = ridersClient.Query<TableEntity>().ToList();
+            var entryList = GetEntryList();
+            UpdateData(entryList, data, outcomes);
 
             _logger.LogInformation($"Successfully processed riders");
 
             return new OkObjectResult("Successfully ran function");
         }
 
-        private void UpdateData(List<RiderRow> entryList, List<TableEntity> data) 
+        private void UpdateData(List<RiderRow> entryList, List<TableEntity> data, List<TableEntity> outcomes) 
         {
             foreach(var entry in entryList)
             {
                 var entity = data.FirstOrDefault(t => t.RowKey == entry.Rider);
-
+                var riderOutcomes = outcomes.Where(t => t.GetString("Rider") == entry.Rider).ToList();
+                var entries = entity.GetInt32("Entries") + 1;
+                var totalPoints = riderOutcomes.Sum(t => t.GetInt32("Points"));
+                var totalPlaces = riderOutcomes.Sum(t => t.GetInt32("Place"));
+                var totalWins = riderOutcomes.Count(t => t.GetInt32("Place") == 1);
+                var totalPodiums = riderOutcomes.Count(t => t.GetInt32("Place") <= 3);
+                var totalTop5 = riderOutcomes.Count(t => t.GetInt32("Place") <= 5);
+                var totalTop10 = riderOutcomes.Count(t => t.GetInt32("Place") <= 10);
+                var totalOutcomes = riderOutcomes.Count();
+                var averagePoints = entries > 0 ? totalPoints / entries : 0;
+                var averagePlace = entries > 0 ? totalPlaces / entries : 0;
+                
                 if(entry.Class.Contains("showdown"))
                 {
                     entry.Class = entity.GetString("Class");
@@ -106,7 +118,15 @@ namespace TurboFantasySports
                         { "ImageUrl", entry.ImageUrl },
                         { "Injury", entry.Injury },
                         { "Class", entry.Class },
-                        { "Entries", 1 }
+                        { "Entries", 0 },
+                        { "TotalPoints",  totalPoints },
+                        { "Wins",  totalWins },
+                        { "Podiums",  totalPodiums },
+                        { "TopFives",  totalTop5 },
+                        { "TopTens",  totalTop10 },
+                        { "AveragePoints",  averagePoints },
+                        { "AveragePlace",  averagePlace },
+                        { "TotalOutcomes", totalOutcomes }
                     };
 
                     ridersClient.AddEntity(tableEntity);
@@ -120,7 +140,15 @@ namespace TurboFantasySports
                     entity["ImageUrl"] = entry.ImageUrl;
                     entity["Injury"] = entry.Injury;
                     entity["Class"] = entry.Class;
-                    entity["Entries"] = entity.GetInt32("Entries") + 1;
+                    entity["Entries"] = entries;
+                    entity["TotalPoints"] = totalPoints;
+                    entity["Wins"] = totalWins;
+                    entity["Podiums"] = totalPodiums;
+                    entity["TopFives"] = totalTop5;
+                    entity["TopTens"] = totalTop10;
+                    entity["AveragePoints"] = averagePoints;
+                    entity["AveragePlace"] = averagePlace;
+                    entity["TotalOutcomes"] = totalOutcomes;
 
                     ridersClient.UpdateEntity(entity, ETag.All);
                     

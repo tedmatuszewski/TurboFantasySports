@@ -1,52 +1,37 @@
 <template>
   <div class="container my-5">
-    <h1>{{league?.Name}}</h1>
-    <p>{{league?.Description}}</p>
-
     <h3>Races</h3>
     <races></races>
 
-    <div class="alert alert-primary" role="alert">
-      You can have up to {{ Config.maxRiders }} riders on your team. You can edit hour lineup up to the start of the current weeks race. Once the race begins, you will no longer see the edit roster buttons. The roster editing ability will become unlock as soon as the admin of the website uploads the race rasults.
-    </div>
-    
     <div class="row">
       <div class="col-md-8">
-        <h3>My Roster</h3>
-        <p>Countdown to the next race. When this runs out, your roster will be locked until the race is over and results are posted.</p>
-
-        <div class="text-center my-2">
-          <Countdown></Countdown>
-        </div>
-
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th>Number</th>
-              <th>Rider</th>
-              <th></th>
-              <th>Class</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="rider in myRidersList" :value="rider.Number">
-              <td>{{rider.Number}}</td>
-              <td>{{rider.Name}}</td>
-              <td><RacerLink :id="rider.RowKey"></RacerLink></td>
-              <td>{{rider.Class}}</td>
-              <td><button class="btn btn-sm btn-danger" :disabled="!isRosterEditable" v-on:click="removeRiderClick(rider)">Remove</button></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <router-link :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block">View Available Riders</router-link>
+        <LeagueHeader></LeagueHeader>
       </div>
       
       <div class="col-md-4">
         <Position></Position>
       </div> 
     </div>
+        
+    <div class="alert alert-primary" role="alert">
+      You can have up to {{ Config.maxRiders }} riders on your team. You can edit hour lineup up to the start of the current weeks race. Once the race begins, you will no longer see the edit roster buttons. The roster editing ability will become unlock as soon as the admin of the website uploads the race rasults.
+    </div>
+    
+    <h3>My Roster</h3>
+
+    <Vue3EasyDataTable :headers="headers" :items="myRidersList" :rows-per-page="6" :hide-footer="true">
+      <template #item-remove="{ RowKey }">
+        <button class="btn btn-sm btn-danger" :disabled="!isRosterEditable" v-on:click="removeRiderClick(RowKey)">Remove</button>
+      </template>
+      <template #item-link="{ RowKey }">
+        <RacerLink :id="RowKey"></RacerLink>
+      </template>
+      <template #item-headshot="{ ImageUrl, Injury }">
+        <Headshot :rider="{ ImageUrl, Injury }"></Headshot>
+      </template>
+    </Vue3EasyDataTable>
+
+    <router-link :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block mt-3">View Available Riders</router-link>
 
     <div class="row">
       <div class="col-md-6 py-5">
@@ -54,9 +39,9 @@
       </div>
       
       <div class="col-md-6 py-5">
-        <Trades v-if="Config.showTrades"></Trades>
+        <!-- <Trades v-if="Config.showTrades"></Trades>-->
       </div>
-    </div> 
+    </div>  
   </div>
 </template>
 
@@ -71,11 +56,31 @@
   import Config from "../config.json";
   import RacerLink from "../components/RacerLink.vue";
   import Feed from "../components/Feed.vue";
+  import Vue3EasyDataTable from 'vue3-easy-data-table';
+  import Headshot from "../components/Headshot.vue";
+  import LeagueHeader from "../components/LeagueHeader.vue";
   import Trades from "../components/Trades.vue";
 
   const storage = useStorage();
   const auth0 = useAuth0();
   const route = useRoute();
+  const headers = [
+    { text: "", value: "remove"},
+    { text: "Number", value: "Number", sortable: true },
+    { text: "", value: "headshot", width: 50 },
+    { text: "Rider", value: "Name", sortable: true },
+    { text: "", value: "link"},
+    { text: "Class", value: "Class", sortable: true },
+    { text: "E", value: "Entries", sortable: true },
+    { text: "MEQF", value: "TotalOutcomes", sortable: true },
+    { text: "TP", value: "TotalPoints", sortable: true },
+    { text: "AFP/R", value: "AveragePoints", sortable: true },
+    { text: "ARP/R", value: "AveragePlace", sortable: true },
+    { text: "Wins", value: "Wins", sortable: true },
+    { text: "Top3", value: "Podiums", sortable: true },
+    { text: "Top5", value: "TopFives", sortable: true },
+    { text: "Top10", value: "TopTens", sortable: true },
+  ];
 
   let member = null;
   let myRidersList = reactive([]);
@@ -99,11 +104,11 @@
     });
   });
 
-  async function removeRiderClick(rider){
+  async function removeRiderClick(key){
     if(confirm("Are you sure that you want to remove this rider from your team? Removing this rider will put them back in the pool of available riders for anyone else to scoop up.") == false) {
       return;
     }
-    let sel = myRidersList.find(r => r.RowKey == rider.RowKey);
+    let sel = myRidersList.find(r => r.RowKey == key);
     let index = myRidersList.indexOf(sel);
     
     myRidersList.splice(index, 1);

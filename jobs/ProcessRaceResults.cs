@@ -43,15 +43,15 @@ namespace TurboFantasySports
             //CreateRaces();
             // https://www.nuget.org/packages/Azure.Data.Tables/
 
-            var races = racesClient.Query<TableEntity>()
-                .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
-                .OrderBy(t => DateTime.Parse(t.GetString("Date")))
-                .ToList();
+            // var races = racesClient.Query<TableEntity>()
+            //     .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
+            //     .OrderBy(t => DateTime.Parse(t.GetString("Date")))
+            //     .ToList();
 
-            foreach(var race in races) {
-                var rx = race.GetString("Racerx");
-                IngestRaceResults(rx);
-            }
+            // foreach(var race in races) {
+            //     var rx = race.GetString("Racerx");
+            //     IngestRaceResults(rx);
+            // }
             //UpdateTableData();
             IngestRaceResults();
             //IngestJsonFile();
@@ -88,21 +88,21 @@ namespace TurboFantasySports
                 .OrderBy(t => DateTime.Parse(t.GetString("Date")))
                 .ToList();
 
-            string raceKey = null;
+            TableEntity raceKey = null;
 
             if( race == null) 
             {
-                raceKey = races.LastOrDefault().RowKey;
+                raceKey = races.LastOrDefault();
             }
             else 
             {
-                raceKey = races.LastOrDefault(r => r.GetString("Racerx") == race).RowKey;
+                raceKey = races.LastOrDefault(r => r.GetString("Racerx") == race);
             }
 
             var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[1]/a";
             var result250Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[3]/ul/li[1]/a";
             var burl = "https://racerxonline.com";
-            var url = $"{burl}/sx/2025/{race}";
+            var url = $"{burl}/sx/2025/{raceKey.GetString("Racerx")}";
             var web = new HtmlWeb();
             var doc = web.Load(url);
             var result450Href = doc.DocumentNode.SelectSingleNode(result450Link).Attributes["href"].Value;
@@ -117,7 +117,7 @@ namespace TurboFantasySports
                 outcomesClient.AddEntity(new TableEntity(partition, Guid.NewGuid().ToString())
                 {
                     { "Rider", result.Value },
-                    { "Race", raceKey },
+                    { "Race", raceKey.RowKey },
                     { "Place", result.Key },
                     { "Points", ConvertPositionToPoints(result.Key) },
                 });
@@ -147,7 +147,7 @@ namespace TurboFantasySports
                     { "Member", member },
                     { "Place", position },
                     { "Points", points },
-                    { "Race", race }
+                    { "Race", raceKey.RowKey }
                 };
 
                 resultsClient.AddEntity(tableEntity);

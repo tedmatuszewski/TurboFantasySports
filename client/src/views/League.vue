@@ -107,12 +107,13 @@
     if(confirm("Are you sure that you want to remove this rider from your team? Removing this rider will put them back in the pool of available riders for anyone else to scoop up.") == false) {
       return;
     }
-    let sel = myRidersList.find(r => r.RowKey == key);
-    let index = myRidersList.indexOf(sel);
+    let sel = myRidersList.value.find(r => r.RowKey == key);
+    console.log(key,sel);
+    let index = myRidersList.value.indexOf(sel);
+    console.log(route.params.id, member.RowKey, sel.RowKey);
     
-    myRidersList.splice(index, 1);
+    myRidersList.value.splice(index, 1);
     
-    console.log(route.params.id, member.RowKey,sel.RowKey);
     let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.RowKey);
 
     toDelete.forEach(async d => {

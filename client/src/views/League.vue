@@ -23,6 +23,9 @@
       <template #item-remove="{ RowKey }">
         <button class="btn btn-sm btn-danger" :disabled="!isRosterEditable" v-on:click="removeRiderClick(RowKey)">Remove</button>
       </template>
+      <template #item-stats="{ RowKey, Name }">
+        <a href="#" v-on:click.prevent="showRiderModal(RowKey)">{{ Name }}</a>
+      </template>
       <template #item-link="{ RowKey }">
         <RacerLink :id="RowKey"></RacerLink>
       </template>
@@ -41,7 +44,9 @@
       <div class="col-md-6 py-5">
         <!-- <Trades v-if="Config.showTrades"></Trades>-->
       </div>
-    </div>  
+    </div> 
+    
+    <Rider ref="riderModal" :league="route.params.id"></Rider>
   </div>
 </template>
 
@@ -58,17 +63,19 @@
   import Feed from "../components/Feed.vue";
   import Vue3EasyDataTable from 'vue3-easy-data-table';
   import Headshot from "../components/Headshot.vue";
+  import Rider from "../components/Rider.vue";
   import LeagueHeader from "../components/LeagueHeader.vue";
   import Trades from "../components/Trades.vue";
 
   const storage = useStorage();
   const auth0 = useAuth0();
   const route = useRoute();
+  const riderModal = ref(null);
   const headers = [
     { text: "", value: "remove"},
     { text: "Number", value: "Number", sortable: true },
     { text: "", value: "headshot", width: 50 },
-    { text: "Rider", value: "Name", sortable: true },
+    { text: "", value: "stats" },
     { text: "", value: "link"},
     { text: "Class", value: "Class", sortable: true },
     { text: "E", value: "Entries", sortable: true },
@@ -83,7 +90,7 @@
   ];
 
   let member = null;
-  let myRidersList = reactive([]);
+  let myRidersList = ref([]);
   let league = ref(null);
   let prev = storage.Races.getPreviousRace();
   let isRosterEditable = ref(false);
@@ -93,15 +100,7 @@
     isRosterEditable.value = storage.Results.hasResults2(route.params.id, prev.RowKey);
     
     member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
-    let team = storage.Teams.getByLeagueAndMember2(route.params.id, member.RowKey);
-    
-    storage.Riders.data.forEach(rider => {
-      let mine = team.map(a => a.Rider).indexOf(rider.RowKey);
-      
-      if (mine > -1) {
-        myRidersList.push(rider);
-      }
-    });
+    myRidersList.value = storage.getTeam(route.params.id, member.RowKey);
   });
 
   async function removeRiderClick(key){
@@ -121,6 +120,11 @@
     });
 
     await storage.Feeds.create({ League: route.params.id, Member: member.RowKey, Action: `Removed rider ${sel.Name} from their team` });
+  }
+
+  function showRiderModal(key){
+    //console.log(key);
+    riderModal.value.open(key);
   }
 </script>
 

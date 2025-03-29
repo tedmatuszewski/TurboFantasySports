@@ -22,6 +22,9 @@ export default defineStore(table, {
         },
         getAll: (state) => {
             return state.data;
+        },
+        get: (state) => {
+            return (rowKey) => state.data.find(x => x.RowKey === rowKey);
         }
     },
     actions: {

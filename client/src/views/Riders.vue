@@ -59,25 +59,32 @@
       <template #item-headshot="{ ImageUrl, Injury }">
         <Headshot :rider="{ ImageUrl, Injury }"></Headshot>
       </template>
+      <template #item-stats="{ RowKey, Name }">
+        <a href="#" v-on:click.prevent="showRiderModal(RowKey)">{{ Name }}</a>
+      </template>
     </Vue3EasyDataTable>
   </div>
+    
+  <Rider ref="riderModal" :league="props.league"></Rider>
 </template>
 
 <script setup>
   import { useStorage } from '../storage/StorageContext';
-  import { ref,onMounted,computed, reactive  } from "vue";
+  import { ref,onMounted,computed, defineProps  } from "vue";
   import { useRoute } from 'vue-router';
   import { useAuth0 } from '@auth0/auth0-vue';
   import Config from "../config.json";
   import RacerLink from "../components/RacerLink.vue";
   import Vue3EasyDataTable from 'vue3-easy-data-table';
   import Headshot from "../components/Headshot.vue";
+  import Rider from "../components/Rider.vue";
   import router from "../router";
 
+  const props = defineProps([ "league" ]);
   const headers = [
     { text: "Number", value: "Number", sortable: true },
     { text: "", value: "headshot", width: 50 },
-    { text: "Rider", value: "Name", sortable: true },
+    { text: "", value: "stats", sortable: true },
     { text: "", value: "link"},
     { text: "Class", value: "Class", sortable: true },
     { text: "E", value: "Entries", sortable: true },
@@ -102,7 +109,7 @@
   
   let member = ref(null);
   let riders = ref([]);
-  let riderModal = null;
+  let riderModal = ref(null);
 
   const availableSpots = computed(() => {
     return Config.maxRiders - team.value.length;
@@ -113,17 +120,9 @@
   });
 
   onMounted(() => {
-    riderModal = new bootstrap.Modal(document.getElementById('riderModal'), {});
-
     member.value = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
-    teams.value = storage.Teams.getByLeague2(route.params.id);
     team.value = storage.Teams.getByLeagueAndMember2(route.params.id, member.value.RowKey);
-
-    let taken = teams.value.map(a => a.Rider);
-    
-    storage.Riders.data.filter(r => taken.indexOf(r.RowKey) === -1).forEach(rider => {
-        riders.value.push(rider);
-    });
+    riders.value = storage.getAvailableRiders(route.params.id);
   });
 
   function rowClick(row, e) {
@@ -171,6 +170,10 @@
     
     //router.push({ name: 'league', params: { id: route.params.id } });
   }
+
+function showRiderModal(key){
+  riderModal.value.open(key);
+}
 </script>
 
 <style lang="css" scoped>

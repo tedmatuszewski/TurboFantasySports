@@ -29,6 +29,10 @@ export default defineStore(table, {
             }
     
             return this.data;
+        },
+        getByRider(rider) {
+            return this.data
+                .filter(o => o.Rider === rider);
         }
     }
   });

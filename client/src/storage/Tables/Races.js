@@ -34,7 +34,7 @@ export default defineStore(table, {
             return this.data;
         },
         getRaceByKey(key) {
-             state.data.find(race => race.RowKey === key);
+            return this.data.find(race => race.RowKey === key);
         },
         isNextUpcomingRace(race) { 
             const now = new Date();

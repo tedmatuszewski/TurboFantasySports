@@ -1,8 +1,8 @@
 <template>
     <div class="player-wrapper">
-        <img :src="rider.ImageUrl" v-if="rider.ImageUrl" class="avator" />
+        <img :src="rider.ImageUrl" v-if="rider.ImageUrl" class="avator" :style="{ width: `${width}px`, height: `${width}px` }" />
         <img src="../assets/profile.png" v-else class="avator" />
-        <div v-if="rider.Injury !== undefined" class="injury" :title="rider.Injury">
+        <div v-if="rider.Injury !== undefined" class="injury" :title="rider.Injury" :style="{ width: `${width/3}px`, height: `${width/3}px` }">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path fill="#EB2A2E" d="M27.5 12.2H21V5.6c0-.9-.8-1.6-1.7-1.6h-6.7c-.8 0-1.6.7-1.6 1.6v6.5H4.5c-.9 0-1.7.7-1.7 1.7v6.7c0 .9.7 1.7 1.7 1.7H11v6.5c0 .9.7 1.7 1.7 1.7h6.7c.9 0 1.7-.7 1.7-1.7v-6.5h6.5c.9 0 1.7-.7 1.7-1.7v-6.7c-.1-.9-.9-1.6-1.8-1.6"></path></svg>
         </div>
     </div>
@@ -13,7 +13,8 @@
     import { defineProps } from 'vue';
     
     const props = defineProps({
-        rider: { type: Object }
+        rider: { type: Object },
+        width: { type: Number, default: 40 }
     });
 </script>
 
@@ -27,8 +28,6 @@
 }
 
 .avator {
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
     -o-object-fit: cover;
     object-fit: cover;
@@ -49,7 +48,7 @@
 }
 
 .injury svg {
-    width:14px;
-    height:14px;
+    width:100%;
+    height:80%;
 }
 </style>

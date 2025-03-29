@@ -30,7 +30,7 @@
 
             <tbody>
               <tr v-for="team in table.Team" :value="team.RowKey">
-                <td>{{ getRiderName(team.Rider) }}</td>
+                <td><a href="#" v-on:click.prevent="showRiderModal(team.Rider);">{{ getRiderName(team.Rider) }}</a></td>
                 <td>{{ getRiderNumber(team.Rider) }}</td>
                 <td>{{ getRiderClass(team.Rider) }}</td>
               </tr>
@@ -40,15 +40,19 @@
       </div>
     </div>
   </div>
+  
+  <Rider ref="riderModal" :league="route.params.id"></Rider>
 </template>
 
 <script setup>
   import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
   import { ref,onMounted,computed, reactive, watch } from "vue";
+  import Rider from "../components/Rider.vue";
   
   const storage = useStorage();
   const route = useRoute();
+  const riderModal = ref(null);
   let tables = reactive([]);
 
   onMounted(async () => {
@@ -65,6 +69,10 @@
         tables.push(table);
       });
   });
+
+  function showRiderModal(id) {
+    riderModal.value.open(id);
+  }
 
 function getRiderName(id) {
   let rider = storage.Riders.data.find(r => r.RowKey === id);

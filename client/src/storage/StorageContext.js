@@ -46,8 +46,15 @@ export function useStorage() {
         return riders;
     }
 
-    context.getTeamWithPoints = (league) => {
-        let results = context.Results.getByLeague2(league);
+    context.getTeamWithPoints = (league, race) => {
+        let results = null;
+        
+        if(race) {
+            results = context.Results.getByLeagueAndRace2(league, race);
+        } else {
+            results = context.Results.getByLeague2(league);
+        }
+        
         let members = context.Members.getByLeague2(league);
         let teams = context.Teams.getByLeague2(league);
         let table = [];
@@ -59,7 +66,8 @@ export function useStorage() {
           table.push({
             TeamName: member.TeamName,
             Points: rr1.map(r => r.Points).reduce((a, b) => a + b, 0),
-            Team: rr2
+            Team: rr2,
+            Results: rr1
           });
         });
     

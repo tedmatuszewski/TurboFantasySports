@@ -57,7 +57,6 @@
   import { useAuth0 } from '@auth0/auth0-vue';
   import Races from "../components/Races.vue";
   import Position from "../components/Position.vue";
-  import Countdown from "../components/Countdown.vue";
   import Config from "../config.json";
   import RacerLink from "../components/RacerLink.vue";
   import Feed from "../components/Feed.vue";
@@ -65,7 +64,6 @@
   import Headshot from "../components/Headshot.vue";
   import Rider from "../components/Rider.vue";
   import LeagueHeader from "../components/LeagueHeader.vue";
-  import Trades from "../components/Trades.vue";
 
   const storage = useStorage();
   const auth0 = useAuth0();
@@ -107,14 +105,12 @@
     if(confirm("Are you sure that you want to remove this rider from your team? Removing this rider will put them back in the pool of available riders for anyone else to scoop up.") == false) {
       return;
     }
+    
     let sel = myRidersList.value.find(r => r.RowKey == key);
-    console.log(key,sel);
     let index = myRidersList.value.indexOf(sel);
-    console.log(route.params.id, member.RowKey, sel.RowKey);
+    let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.RowKey);
     
     myRidersList.value.splice(index, 1);
-    
-    let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.RowKey);
 
     toDelete.forEach(async d => {
       await storage.Teams.remove(d.RowKey);
@@ -124,7 +120,6 @@
   }
 
   function showRiderModal(key){
-    //console.log(key);
     riderModal.value.open(key);
   }
 </script>

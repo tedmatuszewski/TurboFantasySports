@@ -76,25 +76,9 @@ const headers = [
   { text: "Race", value: "Race" },
   { text: "Date", value: "date" },
   { text: "Points", value: "Points" },
-  // { text: "", value: "remove"},
-  // { text: "Number", value: "Number", sortable: true },
-  // { text: "", value: "headshot", width: 50 },
-  // { text: "", value: "stats" },
-  // { text: "", value: "link"},
-  // { text: "Class", value: "Class", sortable: true },
-  // { text: "E", value: "Entries", sortable: true },
-  // { text: "MEQF", value: "TotalOutcomes", sortable: true },
-  // { text: "TP", value: "TotalPoints", sortable: true },
-  // { text: "AFP/R", value: "AveragePoints", sortable: true },
-  // { text: "ARP/R", value: "AveragePlace", sortable: true },
-  // { text: "Wins", value: "Wins", sortable: true },
-  // { text: "Top3", value: "Podiums", sortable: true },
-  // { text: "Top5", value: "TopFives", sortable: true },
-  // { text: "Top10", value: "TopTens", sortable: true },
 ];
 
 let modal = null;
-let rowKey = null;
 
 onMounted(async () => {
   modal = new bootstrap.Modal(document.getElementById('riderModal'), {});
@@ -104,6 +88,7 @@ const teamDisplay = computed(() => {
   if (member.value && member.value.TeamName) {
     return member.value.TeamName;
   }
+  
   return "Available";
 });
 

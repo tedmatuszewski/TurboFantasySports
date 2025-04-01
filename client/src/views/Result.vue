@@ -12,9 +12,9 @@
     <races :race="race.RowKey"></races>
     
     <div class="row">
-      <div class="col-md-6" v-for="(table, i) in tables" :value="table.member.UserGuid">
+      <div class="col-md-6" v-for="(table, i) in tables">
         <div class="search-list mb-3">
-          <h4>{{ (i+1) }}. {{table.member.TeamName}}</h4>
+          <h4>{{ (i+1) }}. {{table.TeamName}}</h4>
 
           <table class="table table-sm">
             <thead>
@@ -26,7 +26,7 @@
             </thead>
 
             <tbody>
-              <tr v-for="result in table.results" :value="result.RowKey">
+              <tr v-for="result in table.Results">
                 <td>{{ getRiderName(result.Rider) }}</td>
                 <td>{{ result.Place }}</td>
                 <td>{{ result.Points }}</td>
@@ -34,7 +34,7 @@
               <tr>
                 <td><b>Total</b></td>
                 <td></td>
-                <td>{{ table.total }}</td>
+                <td>{{ table.Points }}</td>
               </tr>
             </tbody>
           </table>
@@ -48,44 +48,24 @@
   import Races from "../components/Races.vue";
   import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
-  import { ref,onMounted,computed, reactive, watch } from "vue";
+  import { onMounted, watch, ref } from "vue";
   
   const storage = useStorage();
   const route = useRoute();
-
-  let tables = reactive([]);
-  let races = storage.Races.data;
-  let race = races.find(r => r.RowKey === route.params.race);
+  const tables = ref([]);
+  const race = ref(null);
 
   watch(() => route.params.race, async (newRace) => {
-    race = races.find(r => r.RowKey === newRace);
-    
-    await loadPage();
+    await loadPage(newRace);
   });
-
+  
   onMounted(async () => {
-    await loadPage();
+    await loadPage(route.params.race);
   });
-
-  async function loadPage(){
-    tables.length = 0;
-    
-    let results =  storage.Results.getByLeagueAndRace2(route.params.id, route.params.race);
-    let members =  storage.Members.getByLeague2(route.params.id);
-    
-    members.forEach((member, i) => {
-      let rr = results.filter(result => result.Member === member.RowKey);
-      let table = {
-        place: i,
-        member: member,
-        results: rr,
-        total: rr.map(r => r.Points).reduce((a, b) => a + b, 0)
-      };
-
-      tables.push(table);
-    });
-
-    tables.sort((a, b) => b.total - a.total);
+  
+  async function loadPage(raceKey){
+    race.value = storage.Races.getRaceByKey(raceKey);
+    tables.value = storage.getTeamWithPoints(route.params.id, raceKey);
   }
 
   function getRiderName(id) {

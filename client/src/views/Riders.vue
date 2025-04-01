@@ -78,7 +78,6 @@
   import Vue3EasyDataTable from 'vue3-easy-data-table';
   import Headshot from "../components/Headshot.vue";
   import Rider from "../components/Rider.vue";
-  import router from "../router";
 
   const props = defineProps([ "league" ]);
   const headers = [
@@ -167,8 +166,6 @@
         Action: `Added rider ${sel.Name} to their team`
       });
     });
-    
-    //router.push({ name: 'league', params: { id: route.params.id } });
   }
 
 function showRiderModal(key){

@@ -77,9 +77,7 @@ namespace TurboFantasySports
             
             var outcomes = outcomesClient.Query<TableEntity>().ToList();
             var data = ridersClient.Query<TableEntity>().ToList();
-            var entryList1 = GetEntryList();
-            var entryList2 = GetEntryList("arlington");
-            var entryList = entryList1.Concat(entryList2).ToList();
+            var entryList = GetEntryList("seattle");
 
             UpdateData(entryList, data, outcomes);
 
@@ -94,7 +92,7 @@ namespace TurboFantasySports
             {
                 var entity = data.FirstOrDefault(t => t.RowKey == entry.Rider);
                 var riderOutcomes = outcomes.Where(t => t.GetString("Rider") == entry.Rider).ToList();
-                var entries = entity.GetInt32("Entries"); // + 1;
+                var entries = entity != null ? entity.GetInt32("Entries"): 1; // + 1;
                 var totalPoints = riderOutcomes.Sum(t => t.GetInt32("Points")) ?? 0;
                 var totalPlaces = riderOutcomes.Sum(t => t.GetInt32("Place")) ?? 0;
                 var totalWins = riderOutcomes.Count(t => t.GetInt32("Place") == 1);
@@ -121,7 +119,7 @@ namespace TurboFantasySports
                         { "ImageUrl", entry.ImageUrl },
                         { "Injury", entry.Injury },
                         { "Class", entry.Class },
-                        { "Entries", 0 },
+                        { "Entries", 1 },
                         { "TotalPoints",  totalPoints },
                         { "TotalPlaces", totalPlaces },
                         { "Wins",  totalWins },
@@ -144,7 +142,7 @@ namespace TurboFantasySports
                     entity["ImageUrl"] = entry.ImageUrl;
                     entity["Injury"] = entry.Injury;
                     entity["Class"] = entry.Class;
-                    entity["Entries"] = entries;
+                    entity["Entries"] = entries + 1;
                     entity["TotalPoints"] = totalPoints;
                     entity["TotalPlaces"] = totalPlaces;
                     entity["Wins"] = totalWins;

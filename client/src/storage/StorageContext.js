@@ -46,5 +46,28 @@ export function useStorage() {
         return riders;
     }
 
+    context.getTeamWithPoints = (league) => {
+        let results = context.Results.getByLeague2(league);
+        let members = context.Members.getByLeague2(league);
+        let teams = context.Teams.getByLeague2(league);
+        let table = [];
+    
+        members.forEach(member => {
+          let rr1 = results.filter(result => result.Member === member.RowKey);
+          let rr2 = teams.filter(t => t.Member === member.RowKey);
+    
+          table.push({
+            TeamName: member.TeamName,
+            Points: rr1.map(r => r.Points).reduce((a, b) => a + b, 0),
+            Team: rr2
+          });
+        });
+    
+        table.sort((a, b) => b.Points - a.Points);
+        table.forEach((t, i) => t.Place = (i+1));
+
+        return table;
+    };
+
     return context;
 }

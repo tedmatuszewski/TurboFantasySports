@@ -15,9 +15,9 @@
     </div>
 
     <div class="row">
-      <div class="col-md-6" v-for="(table, i) in tables" :value="table.TeamName">
+      <div class="col-md-6" v-for="(table, i) in tables">
         <div class="search-list mb-3">
-          <h4>{{table.TeamName}}</h4>
+          <h4>{{(i+1) + ". " + table.TeamName}}</h4>
 
           <table class="table table-sm">
             <thead>
@@ -47,27 +47,16 @@
 <script setup>
   import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
-  import { ref,onMounted,computed, reactive, watch } from "vue";
+  import { ref, onMounted } from "vue";
   import Rider from "../components/Rider.vue";
   
   const storage = useStorage();
   const route = useRoute();
   const riderModal = ref(null);
-  let tables = reactive([]);
+  const tables = ref([]);
 
-  onMounted(async () => {
-      let teams =  storage.Teams.getByLeague2(route.params.id);
-      let members =  storage.Members.getByLeague2(route.params.id);
-
-      members.forEach((member, i) => {
-        let rr = teams.filter(t => t.Member === member.RowKey);
-        let table = {
-          TeamName: member.TeamName,
-          Team: rr
-        };
-  
-        tables.push(table);
-      });
+  onMounted(() => {
+    tables.value = storage.getTeamWithPoints(route.params.id);
   });
 
   function showRiderModal(id) {

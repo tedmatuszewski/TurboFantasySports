@@ -33,26 +33,13 @@
 <script setup>
   import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
-  import { ref,onMounted,computed, reactive, watch } from "vue";
+  import { ref, onMounted } from "vue";
   
   const storage = useStorage();
   const route = useRoute();
-  let table = reactive([]);
+  const table = ref([]);
 
   onMounted(async () => {
-    let results = storage.Results.getByLeague2(route.params.id);
-    let members = storage.Members.getByLeague2(route.params.id);
-
-    members.forEach(member => {
-      let rr = results.filter(result => result.Member === member.RowKey);
-
-      table.push({
-        TeamName: member.TeamName,
-        Points: rr.map(r => r.Points).reduce((a, b) => a + b, 0)
-      });
-    });
-
-    table.sort((a, b) => b.Points - a.Points);
-    table.forEach((t, i) => t.Place = (i+1));
+    table.value = storage.getTeamWithPoints(route.params.id);
   });
 </script>

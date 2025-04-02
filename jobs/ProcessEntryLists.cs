@@ -39,59 +39,59 @@ namespace TurboFantasySports
         public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
             //var riderList = GetRacerxRiderList();
+            // var outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // var data = ridersClient.Query<TableEntity>().ToList();
+            // var entryList = GetEntryList("anaheim-1");
+            // UpdateData(entryList, data, outcomes);
+            
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("san-diego");
+            // UpdateData(entryList, data, outcomes);
+
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("anaheim-2");
+            // UpdateData(entryList, data, outcomes);
+            
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("glendale");
+            // UpdateData(entryList, data, outcomes);
+            
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("tampa");
+            // UpdateData(entryList, data, outcomes);
+            
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("detroit");
+            // UpdateData(entryList, data, outcomes);
+            
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("arlington");
+            // UpdateData(entryList, data, outcomes);
+            
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("daytona");
+            // UpdateData(entryList, data, outcomes);
+            
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("indianapolis");
+            // UpdateData(entryList, data, outcomes);
+            
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("birmingham");
+            // UpdateData(entryList, data, outcomes);
+            
             var outcomes = outcomesClient.Query<TableEntity>().ToList();
             var data = ridersClient.Query<TableEntity>().ToList();
-            var entryList = GetEntryList("anaheim-1");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("san-diego");
-            UpdateData(entryList, data, outcomes);
-
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("anaheim-2");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("glendale");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("tampa");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("detroit");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("arlington");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("daytona");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("indianapolis");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("birmingham");
-            UpdateData(entryList, data, outcomes);
-            
-            outcomes = outcomesClient.Query<TableEntity>().ToList();
-            data = ridersClient.Query<TableEntity>().ToList();
-            entryList = GetEntryList("seattle");
+            var entryList = GetEntryList();
 
             UpdateData(entryList, data, outcomes);
 

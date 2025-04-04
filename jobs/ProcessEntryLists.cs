@@ -1,11 +1,9 @@
-using System.Text.Json;
 using Azure;
 using Azure.Data.Tables;
 using HtmlAgilityPack;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+//using Microsoft.Azure.WebJobs;
 
 namespace TurboFantasySports
 {
@@ -38,7 +36,7 @@ namespace TurboFantasySports
         TableClient entriesClient;
 
         [Function("ProcessEntryLists")]
-        public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public async Task Run([TimerTrigger("0 0 6 * * 4")] Microsoft.Azure.WebJobs.TimerInfo timer)
         {
             //var riderList = GetRacerxRiderList();
             // var outcomes = outcomesClient.Query<TableEntity>().ToList();
@@ -104,7 +102,7 @@ namespace TurboFantasySports
 
             _logger.LogInformation($"Successfully processed riders");
 
-            return new OkObjectResult("Successfully ran function");
+            //return new OkObjectResult("Successfully ran function");
         }
 
         private void UpdateData(List<RiderRow> entryList, List<TableEntity> data, List<TableEntity> outcomes) 

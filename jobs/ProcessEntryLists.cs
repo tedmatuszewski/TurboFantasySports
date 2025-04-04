@@ -23,6 +23,7 @@ namespace TurboFantasySports
             racesClient = new TableClient(new Uri(storageUri), "Races", credential);
             outcomesClient = new TableClient(new Uri(storageUri), "Outcomes", credential);
             ridersClient = new TableClient(new Uri(storageUri), "Riders", credential);
+            entriesClient = new TableClient(new Uri(storageUri), "Entries", credential);
         }
 
         string partition = "1";
@@ -34,6 +35,7 @@ namespace TurboFantasySports
         TableClient racesClient;
         TableClient outcomesClient;
         TableClient ridersClient;
+        TableClient entriesClient;
 
         [Function("ProcessEntryLists")]
         public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
@@ -89,6 +91,11 @@ namespace TurboFantasySports
             // entryList = GetEntryList("birmingham");
             // UpdateData(entryList, data, outcomes);
             
+            // outcomes = outcomesClient.Query<TableEntity>().ToList();
+            // data = ridersClient.Query<TableEntity>().ToList();
+            // entryList = GetEntryList("seattle");
+            // UpdateData(entryList, data, outcomes);
+            
             var outcomes = outcomesClient.Query<TableEntity>().ToList();
             var data = ridersClient.Query<TableEntity>().ToList();
             var entryList = GetEntryList();
@@ -121,6 +128,13 @@ namespace TurboFantasySports
                 {
                     entry.Class = entity.GetString("Class");
                 }
+
+                entriesClient.AddEntity(new TableEntity(partition, Guid.NewGuid().ToString())
+                {
+                    { "Rider", entry.Rider },
+                    { "Class", entry.Class },
+                    { "Race", entry.Race }
+                });
 
                 if(entity == null)
                 {
@@ -212,16 +226,21 @@ namespace TurboFantasySports
 
         private List<RiderRow> GetEntryList(string race = null)
         {  
-            var entity = racesClient.Query<TableEntity>()
-                .Where(t => DateTime.Parse(t.GetString("Date")) > DateTime.Now)
-                .OrderBy(t => DateTime.Parse(t.GetString("Date")))
-                .FirstOrDefault();
+            TableEntity entity = null;
 
             if( race == null) 
             {
-                race = entity.GetString("Racerx");
+                entity = racesClient.Query<TableEntity>()
+                .Where(t => DateTime.Parse(t.GetString("Date")) > DateTime.Now)
+                .OrderBy(t => DateTime.Parse(t.GetString("Date")))
+                .FirstOrDefault();
+            }
+            else
+            {
+                entity = racesClient.Query<TableEntity>().FirstOrDefault(e => e.GetString("Racerx") == race);
             }
 
+            race = entity.GetString("Racerx");
             var burl = "https://racerxonline.com";
             var url = $"{burl}/sx/2025/{race}";
             var web = new HtmlWeb();
@@ -244,6 +263,8 @@ namespace TurboFantasySports
             }
             
             var results = result250.Concat(result450).ToList();
+
+            results.ForEach(r => r.Race = entity.RowKey);
 
             // var result450Link = entryListLinks.FirstOrDefault(l => l.Attributes["href"].Value.Contains("450")).Attributes["href"].Value;
             // var result250Link = entryListLinks.FirstOrDefault(l => l.Attributes["href"].Value.Contains("250")).Attributes["href"].Value;
@@ -319,5 +340,6 @@ namespace TurboFantasySports
         public string? Name { get; set; }
         public string Class {get; set;}
         public int Entries {get; set;}
+        public string Race {get; set;}
     }
 }

@@ -37,8 +37,8 @@ namespace TurboFantasySports
         TableClient outcomesClient;
         TableClient ridersClient;
 
-        [Function("ProcessRaceResults")]
-        public async Task<OkObjectResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        [Function("Process Race Results")]
+        public async Task Run([TimerTrigger("0 0 6 * * 1")] Microsoft.Azure.WebJobs.TimerInfo timer)
         {
             //CreateRaces();
             // https://www.nuget.org/packages/Azure.Data.Tables/
@@ -55,8 +55,6 @@ namespace TurboFantasySports
             //UpdateTableData();
             IngestRaceResults();
             //IngestJsonFile();
-            
-            return new OkObjectResult("Successfully ran function");
         }
 
         private void CreateRaces()

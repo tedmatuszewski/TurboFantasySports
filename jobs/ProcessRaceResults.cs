@@ -97,6 +97,8 @@ namespace TurboFantasySports
                 raceKey = races.LastOrDefault(r => r.GetString("Racerx") == race);
             }
 
+            _logger.LogInformation($"Found race {raceKey}");
+
             var result450Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[2]/ul/li[1]/a";
             var result250Link = "//*[@id=\"content\"]/div[2]/div/nav/ul/li[3]/ul/li[1]/a";
             var burl = "https://racerxonline.com";
@@ -109,6 +111,8 @@ namespace TurboFantasySports
             var result250 = GetRaceResults($"{burl}{result250Href}");
             var results = result250.Concat(result450).ToList();
             var teams = teamsClient.Query<TableEntity>();
+
+            _logger.LogInformation($"Gathered data");
 
             foreach(var result in results)
             {

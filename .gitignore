@@ -258,3 +258,4 @@ paket-files/
 __pycache__/
 *.pyc
 /AHQ.VUE/dist
+scripts/Copy-Prod-To-Dev.ps1

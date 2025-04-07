@@ -35,7 +35,7 @@ namespace TurboFantasySports
         TableClient ridersClient;
         TableClient entriesClient;
 
-        [Function("Process Entry List")]
+        [Function("ProcessEntryList")]
         public async Task Run([TimerTrigger("0 0 6 * * 4")] Microsoft.Azure.WebJobs.TimerInfo timer)
         {
             //var riderList = GetRacerxRiderList();

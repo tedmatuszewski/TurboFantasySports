@@ -259,3 +259,6 @@ __pycache__/
 *.pyc
 /AHQ.VUE/dist
 scripts/Copy-Prod-To-Dev.ps1
+__azurite_db_blob__.json
+__azurite_db_blob_extent__.json
+__blobstorage__/14ce82db-a6e7-474c-922e-856326b0b61a

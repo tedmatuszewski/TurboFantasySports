@@ -39,6 +39,56 @@ public class RacerXContext
         return result;
     }
 
+    public List<EntryListLink> GetRaceResultLinks(string race)
+    {
+        var result = new List<EntryListLink>();
+        var web = new HtmlWeb();
+        var burl = "https://racerxonline.com";
+        var url = $"{burl}/sx/2025/{race}";
+        var doc = web.Load(url);
+        var result450Link = doc.DocumentNode.SelectSingleNode($"//a[contains(@href, '{race}/450')]").Attributes["href"].Value;
+        var result250Link = doc.DocumentNode.SelectSingleNode($"//a[contains(@href, '{race}/250')]").Attributes["href"].Value;
+        var class450 = result450Link.Split('/').Last();
+        var class250 = result250Link.Split('/').Last();
+
+        result.Add(new EntryListLink($"{burl}{result450Link}", class450));
+        result.Add(new EntryListLink($"{burl}{result250Link}", class250));
+            
+        return result;
+    }
+
+    public List<OutcomeModel> GetResultList(string url, string race)
+    {
+        var outcomes = new List<OutcomeModel>();
+        var web = new HtmlWeb();
+        var doc = web.Load(url);
+        var table = doc.DocumentNode.SelectNodes("//*[@id=\"content\"]/div[3]/div/table/tbody/tr");
+            
+        foreach(var row in table) 
+        {
+            var cells = row.SelectNodes("td").ToList();
+            var position = cells[0].InnerText;
+            var i = cells[1].InnerHtml;
+            var htmlDoc = new HtmlDocument();
+            var intPosition = 22; // Likely dnf. Make their position 22 since that is last place.
+
+            int.TryParse(position, out intPosition);
+
+            htmlDoc.LoadHtml(i);
+
+            var htmlBody = htmlDoc.DocumentNode.SelectSingleNode("//a[@class='headshot']");
+            var ii = htmlBody.Attributes["href"].Value.Replace("/rider/", "").Replace("/races", "");
+
+            outcomes.Add(new OutcomeModel {
+                Place = intPosition,
+                Rider = ii,
+                Race = race
+            });
+        }
+
+        return outcomes;
+    }
+
     public List<RiderRow> GetEntryList(string url, string lass)
     {
         var web = new HtmlWeb();

@@ -42,6 +42,16 @@ public class StorageContext
         return new RaceModel(entity);
     }
 
+    public RaceModel GetLastRace()
+    {
+        var entity = racesClient.Query<TableEntity>()
+                .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
+                .OrderBy(t => DateTime.Parse(t.GetString("Date")))
+                .LastOrDefault();
+
+        return new RaceModel(entity);
+    }
+
     public RaceModel GetRace(string key)
     {
         var entity = racesClient.Query<TableEntity>()
@@ -56,6 +66,11 @@ public class StorageContext
         var outcomes = outcomesClient.Query<TableEntity>().ToList().ConvertAll(e => new OutcomeModel(e));
         
         return outcomes;
+    }
+
+    public void CreateOutcome(OutcomeModel row)
+    {
+        outcomesClient.AddEntity(row.ToTableEntity());
     }
 
     public List<RiderRow> GetRiders()
@@ -82,8 +97,20 @@ public class StorageContext
         return data;
     }
 
+    public List<TeamRow> GetTeams()
+    {
+        var data = teamsClient.Query<TableEntity>().ToList().ConvertAll(e => new TeamRow(e));
+
+        return data;
+    }
+
     public void CreateEntry(EntryRow row)
     {
         entriesClient.AddEntity(row.ToTableEntity());
+    }
+
+    public void CreateResult(ResultRow row)
+    {
+        resultsClient.AddEntity(row.ToTableEntity());
     }
 }

@@ -9,12 +9,13 @@
               <div class="row g-0">
                 <div class="col-8">
                   <div class="card-body">
-                    <h5 class="card-title">{{ league.Name }}</h5>
+                    <h5 class="card-title text-truncate">{{ league.Name }}</h5>
                     <p class="card-text">{{ league.Description }}</p>
                   </div>
                 </div>
                 <div class="col-4">
                   <div class="card-body d-flex justify-content-end align-items-center h-100">
+                    <router-link v-if="isAdmin(league)" :to="{ name: 'ManageLeague', params: { id: league.RowKey } }" class="btn btn-primary mr-3">Manage</router-link>
                     <router-link v-if="isMember(league)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
                   </div>
                 </div>
@@ -63,6 +64,12 @@
 
   function isMember(league) {
     var member = members.value.find(m => m.League === league.RowKey && m.Email === auth0.user.value.email);
+
+    return member !== undefined;
+  }
+
+  function isAdmin(league) {
+    var member = members.value.find(m => m.League === league.RowKey && m.Email === auth0.user.value.email && m.IsAdmin);
 
     return member !== undefined;
   }

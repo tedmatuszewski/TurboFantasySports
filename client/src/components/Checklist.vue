@@ -13,7 +13,7 @@
         </div>
 
         <div class="col-md-5 d-flex align-items-center justify-content-center">
-            <img src="././../assets/meme.jpg" style="max-width: 100%;" />
+            <img class="d-none d-md-block" src="././../assets/meme.jpg" style="max-width: 100%;" />
         </div>
     </div>
 </template>

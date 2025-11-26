@@ -4,13 +4,23 @@
         <div class="col-md-8">
           <h2 class="mb-3">Ready to start your own league?</h2>
           <p class="lead mb-4">Create your own fantasy sports SMX league with your friends and family. Set your own team, optimize your lineup, and compete for bragging rights!</p>
-          <router-link :to="{ name: 'CreateLeague' }" class="btn btn-secondary btn-lg">Create New League</router-link>
+          <router-link v-if="isAuthenticated" :to="{ name: 'CreateLeague' }" class="btn btn-secondary btn-lg">Create New League</router-link>
+          <span v-else>Please log in to create a new league.</span>
         </div>
       </div>
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+  import { useAuth0 } from '@auth0/auth0-vue';
+  import { ref,onMounted,computed,watch } from "vue";
+  
+  const auth0 = useAuth0();
+  
+  const isAuthenticated = computed(() => {
+      return auth0.isAuthenticated.value;
+  });
+</script>
 
 <style scoped>
     .track-background {

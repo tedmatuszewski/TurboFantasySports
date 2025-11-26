@@ -1,15 +1,23 @@
 <template>
   <div class="py-5">
     <div v-if="isAuthenticated">
-      <h2 class="text-center">Your leagues</h2>
+      <h2 class="text-center">Current leagues</h2>
 
       <div v-for="(pair, index) in leaguePairs" :key="index" class="row my-5">
           <div v-for="league in pair" :key="league.Id" class="col-md-6 mb-4">
             <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">{{ league.Name }}</h5>
-                <p class="card-text">{{ league.Description }}</p>
-                <router-link v-if="isMember(league)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
+              <div class="row g-0">
+                <div class="col-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ league.Name }}</h5>
+                    <p class="card-text">{{ league.Description }}</p>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="card-body d-flex justify-content-end align-items-center h-100">
+                    <router-link v-if="isMember(league)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

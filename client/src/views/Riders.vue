@@ -42,9 +42,9 @@
       </div>
     </div>
 
-    <input type="text" class="form-control mb-3" placeholder="Search for a rider" v-model="searchValue">
+    <input id="filter-text-box" type="text" class="form-control mb-3" placeholder="Search for a rider" v-on:input="onFilterTextBoxChanged()" />
 
-    <Vue3EasyDataTable
+    <!-- <Vue3EasyDataTable
         :headers="headers"
         :items="riders"
         :search-field="searchField"
@@ -62,8 +62,9 @@
       <template #item-stats="{ RowKey, Name }">
         <a href="#" v-on:click.prevent="showRiderModal(RowKey)">{{ Name }}</a>
       </template>
-    </Vue3EasyDataTable>
-  </div>
+    </Vue3EasyDataTable>-->
+    <ag-grid-vue ref="grid" @selection-changed="onSelectionChanged" :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :selectionColumnDef="{pinned: 'left', width: 50}" :rowSelection="{ mode: 'multiRow' }" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
+  </div> 
     
   <Rider ref="riderModal" :league="props.league"></Rider>
 </template>
@@ -74,37 +75,41 @@
   import { useRoute } from 'vue-router';
   import { useAuth0 } from '@auth0/auth0-vue';
   import Config from "../config.json";
-  import RacerLink from "../components/RacerLink.vue";
-  import Vue3EasyDataTable from 'vue3-easy-data-table';
-  import Headshot from "../components/Headshot.vue";
+  import RacerName from "../components/RacerName.vue";
   import Rider from "../components/Rider.vue";
+  import { AgGridVue } from "ag-grid-vue3";
+
+  const colDefs = ref([
+    { 
+      headerName: "Rider",
+      field: "Name",
+      pinned: 'left',
+      cellRenderer: RacerName,
+      cellRendererParams: {
+        click: showRiderModal
+      }
+    },
+    { field: "Number", headerName: "#" },
+      { field: "Class" },
+      { headerName: "E", field: "Entries" },
+      { headerName: "MEQF", field: "TotalOutcomes" },
+      { headerName: "TP", field: "TotalPoints" },
+      { headerName: "AFP/R", field: "AveragePoints" },
+      { headerName: "ARP/R", field: "AveragePlace" },
+      { headerName: "Wins", field: "Wins" },
+      { headerName: "Top3", field: "Podiums" },
+      { headerName: "Top5", field: "TopFives" },
+      { headerName: "Top10", field: "TopTens" }
+  ]);
 
   const props = defineProps([ "league" ]);
-  const headers = [
-    { text: "Number", value: "Number", sortable: true },
-    { text: "", value: "headshot", width: 50 },
-    { text: "", value: "stats", sortable: true },
-    { text: "", value: "link"},
-    { text: "Class", value: "Class", sortable: true },
-    { text: "E", value: "Entries", sortable: true },
-    { text: "MEQF", value: "TotalOutcomes", sortable: true },
-    { text: "TP", value: "TotalPoints", sortable: true },
-    { text: "AFP/R", value: "AveragePoints", sortable: true },
-    { text: "ARP/R", value: "AveragePlace", sortable: true },
-    { text: "Wins", value: "Wins", sortable: true },
-    { text: "Top3", value: "Podiums", sortable: true },
-    { text: "Top5", value: "TopFives", sortable: true },
-    { text: "Top10", value: "TopTens", sortable: true },
-  ];
-
   const storage = useStorage();
   const itemsSelected = ref([]);
-  const searchField = ref("Name");
-  const searchValue = ref("");
   const auth0 = useAuth0();
   const route = useRoute();
   const teams = ref([]);
   const team = ref([]);
+  const grid = ref(null);
   
   let member = ref(null);
   let riders = ref([]);
@@ -124,8 +129,12 @@
     riders.value = storage.getAvailableRiders(route.params.id);
   });
 
-  function rowClick(row, e) {
-    e.srcElement.closest("tr").querySelector("input[type=checkbox]").click();
+  function onFilterTextBoxChanged() {
+    grid.value.api.setGridOption("quickFilterText", document.getElementById("filter-text-box").value);
+  }
+
+  function onSelectionChanged() {
+    itemsSelected.value = grid.value.api.getSelectedRows();
   }
 
   async function addRidersClick() {

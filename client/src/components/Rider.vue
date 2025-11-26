@@ -35,20 +35,8 @@
           </div>
 
           <h4>Race Results</h4>
-        <Vue3EasyDataTable :headers="headers" :items="historyTable" :rows-per-page="6">
-         <template #item-date="{ Date }">
-            <span>{{ Date.toLocaleDateString() }}</span>
-          </template>
-          <!-- <template #item-stats="{ RowKey, Name }">
-            <a href="#" v-on:click.prevent="showRiderModal(RowKey)">{{ Name }}</a>
-          </template>
-          <template #item-link="{ RowKey }">
-            <RacerLink :id="RowKey"></RacerLink>
-          </template>
-          <template #item-headshot="{ ImageUrl, Injury }">
-            <Headshot :rider="{ ImageUrl, Injury }"></Headshot>
-          </template> -->
-        </Vue3EasyDataTable>
+
+          <ag-grid-vue :rowData="historyTable" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" v-on:click="close">Close</button>
@@ -61,9 +49,15 @@
 <script setup>
 import { onMounted, defineExpose, ref, defineProps, computed } from 'vue';
 import { useStorage } from '../storage/StorageContext';
-import Vue3EasyDataTable from 'vue3-easy-data-table';
 import Headshot from "../components/Headshot.vue";
+import { AgGridVue } from "ag-grid-vue3";
 
+const colDefs = ref([
+    { field: "Place", headerName: "Place" },
+    { field: "Race", headerName: "Race" },
+    { headerName: "Date", field: "Date", sort: "desc" },
+    { headerName: "Points", field: "Points" }
+]);
 const props = defineProps([ "league" ]);
 const storage = useStorage();
 const outcomes = ref([]);
@@ -71,12 +65,6 @@ const rider = ref({});
 const team = ref({});
 const member = ref(null);
 const historyTable = ref([]);
-const headers = [
-  { text: "Place", value: "Place" },
-  { text: "Race", value: "Race" },
-  { text: "Date", value: "date" },
-  { text: "Points", value: "Points" },
-];
 
 let modal = null;
 
@@ -94,6 +82,7 @@ const teamDisplay = computed(() => {
 
 function open(id) {
   modal.show();
+  
   outcomes.value = storage.Outcomes.getByRider(id);
   rider.value = storage.Riders.getSingle(id);
   team.value = storage.Teams.getByLeagueAndRider(props.league, id);
@@ -110,8 +99,6 @@ function open(id) {
         Place: outcome.Place
     });
   });
-  
-  historyTable.value.sort((a, b) => a.Date - b.Date);
 }
 
 function close() {

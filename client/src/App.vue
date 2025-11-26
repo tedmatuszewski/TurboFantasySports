@@ -17,6 +17,9 @@
     import NavBar from "./components/NavBar.vue";
     import Error from "./components/Error.vue";
     import { useStorage } from './storage/StorageContext';
+    import { AllCommunityModule, ModuleRegistry, QuickFilterModule } from 'ag-grid-community'; 
+
+    ModuleRegistry.registerModules([AllCommunityModule, QuickFilterModule]);
 
     const storage = useStorage();
   
@@ -350,6 +353,12 @@ a {
 
 .btn {
     border-radius: .1rem
+}
+
+ol {
+    margin-left: 0;
+    margin-block-start: 0;
+    padding-inline-start: 15px;
 }
 
 </style>

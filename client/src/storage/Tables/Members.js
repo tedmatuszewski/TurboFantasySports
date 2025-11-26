@@ -31,7 +31,11 @@ export default defineStore(table, {
         async fillData() {
             this.data.length = 0;
 
-            const entitiesIter = client.listEntities();
+            const entitiesIter = client.listEntities({
+                queryOptions: {
+                    filter: `PartitionKey eq '${config.partitionKey}'`
+                }
+            });
 
             for await (const entity of entitiesIter) {
                 this.data.push(new Member(entity));
@@ -62,6 +66,14 @@ export default defineStore(table, {
             }
 
             return this.data[index];
+        },
+        async remove(key) {
+            let index = this.data.findIndex(x => x.RowKey === key);
+            if (index >= 0) {
+                this.data.splice(index, 1);
+            }
+
+            await client.deleteEntity(config.partitionKey, key);
         }
     }
   });

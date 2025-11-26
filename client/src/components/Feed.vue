@@ -32,8 +32,13 @@
 
   function getMemberName(id) {
     let member = members.value.find(m => m.RowKey == id);
+    let name = member ? member.TeamName : '';
 
-    return member ? member.TeamName : '';
+    if(member.IsAdmin) {
+      name += " ⭐";
+    }
+
+    return name;
   }
 
   function formatDate(date) {

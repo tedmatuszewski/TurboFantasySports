@@ -8,6 +8,9 @@ import Contact from "../views/Contact.vue";
 import Matchup from "../views/Matchup.vue";
 import Privacy from "../views/Privacy.vue";
 import Riders from "../views/Riders.vue";
+import CreateLeague from "../views/CreateLeague.vue";
+import ManageLeague from "../views/ManageLeague.vue";
+import Draft from "../views/Draft.vue";
 import { createAuthGuard } from "@auth0/auth0-vue";
 
 const routes = [
@@ -61,6 +64,24 @@ const routes = [
     path: "/league/:id/riders",
     name: "riders",
     component: Riders,
+    beforeEnter: createAuthGuard(app)
+  },
+  {
+    path: "/league",
+    name: "CreateLeague",
+    component: CreateLeague,
+    beforeEnter: createAuthGuard(app)
+  },
+  {
+    path: "/league/:id/manage",
+    name: "ManageLeague",
+    component: ManageLeague,
+    beforeEnter: createAuthGuard(app)
+  },
+  {
+    path: "/league/:id/draft",
+    name: "draft",
+    component: Draft,
     beforeEnter: createAuthGuard(app)
   }
 ];

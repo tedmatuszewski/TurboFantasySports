@@ -14,7 +14,7 @@ public class Base
 
     public Base() { }
 
-    public string PartitionKey { get; set; } = "1";
+    public string PartitionKey { get; set; } = "2";
 
     public string RowKey { get; set; } = Guid.NewGuid().ToString();
 }

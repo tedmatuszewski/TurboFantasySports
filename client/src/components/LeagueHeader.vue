@@ -39,8 +39,6 @@
     import { ref,onMounted,computed, reactive  } from "vue";
     import { useRoute } from 'vue-router';
     import Countdown from "../components/Countdown.vue";
-    import Config from "../config.json";
-    import { useAuth0 } from '@auth0/auth0-vue';
 
     const storage = useStorage();
     const route = useRoute();

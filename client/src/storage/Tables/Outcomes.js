@@ -22,7 +22,11 @@ export default defineStore(table, {
         async fillData() {
             this.data.length = 0;
 
-            const entitiesIter = client.listEntities();
+            const entitiesIter = client.listEntities({
+                queryOptions: {
+                    filter: `PartitionKey eq '${config.partitionKey}'`
+                }
+            });
 
             for await (const entity of entitiesIter) {
                 this.data.push(new Outcome(entity));

@@ -2,7 +2,7 @@ using Azure.Data.Tables;
 
 namespace jobs.Models;
 
-public class RiderRow
+public class RiderRow : Base
 {
     public RiderRow()
     {
@@ -31,10 +31,6 @@ public class RiderRow
         this.Wins = entity.GetInt32("Wins");
     }
     
-    public string PartitionKey { get; set; } = "1";
-
-    public string RowKey { get; set; }
-
     public int? Number {get; set; }
     public string? Rider {get; set; }
     public string? ImageUrl {get; set; }

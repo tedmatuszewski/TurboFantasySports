@@ -85,7 +85,7 @@
 
           <div class="form-group">
             <label class="form-label">Member Email*</label>
-            <input v-model="member.Email" type="text" class="form-control" />
+            <input v-model="member.Email" type="text" class="form-control" @change="handleMemberEmailChange" />
           </div>
 
           <div class="alert alert-primary" role="alert">
@@ -152,12 +152,15 @@
   const league = ref({});
   const members = ref([]);
   const member = ref({});
+
   const deleteMessage = computed(() => {
     return `All results and data associated with this league will be permanently deleted. This action cannot be undone.`;
   });
+
   const me = computed(() => {
     return members.value.find(member => member.Email === auth0.user.value?.email);
   });
+
   const colDefs = ref([
     { 
       headerName: "Actions",
@@ -247,6 +250,12 @@
     await storage.Feeds.create({ League: route.params.id, Member: me.value.RowKey, Action: `Updated league ${league.value.Name} name or description` });
     
     closeLeagueModal();
+  }
+
+  function handleMemberEmailChange() {
+    if (member.value.TeamName == null || member.value.TeamName.trim() === "") {
+      member.value.TeamName = "Team " + member.value.Email.trim().toLowerCase();
+    }
   }
 </script>
 

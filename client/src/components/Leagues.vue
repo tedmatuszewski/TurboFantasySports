@@ -3,6 +3,10 @@
     <div v-if="isAuthenticated">
       <h2 class="text-center">Current leagues</h2>
 
+      <div v-if="leaguePairs.length == 0">
+        <p class="text-center text-muted">There aren't any! Create one to be the first!</p>
+      </div>
+
       <div v-for="(pair, index) in leaguePairs" :key="index" class="row my-5">
           <div v-for="league in pair" :key="league.Id" class="col-md-6 mb-4">
             <div class="card">

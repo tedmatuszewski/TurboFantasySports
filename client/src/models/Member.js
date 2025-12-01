@@ -17,6 +17,7 @@ export default class Member {
             "Email": this.Email,
             "TeamName": this.TeamName,
             "DraftPosition": this.DraftPosition,
+            "IsAdmin": this.IsAdmin,
             "partitionKey": this.PartitionKey,
             "etag": this.etag
         };

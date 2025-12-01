@@ -1,57 +1,68 @@
 <template>
-  <div class="container my-5">
-    <div class="row my-2">
-      <div class="col-md">
-        <h3 class="text-center text-md-left">Choosing Team</h3>
-      </div>
-      <div class="col-md text-center text-md-right">
-          <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary mr-2">League Home</router-link>
-      </div>
-    </div>
+  <div class="container my-3">
 
     <div v-if="hasUnsetDraftPositions" class="my-3">
-      <p>Draft has not been started. Click the 'Setup Draft' button below to randomize the order of the league members. Once clicked, you will 
-        see the draft order appear below. After confirming the order, click the 'Start Draft' button to begin drafting riders.
+      <p>Draft has not been started. Click the 'Setup Draft' button to randomize the order of the league members. Once clicked, you will 
+        see the draft order appear. After confirming the order, click the 'Start Draft' button to begin drafting riders.
       </p>
       
       <button v-on:click="randomizeOrder" class="btn btn-primary my-3">Setup Draft</button>
+      <router-link :to="{ name: 'ManageLeague', params: { id: route.params.id } }" class="btn btn-secondary ml-2">Back to Manage Page</router-link>
     </div>
+
     <div v-else>
-      <vueper-slides
-      class="no-shadow"
-      :visible-slides="3"
-      slide-multiple
-      :arrows="false"
-      fixed-height="120px"
-      :breakpoints="{ 800: { visibleSlides: 2, slideMultiple: 1 } }">
-          <vueper-slide v-for="(member, i) in members" :key="i">
-              <template #content>
-                  <div class="card" :class="{ 'border-warning': selecting == member.RowKey }" style="width: 20rem;">
-                    <div class="card-body">
-                      <h5 class="card-title">
-                        {{ member.TeamName }} 
-                        <span v-if="selecting == member.RowKey" class="badge rounded-pill text-bg-warning">Choosing</span>
-                      </h5>
-                      <p class="card-text text-nowrap">{{ member.Email }}</p>
-                    </div>
-                  </div>
-              </template>
-          </vueper-slide>
+      <div class="row my-2">
+        <div class="col-md-4">
+          <h3 class="text-center text-md-left">Choosing Team</h3>
+        </div>
+
+        <div class="col-md-8 text-center text-md-right">
+          <div class="d-flex">
+            <div class="flex-grow-1 mx-2">
+              <select class ="form-control" v-model="selectionStyle">
+                <option :value="automatic">Automatically move to next team</option>
+                <option :value="manual">Manually move to next team</option>
+              </select>
+            </div>
+
+            <div class="text-center text-sm-right">
+              <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary mr-2">League Home</router-link>
+              <router-link :to="{ name: 'matchup', params: { id: route.params.id } }" class="btn btn-secondary">View Teams</router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <vueper-slides ref="slides" class="no-shadow" :visible-slides="3" slide-multiple :arrows="false" fixed-height="120px" :breakpoints="{ 800: { visibleSlides: 2, slideMultiple: 1 } }">
+        <vueper-slide v-for="(member, i) in members" :key="i">
+          <template #content>
+            <div class="card position-relative" :class="{ 'border-warning': selecting == member.RowKey }" style="width: 20rem;">
+              <div class="card-body">
+                <h5 class="text-nowrap card-title">
+                  <span class="badge text-bg-secondary">{{member.teamCount}}/{{ Config.maxRiders }}</span>
+                  {{ member.TeamName }}
+                </h5>
+                <p class="card-text text-nowrap fs-6">{{ member.Email }}</p>
+              </div>
+              <span v-if="selecting == member.RowKey" class="position-absolute top-0 start-100 translate-middle badge text-bg-warning">Choosing</span>
+            </div>
+          </template>
+        </vueper-slide>
       </vueper-slides>
-    </div>
-        
-    <div class="row my-2">
-      <div class="col-md">
-        <h3 class="text-center text-md-left">Available Riders</h3>
+
+      <div class="row my-2">
+        <div class="col-md">
+          <h3 class="text-center text-md-left">Available Riders</h3>
+        </div>
+
+        <div class="col-md text-center text-md-right">
+            <button class="btn btn-secondary mr-2" v-on:click="previous">⇦ Previous Team</button>
+            <button class="btn btn-secondary mr-2" v-on:click="next">Next Team ⇨</button>
+        </div>
       </div>
 
-      <div class="col-md text-center text-md-right">
-          <button class="btn btn-secondary mr-2" v-on:click="previous">⇦ Previous Team</button>
-          <button class="btn btn-secondary mr-2" v-on:click="next">Next Team ⇨</button>
-      </div>
+      <ag-grid-vue :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
     </div>
-
-    <ag-grid-vue :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
   </div>
 </template>
 
@@ -61,30 +72,45 @@
   import { useStorage } from '../storage/StorageContext';
   import { useRoute } from 'vue-router';
   import { VueperSlides, VueperSlide } from 'vueperslides'
+  import TableChoose from "../components/TableChoose.vue";
   import 'vueperslides/dist/vueperslides.css'
+  import Config from "../config.json";
   // import { useAuth0 } from '@auth0/auth0-vue';
 
+  const automatic = "automatic";
+  const manual = "manual";
   const storage = useStorage();
   const route = useRoute();
   const members = ref([]);
   const riders = ref([]);
   const teams = ref([]);
   const selecting = ref(null);
+  const selectionStyle = ref(automatic);
+  const slides = ref(null);
   // const league = ref({});
   // const auth0 = useAuth0();
   // const member = ref({});
 
   const colDefs = ref([
+    { 
+      headerName: "Actions",
+      field: "Name",
+      pinned: 'left',
+      cellRenderer: TableChoose,
+      cellRendererParams: {
+        click: chooseRider,
+      }
+    },
     { field: "Number", headerName: "Number" },
     { field: "Name", headerName: "Name" },
     { field: "Class", headerName: "LY Class" },
-    { field: "TotalPoints", headerName: "LY Points" }
+    { field: "TotalPoints", headerName: "LY Points", sort: "desc" }
   ]);
   
   const hasUnsetDraftPositions = computed(() => {
     return members.value.some(member => !member.DraftPosition);
   });
-
+  
   onMounted(async () => {
     members.value = await storage.Members.getByLeague2(route.params.id);
     riders.value = await storage.getAvailableRiders(route.params.id);
@@ -93,7 +119,11 @@
     members.value.sort((a, b) => a.DraftPosition - b.DraftPosition);
     selecting.value = members.value[0].RowKey;
 
-    console.log(riders.value);
+    members.value.forEach(member => {
+      member.teamCount = teams.value.filter(t => t.Member === member.RowKey).length;
+    });
+
+    console.log(members.value);
   });
 
   async function randomizeOrder() {
@@ -106,11 +136,15 @@
       member.DraftPosition = (index + 1);
       await storage.Members.update(member);
     });
+
+    selecting.value = members.value[0].RowKey;
   }
 
   function next() {
     const currentIndex = members.value.findIndex(m => m.RowKey === selecting.value);
     const nextIndex = (currentIndex + 1) % members.value.length;
+
+    slides.value.goToSlide(nextIndex);
 
     selecting.value = members.value[nextIndex].RowKey;
   }
@@ -119,7 +153,35 @@
     const currentIndex = members.value.findIndex(m => m.RowKey === selecting.value);
     const previousIndex = (currentIndex - 1 + members.value.length) % members.value.length;
 
+    slides.value.goToSlide(previousIndex);
+    
     selecting.value = members.value[previousIndex].RowKey;
+  }
+
+  function chooseRider(rider) {
+    const currentMember = members.value.find(m => m.RowKey === selecting.value);
+
+    if(currentMember.teamCount >= Config.maxRiders) {
+      alert("This team has already selected the maximum number of riders.");
+      return;
+    }
+
+    storage.Teams.create({
+      League: route.params.id,
+      Member: selecting.value,
+      Rider: rider.RowKey
+    });
+    
+
+    if (currentMember) {
+      currentMember.teamCount++;
+    }
+
+    riders.value = riders.value.filter(r => r.RowKey !== rider.RowKey);
+
+    if (selectionStyle.value === automatic) {
+      next();
+    }
   }
 </script>
 

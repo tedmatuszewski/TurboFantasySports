@@ -70,6 +70,8 @@
       TeamName: "Team Snacks"
     });
     
+    await storage.Feeds.create({ League: league.RowKey, Member: member.RowKey, Action: `Created league ${leagueName.value}` });
+    
     router.push({ name: 'ManageLeague', params: { id: league.RowKey } });
   }
 </script>

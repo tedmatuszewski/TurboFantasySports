@@ -30,7 +30,7 @@ export default defineStore(table, {
             await client.createEntity(entity);
             
             let team = new Feed(entity);
-            this.data.push(team);
+            this.data.unshift(team);
 
             return team;
         },

@@ -50,8 +50,17 @@
         </vueper-slide>
       </vueper-slides>
 
+      <div class="card text-bg-light mb-3" v-if="draftCompleteMessage != null">
+        <div class="card-body">
+          <h5 class="card-title">The draft is complete!</h5>
+          <p class="card-text">{{ draftCompleteMessage }}</p>
+            
+          <button class="btn btn-secondary" v-if="league.DraftComplete == false || league.DraftComplete == null" v-on:click="completeDraftClick">Complete Draft</button>
+        </div>
+      </div>
+
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 mb-3">
           <div class="row my-2">
             <div class="col-md">
               <h3 class="text-center text-md-left">Available Riders</h3>
@@ -65,6 +74,7 @@
 
           <ag-grid-vue :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
         </div>
+        
         <div class="col-md-4">
           <Feed></Feed>
         </div>
@@ -83,7 +93,6 @@
   import 'vueperslides/dist/vueperslides.css'
   import Config from "../config.json";
   import Feed from "../components/Feed.vue";
-  // import { useAuth0 } from '@auth0/auth0-vue';
 
   const automatic = "automatic";
   const manual = "manual";
@@ -95,9 +104,7 @@
   const selecting = ref(null);
   const selectionStyle = ref(automatic);
   const slides = ref(null);
-  // const league = ref({});
-  // const auth0 = useAuth0();
-  // const member = ref({});
+  const league = ref({});
 
   const colDefs = ref([
     { 
@@ -118,11 +125,31 @@
   const hasUnsetDraftPositions = computed(() => {
     return members.value.some(member => !member.DraftPosition);
   });
+
+  const isDraftComplete = computed(() => {
+    return members.value.every(member => member.teamCount >= Config.maxRiders);
+  });
+
+  const draftCompleteMessage = computed(() => {
+    let message = null;
+
+    if (isDraftComplete.value == true && league.value.DraftComplete == true) {
+      message = "All teams have selected the maximum number of riders and the 'Complete Draft' button has been clicked. The league is now open for regular season management.";
+    }
+
+    if(isDraftComplete.value == true && (league.value.DraftComplete == false || league.value.DraftComplete == null)) {
+      message = `Every team has selected ${ Config.maxRiders } riders. Click the 'Complete Draft' button to finalize the draft. This will open 
+            up the league for regular season management`;
+    }
+
+    return message;
+  });
   
-  onMounted(async () => {
-    members.value = await storage.Members.getByLeague2(route.params.id);
-    riders.value = await storage.getAvailableRiders(route.params.id);
-    teams.value = await storage.Teams.getByLeague2(route.params.id);
+  onMounted(() => {
+    members.value = storage.Members.getByLeague2(route.params.id);
+    riders.value = storage.getAvailableRiders(route.params.id);
+    teams.value = storage.Teams.getByLeague2(route.params.id);
+    league.value = storage.Leagues.getSingle(route.params.id);
     
     members.value.sort((a, b) => a.DraftPosition - b.DraftPosition);
     selecting.value = members.value[0].rowKey;
@@ -131,7 +158,7 @@
       member.teamCount = teams.value.filter(t => t.Member === member.rowKey).length;
     });
 
-    console.log(members.value);
+    console.log(league.value);
   });
 
   async function randomizeOrder() {
@@ -180,7 +207,8 @@
       Rider: rider.rowKey
     });
     
-
+    storage.Feeds.create({ League: route.params.id, Member: selecting.value, Action: `Added rider ${rider.Name} to team` });
+    
     if (currentMember) {
       currentMember.teamCount++;
     }
@@ -190,6 +218,15 @@
     if (selectionStyle.value === automatic) {
       next();
     }
+  }
+
+  async function completeDraftClick() {
+    if(confirm("Are you sure you want to complete the draft?") == false) {
+      return;
+    }
+
+    league.value.DraftComplete = true;
+    await storage.Leagues.update(league.value);
   }
 </script>
 

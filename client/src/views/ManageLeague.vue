@@ -119,12 +119,12 @@
         <form>
           <div class="form-group">
             <label class="form-label">League Name*</label>
-            <!-- <input v-model="league.Name" type="text" class="form-control" /> -->
+            <input v-model="league.Name" type="text" class="form-control" />
           </div>
 
           <div class="form-group">
             <label class="form-label">League Description</label>
-            <!-- <input v-model="league.Description" class="form-control" /> -->
+            <input v-model="league.Description" class="form-control" />
           </div>
         </form> 
       </div>
@@ -183,7 +183,6 @@
 
   onMounted(() => {
     league.value = storage.Leagues.getSingle(route.params.id);
-    console.log("League", league.value, route.params.id);
     members.value = storage.Members.getByLeague2(route.params.id);
 
     memberModal = new bootstrap.Modal(document.getElementById('memberModal'), {});

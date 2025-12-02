@@ -32,10 +32,9 @@ export default defineStore(table, {
             });
 
             for await (const entity of entitiesIter) {
-                console.log("Loading league entity", entity);
                 this.data.push(new League(entity));
             }
-console.log("Leagues loaded", this.data);
+            
             return this.data;
         },
         async create (entity) {

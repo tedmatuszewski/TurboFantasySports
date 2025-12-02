@@ -38,7 +38,6 @@ export default defineStore(table, {
             });
 
             for await (const entity of entitiesIter) {
-                console.log("Loading member entity", entity);
                 this.data.push(new Member(entity));
             }
 

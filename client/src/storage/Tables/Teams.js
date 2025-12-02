@@ -21,7 +21,7 @@ export default defineStore(table, {
             return (league, rider) => state.data.find(x => x.League === league && x.Rider === rider);
         },
         getOne: (state) => {
-            return (rowKey) => state.data.find(x => x.RowKey === rowKey);
+            return (rowKey) => state.data.find(x => x.rowKey === rowKey);
         },
         getByLeagueAndOwnerAndNumber2: (state) => {
             return (league, member, rider) => state.data.filter(x => x.League === league && x.Member === member && x.Rider === rider);
@@ -47,8 +47,8 @@ export default defineStore(table, {
             return this.data;
         },
         async create(entity) {
-            entity.RowKey = generateGuid();
-            entity.PartitionKey = config.partitionKey;
+            entity.rowKey = generateGuid();
+            entity.partitionKey = config.partitionKey;
 
             await client.createEntity(entity);
             
@@ -58,7 +58,7 @@ export default defineStore(table, {
             return team;
         },
         async remove(key) {
-            let index = this.data.findIndex(x => x.RowKey === key);
+            let index = this.data.findIndex(x => x.rowKey === key);
             if (index >= 0) {
                 this.data.splice(index, 1);
             }

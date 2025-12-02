@@ -66,7 +66,7 @@
             await storage.Members.update(member);
             await storage.Feeds.create({
                 League: route.params.id,
-                Member: member.RowKey,
+                Member: member.rowKey,
                 Action: `Changed team name from ${oldName} to ${newName}`
             });
         }
@@ -75,13 +75,13 @@
     onMounted(async () => {
         member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
         
-        let team = storage.Teams.getByLeagueAndMember2(route.params.id, member.RowKey);
+        let team = storage.Teams.getByLeagueAndMember2(route.params.id, member.rowKey);
         let results = storage.Results.getByLeague2(route.params.id);
         let riders = storage.Riders.data;
         let ids = team.map(t => t.Rider);
         let totals = {};
         let myRiders = riders.filter(rider => {
-            return ids.indexOf(rider.RowKey) !== -1;
+            return ids.indexOf(rider.rowKey) !== -1;
         });
 
         results.forEach(r => {
@@ -96,8 +96,8 @@
             .map(([member, points]) => ({ member, points }))
             .sort((a, b) => b.points - a.points);
         
-        place.value = standings.findIndex(s => s.member === member.RowKey);
-        totalPoints.value = results.filter(r => r.Member === member.RowKey).reduce((acc, result) => acc + result.Points, 0);
+        place.value = standings.findIndex(s => s.member === member.rowKey);
+        totalPoints.value = results.filter(r => r.Member === member.rowKey).reduce((acc, result) => acc + result.Points, 0);
         numOf250Riders.value = myRiders.filter(t => t.Class.indexOf("250") !== -1).length;
         numOf450Riders.value = myRiders.filter(t => t.Class.indexOf("450") !== -1).length;
     });

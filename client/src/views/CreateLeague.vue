@@ -64,15 +64,17 @@
     });
 
     let member = await storage.Members.create({
-      League: league.RowKey,
+      League: league.rowKey,
       Email: auth0.user.value.email,
       IsAdmin: true,
       TeamName: "Team Snacks"
     });
     
-    await storage.Feeds.create({ League: league.RowKey, Member: member.RowKey, Action: `Created league ${leagueName.value}` });
+    console.log(league, member);
+
+    await storage.Feeds.create({ League: league.rowKey, Member: member.rowKey, Action: `Created league ${leagueName.value}` });
     
-    router.push({ name: 'ManageLeague', params: { id: league.RowKey } });
+    router.push({ name: 'ManageLeague', params: { id: league.rowKey } });
   }
 </script>
 

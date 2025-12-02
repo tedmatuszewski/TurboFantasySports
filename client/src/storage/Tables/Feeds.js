@@ -15,16 +15,17 @@ export default defineStore(table, {
     }),
     getters: { 
         getSingle: (state) => {
-            return (rowKey) => state.data.find(league => league.RowKey === rowKey);
+            return (rowKey) => state.data.find(league => league.rowKey === rowKey);
         },
         getAll: (state) => {
-            return state.data;
+            return () => state.data;
         }
     },
     actions: {
         async create (entity) {
             entity.rowKey = generateGuid();
             entity.partitionKey = config.partitionKey;
+            entity.timestamp = new Date().toISOString();
 
             await client.createEntity(entity);
             
@@ -45,7 +46,7 @@ export default defineStore(table, {
             for await (const entity of entitiesIter) {
                 this.data.push(new Feed(entity));
             }
-
+            
             this.data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
             return this.data;

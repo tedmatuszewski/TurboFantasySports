@@ -4,8 +4,8 @@ export default class Race {
       this.Date = entity.Date;
       this.Lites = entity.Lites;
       this.Racerx = entity.Racerx;
-      this.RowKey = entity.rowKey;
-      this.PartitionKey = entity.partitionKey;
+      this.rowKey = entity.rowKey;
+      this.partitionKey = entity.partitionKey;
       this.etag = entity.etag;
       this.timestamp = entity.timestamp;
     }

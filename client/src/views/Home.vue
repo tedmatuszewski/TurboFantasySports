@@ -26,7 +26,6 @@
   import BulletCallout from "../components/BulletCallout.vue";
   import Checklist from "../components/Checklist.vue";
   import CreateLeague from "../components/CreateLeagueBanner.vue";
-  import { Adsense } from 'vue3-google-adsense';
 </script>
 
 <style lang="css" scoped>

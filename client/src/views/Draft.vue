@@ -26,7 +26,7 @@
             </div>
 
             <div class="text-center text-sm-right">
-              <router-link :to="{ name: 'league', params: { id: route.params.id } }" class="btn btn-primary mr-2">League Home</router-link>
+              <router-link :to="{ name: 'ManageLeague', params: { id: route.params.id } }" class="btn btn-primary mr-2">Manage League</router-link>
               <router-link :to="{ name: 'matchup', params: { id: route.params.id } }" class="btn btn-secondary">View Teams</router-link>
             </div>
           </div>
@@ -36,7 +36,7 @@
       <vueper-slides ref="slides" class="no-shadow" :visible-slides="3" slide-multiple :arrows="false" fixed-height="120px" :breakpoints="{ 800: { visibleSlides: 2, slideMultiple: 1 } }">
         <vueper-slide v-for="(member, i) in members" :key="i">
           <template #content>
-            <div class="card position-relative" :class="{ 'border-warning': selecting == member.RowKey }" style="width: 20rem;">
+            <div class="card position-relative" :class="{ 'border-warning': selecting == member.rowKey }" style="width: 20rem;">
               <div class="card-body">
                 <h5 class="text-nowrap card-title">
                   <span class="badge text-bg-secondary">{{member.teamCount}}/{{ Config.maxRiders }}</span>
@@ -44,24 +44,31 @@
                 </h5>
                 <p class="card-text text-nowrap fs-6">{{ member.Email }}</p>
               </div>
-              <span v-if="selecting == member.RowKey" class="position-absolute top-0 start-100 translate-middle badge text-bg-warning">Choosing</span>
+              <span v-if="selecting == member.rowKey" class="position-absolute top-0 start-100 translate-middle badge text-bg-warning">Choosing</span>
             </div>
           </template>
         </vueper-slide>
       </vueper-slides>
 
-      <div class="row my-2">
-        <div class="col-md">
-          <h3 class="text-center text-md-left">Available Riders</h3>
-        </div>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row my-2">
+            <div class="col-md">
+              <h3 class="text-center text-md-left">Available Riders</h3>
+            </div>
 
-        <div class="col-md text-center text-md-right">
-            <button class="btn btn-secondary mr-2" v-on:click="previous">⇦ Previous Team</button>
-            <button class="btn btn-secondary mr-2" v-on:click="next">Next Team ⇨</button>
+            <div class="col-md text-center text-md-right">
+                <button class="btn btn-secondary mr-2" v-on:click="previous">⇦ Previous Team</button>
+                <button class="btn btn-secondary mr-2" v-on:click="next">Next Team ⇨</button>
+            </div>
+          </div>
+
+          <ag-grid-vue :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
+        </div>
+        <div class="col-md-4">
+          <Feed></Feed>
         </div>
       </div>
-
-      <ag-grid-vue :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
     </div>
   </div>
 </template>
@@ -75,6 +82,7 @@
   import TableChoose from "../components/TableChoose.vue";
   import 'vueperslides/dist/vueperslides.css'
   import Config from "../config.json";
+  import Feed from "../components/Feed.vue";
   // import { useAuth0 } from '@auth0/auth0-vue';
 
   const automatic = "automatic";
@@ -117,10 +125,10 @@
     teams.value = await storage.Teams.getByLeague2(route.params.id);
     
     members.value.sort((a, b) => a.DraftPosition - b.DraftPosition);
-    selecting.value = members.value[0].RowKey;
+    selecting.value = members.value[0].rowKey;
 
     members.value.forEach(member => {
-      member.teamCount = teams.value.filter(t => t.Member === member.RowKey).length;
+      member.teamCount = teams.value.filter(t => t.Member === member.rowKey).length;
     });
 
     console.log(members.value);
@@ -137,29 +145,29 @@
       await storage.Members.update(member);
     });
 
-    selecting.value = members.value[0].RowKey;
+    selecting.value = members.value[0].rowKey;
   }
 
   function next() {
-    const currentIndex = members.value.findIndex(m => m.RowKey === selecting.value);
+    const currentIndex = members.value.findIndex(m => m.rowKey === selecting.value);
     const nextIndex = (currentIndex + 1) % members.value.length;
 
     slides.value.goToSlide(nextIndex);
 
-    selecting.value = members.value[nextIndex].RowKey;
+    selecting.value = members.value[nextIndex].rowKey;
   }
 
   function previous() {
-    const currentIndex = members.value.findIndex(m => m.RowKey === selecting.value);
+    const currentIndex = members.value.findIndex(m => m.rowKey === selecting.value);
     const previousIndex = (currentIndex - 1 + members.value.length) % members.value.length;
 
     slides.value.goToSlide(previousIndex);
     
-    selecting.value = members.value[previousIndex].RowKey;
+    selecting.value = members.value[previousIndex].rowKey;
   }
 
   function chooseRider(rider) {
-    const currentMember = members.value.find(m => m.RowKey === selecting.value);
+    const currentMember = members.value.find(m => m.rowKey === selecting.value);
 
     if(currentMember.teamCount >= Config.maxRiders) {
       alert("This team has already selected the maximum number of riders.");
@@ -169,7 +177,7 @@
     storage.Teams.create({
       League: route.params.id,
       Member: selecting.value,
-      Rider: rider.RowKey
+      Rider: rider.rowKey
     });
     
 
@@ -177,7 +185,7 @@
       currentMember.teamCount++;
     }
 
-    riders.value = riders.value.filter(r => r.RowKey !== rider.RowKey);
+    riders.value = riders.value.filter(r => r.rowKey !== rider.rowKey);
 
     if (selectionStyle.value === automatic) {
       next();

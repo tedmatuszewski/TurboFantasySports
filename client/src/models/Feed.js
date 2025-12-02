@@ -3,8 +3,8 @@ export default class League {
       this.Action = entity.Action;
       this.League = entity.League;
       this.Member = entity.Member;
-      this.RowKey = entity.rowKey;
-      this.PartitionKey = entity.partitionKey;
+      this.rowKey = entity.rowKey;
+      this.partitionKey = entity.partitionKey;
       this.etag = entity.etag;
       this.timestamp = entity.timestamp;
     }

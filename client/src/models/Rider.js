@@ -15,8 +15,8 @@ export default class Rider {
       this.AveragePoints = entity.AveragePoints;
       this.AveragePlace = entity.AveragePlace;
       this.TotalOutcomes = entity.TotalOutcomes;
-      this.RowKey = entity.rowKey;
-      this.PartitionKey = entity.partitionKey;
+      this.rowKey = entity.rowKey;
+      this.partitionKey = entity.partitionKey;
       this.etag = entity.etag;
       this.timestamp = entity.timestamp;
     }

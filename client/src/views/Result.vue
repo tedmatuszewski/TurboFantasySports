@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <races :race="race.RowKey"></races>
+    <races :race="race.rowKey"></races>
     
     <div class="row">
       <div class="col-md-6" v-for="(table, i) in tables">
@@ -69,7 +69,7 @@
   }
 
   function getRiderName(id) {
-    let rider = storage.Riders.data.find(r => r.RowKey === id);
+    let rider = storage.Riders.data.find(r => r.rowKey === id);
     return rider ? rider.Name : '';
   }
 </script>

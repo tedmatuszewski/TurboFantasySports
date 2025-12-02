@@ -18,7 +18,6 @@
     "vue-router": "^4.2.1",
     "vue3-application-insights": "^1.1.0",
     "vue3-easy-data-table": "^1.5.47",
-    "vue3-google-adsense": "^1.2.2",
     "vueperslides": "^3.6.0"
   },
   "devDependencies": {

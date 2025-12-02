@@ -1,6 +1,6 @@
 export default class Result {
     constructor(entity) {
-      this.RowKey = entity.rowKey;
+      this.rowKey = entity.rowKey;
       this.Rider = entity.Rider;
       this.Race = entity.Race;
       this.Points = entity.Points;

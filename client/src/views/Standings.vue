@@ -20,7 +20,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="row in table" :value="row.RowKey">
+        <tr v-for="row in table" :value="row.rowKey">
           <td>{{ row.Place }}</td>
           <td>{{ row.TeamName }}</td>
           <td>{{ row.Points }}</td>

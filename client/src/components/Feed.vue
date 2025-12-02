@@ -31,10 +31,10 @@
   });
 
   function getMemberName(id) {
-    let member = members.value.find(m => m.RowKey == id);
+    let member = members.value.find(m => m.rowKey == id);
     let name = member ? member.TeamName : '';
 
-    if(member.IsAdmin) {
+    if(member && member.IsAdmin) {
       name += " ⭐";
     }
 
@@ -42,7 +42,7 @@
   }
 
   function formatDate(date) {
-    const options = { day: '2-digit', month: 'short' };
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
     return new Date(date).toLocaleDateString('en-US', options);
   }
 

@@ -53,14 +53,14 @@
         v-model:items-selected="itemsSelected"
         @click-row="rowClick"
         :hide-footer="true">
-      <template #item-link="{ RowKey }">
-        <RacerLink :id="RowKey"></RacerLink>
+      <template #item-link="{ rowKey }">
+        <RacerLink :id="rowKey"></RacerLink>
       </template>
       <template #item-headshot="{ ImageUrl, Injury }">
         <Headshot :rider="{ ImageUrl, Injury }"></Headshot>
       </template>
-      <template #item-stats="{ RowKey, Name }">
-        <a href="#" v-on:click.prevent="showRiderModal(RowKey)">{{ Name }}</a>
+      <template #item-stats="{ rowKey, Name }">
+        <a href="#" v-on:click.prevent="showRiderModal(rowKey)">{{ Name }}</a>
       </template>
     </Vue3EasyDataTable>-->
     <ag-grid-vue ref="grid" @selection-changed="onSelectionChanged" :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :selectionColumnDef="{pinned: 'left', width: 50}" :rowSelection="{ mode: 'multiRow' }" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
@@ -125,7 +125,7 @@
 
   onMounted(() => {
     member.value = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
-    team.value = storage.Teams.getByLeagueAndMember2(route.params.id, member.value.RowKey);
+    team.value = storage.Teams.getByLeagueAndMember2(route.params.id, member.value.rowKey);
     riders.value = storage.getAvailableRiders(route.params.id);
   });
 
@@ -156,8 +156,8 @@
       return;
     }
 
-    itemsSelected.value.map(i => i.RowKey).forEach(async RowKey => {
-      let sel = riders.value.find(r => r.RowKey == RowKey);
+    itemsSelected.value.map(i => i.rowKey).forEach(async rowKey => {
+      let sel = riders.value.find(r => r.rowKey == rowKey);
       let index = riders.value.indexOf(sel);
 
       riders.value.splice(index, 1);
@@ -165,13 +165,13 @@
 
       await  storage.Teams.create({
         League: route.params.id,
-        Member: member.value.RowKey,
-        Rider: sel.RowKey
+        Member: member.value.rowKey,
+        Rider: sel.rowKey
       });
 
       await storage.Feeds.create({
         League: route.params.id,
-        Member: member.value.RowKey,
+        Member: member.value.rowKey,
         Action: `Added rider ${sel.Name} to their team`
       });
     });

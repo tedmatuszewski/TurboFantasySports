@@ -24,7 +24,7 @@ export function useStorage() {
         let riders = [];
 
         context.Riders.data.forEach(rider => {
-            let mine = team.map(a => a.Rider).indexOf(rider.RowKey);
+            let mine = team.map(a => a.Rider).indexOf(rider.rowKey);
             
             if (mine > -1) {
             riders.push(rider);
@@ -39,7 +39,7 @@ export function useStorage() {
         let teams = context.Teams.getByLeague2(league);
         let taken = teams.map(a => a.Rider);
         
-        context.Riders.data.filter(r => taken.indexOf(r.RowKey) === -1).forEach(rider => {
+        context.Riders.data.filter(r => taken.indexOf(r.rowKey) === -1).forEach(rider => {
             riders.push(rider);
         });
 
@@ -60,8 +60,8 @@ export function useStorage() {
         let table = [];
     
         members.forEach(member => {
-          let rr1 = results.filter(result => result.Member === member.RowKey);
-          let rr2 = teams.filter(t => t.Member === member.RowKey);
+          let rr1 = results.filter(result => result.Member === member.rowKey);
+          let rr2 = teams.filter(t => t.Member === member.rowKey);
     
           table.push({
             TeamName: member.TeamName,

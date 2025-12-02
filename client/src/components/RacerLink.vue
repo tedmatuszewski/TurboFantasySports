@@ -1,5 +1,5 @@
 <template>
-        <a target="_blank" :href="Config.racerxRiderLink + props.params.data.RowKey">
+        <a target="_blank" :href="Config.racerxRiderLink + props.params.data.rowKey">
             <img style="height:25px;" src="../assets/racer-x-shield.png">
         </a>
 </template>

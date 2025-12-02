@@ -15,6 +15,7 @@ export default defineStore(table, {
     getters: { 
         count: (state) => {
             const uniqueKeys = new Set(state.data.map(o => o.Race));
+            
             return uniqueKeys.size;
         },
     },

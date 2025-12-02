@@ -15,7 +15,7 @@ export default defineStore(table, {
     }),
     getters: { 
         getSingle: (state) => {
-            return (rowKey) => state.data.find(league => league.RowKey === rowKey);
+            return (rowKey) => state.data.find(league => league.rowKey === rowKey);
         },
         getAll: (state) => {
             return state.data;
@@ -32,9 +32,10 @@ export default defineStore(table, {
             });
 
             for await (const entity of entitiesIter) {
+                console.log("Loading league entity", entity);
                 this.data.push(new League(entity));
             }
-
+console.log("Leagues loaded", this.data);
             return this.data;
         },
         async create (entity) {
@@ -53,7 +54,7 @@ export default defineStore(table, {
             
             await client.updateEntity(entity, "Replace");
             
-            const index = this.data.findIndex(x => x.RowKey === entity.rowKey);
+            const index = this.data.findIndex(x => x.rowKey === entity.rowKey);
 
             if (index !== -1) {
                 this.data[index] = new League(entity);
@@ -62,7 +63,7 @@ export default defineStore(table, {
             return this.data[index];
         },
         async remove(key) {
-            let index = this.data.findIndex(x => x.RowKey === key);
+            let index = this.data.findIndex(x => x.rowKey === key);
             if (index >= 0) {
                 this.data.splice(index, 1);
             }

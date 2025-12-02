@@ -1,5 +1,6 @@
 <template>
-  <div class="container my-5">
+  <h1>Manage</h1>
+<div class="container my-5">
     <div class="row">
       <div class="col-md-4">
         <div class="card">
@@ -115,17 +116,17 @@
       </div>
 
       <div class="modal-body">
-        <form @submit.prevent="createNewLeague">
+        <form>
           <div class="form-group">
             <label class="form-label">League Name*</label>
-            <input v-model="league.Name" type="text" class="form-control" />
+            <!-- <input v-model="league.Name" type="text" class="form-control" /> -->
           </div>
 
           <div class="form-group">
             <label class="form-label">League Description</label>
-            <input v-model="league.Description" class="form-control" />
+            <!-- <input v-model="league.Description" class="form-control" /> -->
           </div>
-        </form>
+        </form> 
       </div>
 
       <div class="modal-footer">
@@ -180,23 +181,24 @@
   let memberModal = null;
   let leagueModal = null;
 
-  onMounted(async () => {
+  onMounted(() => {
     league.value = storage.Leagues.getSingle(route.params.id);
-    members.value = await storage.Members.getByLeague2(route.params.id);
+    console.log("League", league.value, route.params.id);
+    members.value = storage.Members.getByLeague2(route.params.id);
 
     memberModal = new bootstrap.Modal(document.getElementById('memberModal'), {});
     leagueModal = new bootstrap.Modal(document.getElementById('leagueModal'), {});
   });
 
   async function saveMember() {
-    if (member.value.RowKey) {
+    if (member.value.rowKey) {
       await storage.Members.update(member.value);
-      await storage.Feeds.create({ League: route.params.id, Member: me.value.RowKey, Action: `Edited member ${member.value.Email} team name or email` });
+      await storage.Feeds.create({ League: route.params.id, Member: me.value.rowKey, Action: `Edited member ${member.value.Email} team name or email` });
     } else {
       member.value.League = route.params.id;
       member.value.IsAdmin = false;
       await storage.Members.create(member.value);
-      await storage.Feeds.create({ League: route.params.id, Member: me.value.RowKey, Action: `Added member ${member.value.Email} to the league` });
+      await storage.Feeds.create({ League: route.params.id, Member: me.value.rowKey, Action: `Added member ${member.value.Email} to the league` });
     }
 
     members.value = await storage.Members.getByLeague2(route.params.id);
@@ -221,8 +223,8 @@
       return;
     }
 
-    await storage.Members.remove(user.RowKey);
-    await storage.Feeds.create({ League: route.params.id, Member: me.value.RowKey, Action: `Removed member ${user.Email} from league` });
+    await storage.Members.remove(user.rowKey);
+    await storage.Feeds.create({ League: route.params.id, Member: me.value.rowKey, Action: `Removed member ${user.Email} from league` });
     members.value = await storage.Members.getByLeague2(route.params.id);
   }
 
@@ -231,7 +233,7 @@
       return;
     }
 
-    await storage.Leagues.remove(league.value.RowKey);
+    await storage.Leagues.remove(league.value.rowKey);
     
     window.location.href = "/";
   }
@@ -247,7 +249,7 @@
 
   async function saveLeague() {
     await storage.Leagues.update(league.value);
-    await storage.Feeds.create({ League: route.params.id, Member: me.value.RowKey, Action: `Updated league ${league.value.Name} name or description` });
+    await storage.Feeds.create({ League: route.params.id, Member: me.value.rowKey, Action: `Updated league ${league.value.Name} name or description` });
     
     closeLeagueModal();
   }

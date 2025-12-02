@@ -3,11 +3,11 @@
         <button  v-on:click="props.params.edit(props.params.data)" class="btn btn-success btn-sm mr-2">Edit</button>
         <button  v-on:click="props.params.delete(props.params.data)" class="btn btn-danger btn-sm">Delete</button>
         <!-- <div class="flex-grow-1">
-            <a href="#" v-on:click.prevent="props.params.click(props.params.data.RowKey)">{{ props.params.data.Name }}</a>
+            <a href="#" v-on:click.prevent="props.params.click(props.params.data.rowKey)">{{ props.params.data.Name }}</a>
         </div>
 
         <div>
-            <a target="_blank" :href="Config.racerxRiderLink + props.params.data.RowKey">
+            <a target="_blank" :href="Config.racerxRiderLink + props.params.data.rowKey">
                 <img style="height:25px;" src="../assets/racer-x-shield.png">
             </a>
         </div> -->

@@ -88,7 +88,7 @@
   //   { text: "", value: "link"},
   //   { 
   //     headerName: "Rider",
-  //     field: "RowKey",
+  //     field: "rowKey",
   //     cellRenderer: RiderLink,
   //   },
   //   { text: "Class", value: "Class", sortable: true },
@@ -114,13 +114,13 @@
     
     // Previous will be null the first race of the year.
     if(prev != null) {
-      isRosterEditable.value = storage.Results.hasResults2(route.params.id, prev.RowKey);
+      isRosterEditable.value = storage.Results.hasResults2(route.params.id, prev.rowKey);
     } else {
       isRosterEditable.value = true;
     }
 
     member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
-    myRidersList.value = storage.getTeam(route.params.id, member.RowKey);
+    myRidersList.value = storage.getTeam(route.params.id, member.rowKey);
   });
 
   async function removeRiderClick(key){
@@ -128,17 +128,17 @@
       return;
     }
     
-    let sel = myRidersList.value.find(r => r.RowKey == key);
+    let sel = myRidersList.value.find(r => r.rowKey == key);
     let index = myRidersList.value.indexOf(sel);
-    let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.RowKey, sel.RowKey);
+    let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.rowKey, sel.rowKey);
     
     myRidersList.value.splice(index, 1);
 
     toDelete.forEach(async d => {
-      await storage.Teams.remove(d.RowKey);
+      await storage.Teams.remove(d.rowKey);
     });
 
-    await storage.Feeds.create({ League: route.params.id, Member: member.RowKey, Action: `Removed rider ${sel.Name} from their team` });
+    await storage.Feeds.create({ League: route.params.id, Member: member.rowKey, Action: `Removed rider ${sel.Name} from their team` });
   }
 
   function showRiderModal(key){

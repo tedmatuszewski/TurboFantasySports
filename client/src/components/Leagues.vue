@@ -7,8 +7,8 @@
         <p class="text-center text-muted">There aren't any! Create one to be the first!</p>
       </div>
 
-      <div v-for="(pair, index) in leaguePairs" :key="index" class="row my-5">
-          <div v-for="league in pair" :key="league.Id" class="col-md-6 mb-4">
+      <div v-for="(pair, index) in leaguePairs" :key="index" class="row my-3">
+          <div v-for="league in pair" :key="league.Id" class="col-md-6">
             <div class="card">
               <div class="row g-0">
                 <div class="col-8">
@@ -19,8 +19,8 @@
                 </div>
                 <div class="col-4">
                   <div class="card-body d-flex justify-content-end align-items-center h-100">
-                    <router-link v-if="isAdmin(league)" :to="{ name: 'ManageLeague', params: { id: league.RowKey } }" class="btn btn-primary mr-3">Manage</router-link>
-                    <router-link v-if="isMember(league)" :to="{ name: 'league', params: { id: league.RowKey } }" class="btn btn-primary">View</router-link>
+                    <router-link v-if="isAdmin(league)" :to="{ name: 'ManageLeague', params: { id: league.rowKey } }" class="btn btn-primary mr-3">Manage</router-link>
+                    <router-link v-if="isMember(league)" :to="{ name: 'league', params: { id: league.rowKey } }" class="btn btn-primary">View</router-link>
                   </div>
                 </div>
               </div>
@@ -67,13 +67,13 @@
   });
 
   function isMember(league) {
-    var member = members.value.find(m => m.League === league.RowKey && m.Email === auth0.user.value.email);
+    var member = members.value.find(m => m.League === league.rowKey && m.Email === auth0.user.value.email);
 
     return member !== undefined;
   }
 
   function isAdmin(league) {
-    var member = members.value.find(m => m.League === league.RowKey && m.Email === auth0.user.value.email && m.IsAdmin);
+    var member = members.value.find(m => m.League === league.rowKey && m.Email === auth0.user.value.email && m.IsAdmin);
 
     return member !== undefined;
   }

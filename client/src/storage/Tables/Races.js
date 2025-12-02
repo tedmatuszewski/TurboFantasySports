@@ -15,7 +15,7 @@ export default defineStore(table, {
     }),
     getters: { 
         count: (state) => {
-            const uniqueKeys = new Set(state.data.map(race => race.RowKey));
+            const uniqueKeys = new Set(state.data.map(race => race.rowKey));
             return uniqueKeys.size;
         },
     },
@@ -38,7 +38,7 @@ export default defineStore(table, {
             return this.data;
         },
         getRaceByKey(key) {
-            return this.data.find(race => race.RowKey === key);
+            return this.data.find(race => race.rowKey === key);
         },
         isNextUpcomingRace(race) { 
             const now = new Date();
@@ -48,7 +48,7 @@ export default defineStore(table, {
             
             const upcomingRace = this.data.filter(r => new Date(r.Date) > now)[0];
             
-            return race.RowKey === upcomingRace.RowKey;
+            return race.rowKey === upcomingRace.rowKey;
         },
         getNextUpcomingRaceIndex() {
             for(let i = 0; i<this.data.length; i++) {

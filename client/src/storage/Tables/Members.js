@@ -24,7 +24,7 @@ export default defineStore(table, {
             return state.data;
         },
         get: (state) => {
-            return (rowKey) => state.data.find(x => x.RowKey === rowKey);
+            return (rowKey) => state.data.find(x => x.rowKey === rowKey);
         }
     },
     actions: {
@@ -38,14 +38,15 @@ export default defineStore(table, {
             });
 
             for await (const entity of entitiesIter) {
+                console.log("Loading member entity", entity);
                 this.data.push(new Member(entity));
             }
 
             return this.data;
         },
         async create(entity) {
-            entity.RowKey = generateGuid();
-            entity.PartitionKey = config.partitionKey;
+            entity.rowKey = generateGuid();
+            entity.partitionKey = config.partitionKey;
 
             await client.createEntity(entity);
 
@@ -59,7 +60,7 @@ export default defineStore(table, {
             
             await client.updateEntity(entity, "Replace");
             
-            const index = this.data.findIndex(x => x.RowKey === entity.rowKey);
+            const index = this.data.findIndex(x => x.rowKey === entity.rowKey);
 
             if (index !== -1) {
                 this.data[index] = new Member(entity);
@@ -68,7 +69,7 @@ export default defineStore(table, {
             return this.data[index];
         },
         async remove(key) {
-            let index = this.data.findIndex(x => x.RowKey === key);
+            let index = this.data.findIndex(x => x.rowKey === key);
             if (index >= 0) {
                 this.data.splice(index, 1);
             }

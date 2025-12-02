@@ -19,7 +19,7 @@
                             <h6 class="card-subtitle mb-2 text-body-secondary">{{ formatDate(race.Date) }}</h6>
                             <p class="card-text">{{ race.Lites }}</p>
                             <a target="_blank" :href="getRaceLink(race)" class="card-link mr-3">Info</a>
-                            <router-link v-if="showResultLink(race)" :to="{ name: 'result', params: { race: race.RowKey } }">Results</router-link>
+                            <router-link v-if="showResultLink(race)" :to="{ name: 'result', params: { race: race.rowKey } }">Results</router-link>
                         </div>
                     </div>
                 </template>
@@ -45,7 +45,7 @@
     let initSlide = storage.Races.getNextUpcomingRaceIndex();
 
     if(props.race !== undefined) {
-        let race = races.find(r => r.RowKey === props.race);
+        let race = races.find(r => r.rowKey === props.race);
         let index = races.indexOf(race);
 
         initSlide = index;

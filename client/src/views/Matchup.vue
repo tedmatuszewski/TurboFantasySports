@@ -29,7 +29,7 @@
             </thead>
 
             <tbody>
-              <tr v-for="team in table.Team" :value="team.RowKey">
+              <tr v-for="team in table.Team" :value="team.rowKey">
                 <td><a href="#" v-on:click.prevent="showRiderModal(team.Rider);">{{ getRiderName(team.Rider) }}</a></td>
                 <td>{{ getRiderNumber(team.Rider) }}</td>
                 <td>{{ getRiderClass(team.Rider) }}</td>
@@ -64,17 +64,17 @@
   }
 
 function getRiderName(id) {
-  let rider = storage.Riders.data.find(r => r.RowKey === id);
+  let rider = storage.Riders.data.find(r => r.rowKey === id);
   return rider ? rider.Name : id;
 }
 
 function getRiderNumber(id) {
-  let rider = storage.Riders.data.find(r => r.RowKey === id);
+  let rider = storage.Riders.data.find(r => r.rowKey === id);
   return rider ? rider.Number : id;
 }
 
 function getRiderClass(id) {
-  let rider = storage.Riders.data.find(r => r.RowKey === id);
+  let rider = storage.Riders.data.find(r => r.rowKey === id);
   return rider ? rider.Class : id;
 }
 </script>

@@ -16,17 +16,18 @@
 </template>
 
 <script setup>
-  import { ref,onMounted,computed,watch } from "vue";
+  import { ref,onMounted,defineProps,  } from "vue";
   import { useStorage } from "../storage/StorageContext";
-  import { useAuth0 } from '@auth0/auth0-vue';
   
   const storage = useStorage();
+  const props = defineProps({ league: { type: String } });
   
   let feed = ref([]);
   let members = ref([]);
 
   onMounted(async () => {
-    feed.value =  storage.Feeds.data;
+    console.log("Loading feed for league: " + props.league);
+    feed.value =  storage.Feeds.getByLeague(props.league);
     members.value = storage.Members.data;
   });
 

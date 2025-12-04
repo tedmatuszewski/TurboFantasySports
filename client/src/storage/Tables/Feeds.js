@@ -14,6 +14,9 @@ export default defineStore(table, {
         data: [],
     }),
     getters: { 
+        getByLeague: (state) => {
+            return (league) => state.data.filter(x => x.League === league);
+        },
         getSingle: (state) => {
             return (rowKey) => state.data.find(league => league.rowKey === rowKey);
         },

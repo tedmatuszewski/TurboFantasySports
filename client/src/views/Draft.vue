@@ -76,7 +76,7 @@
         </div>
         
         <div class="col-md-4">
-          <Feed></Feed>
+          <Feed :league="route.params.id"></Feed>
         </div>
       </div>
     </div>

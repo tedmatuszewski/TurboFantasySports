@@ -65,7 +65,7 @@
         <ag-grid-vue :rowData="members" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
 
         <div class="mt-3">
-          <Feed></Feed>
+          <Feed :league="route.params.id"></Feed>
         </div>
       </div>
     </div>

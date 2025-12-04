@@ -27,7 +27,7 @@
 
     <div class="row">
       <div class="col-md-6 py-5">
-        <Feed></Feed>
+        <Feed :league="route.params.id"></Feed>
       </div>
       
       <div class="col-md-6 py-5">

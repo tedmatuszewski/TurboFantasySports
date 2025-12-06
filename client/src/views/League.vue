@@ -3,6 +3,10 @@
     <h3>Races</h3>
     <races></races>
 
+    <div class="alert alert-danger" role="alert" v-if="league.DraftComplete != true">
+      The draft for your league has not yet taken place. Once the draft is complete, you will be able to manage your riders for the season.
+    </div>
+
     <div class="row">
       <div class="col-md-8">
         <LeagueHeader></LeagueHeader>
@@ -23,7 +27,7 @@
 
     <ag-grid-vue :rowData="myRidersList" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
 
-    <router-link :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block mt-3">Edit Roster</router-link>
+    <router-link v-if="isRosterEditable" :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block mt-3">Edit Roster</router-link>
 
     <div class="row">
       <div class="col-md-6 py-5">
@@ -112,12 +116,16 @@
 
   onMounted(async () => {
     league.value = storage.Leagues.getSingle(route.params.id);
+
+    console.log(league.value);
     
     // Previous will be null the first race of the year.
     if(prev != null) {
-      isRosterEditable.value = storage.Results.hasResults2(route.params.id, prev.rowKey);
+      console.log("1");
+      isRosterEditable.value = league.value.DraftComplete == true && storage.Results.hasResults2(route.params.id, prev.rowKey);
     } else {
-      isRosterEditable.value = true;
+      console.log("2");
+      isRosterEditable.value = league.value.DraftComplete == true;
     }
 
     member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);

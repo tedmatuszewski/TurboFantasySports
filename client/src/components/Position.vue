@@ -104,6 +104,10 @@
     });
 
     function getOrdinalSuffix(num) {
+        if (num == null || num === undefined) {
+            return "-";
+        }
+
         const j = num % 10;
         const k = num % 100;
         if (j === 1 && k !== 11) {

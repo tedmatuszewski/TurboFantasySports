@@ -11,6 +11,7 @@
                 </ul>
                 
                 <ul class="list-unstyled mb-4">
+                    <li>You were <span class="badge rounded-pill bg-danger text-white">{{ getOrdinalSuffix(member.DraftPosition) }}</span> in draft order</li>
                     <li>You have {{ numOf250Riders }} 250 riders</li>
                     <li>You have {{ numOf450Riders }} 450 riders</li>
                     <li>You have {{ (numOf250Riders + numOf450Riders) }} of {{ Config.maxRiders }} spots filled</li>
@@ -101,6 +102,21 @@
         numOf250Riders.value = myRiders.filter(t => t.Class.indexOf("250") !== -1).length;
         numOf450Riders.value = myRiders.filter(t => t.Class.indexOf("450") !== -1).length;
     });
+
+    function getOrdinalSuffix(num) {
+        const j = num % 10;
+        const k = num % 100;
+        if (j === 1 && k !== 11) {
+            return num + "st";
+        }
+        if (j === 2 && k !== 12) {
+            return num + "nd";
+        }
+        if (j === 3 && k !== 13) {
+            return num + "rd";
+        }
+        return num + "th";
+    }
 </script>
 
 <style scoped>

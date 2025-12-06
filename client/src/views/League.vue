@@ -31,7 +31,7 @@
       </div>
       
       <div class="col-md-6 py-5">
-        <!-- <Trades v-if="Config.showTrades"></Trades>-->
+         <Donate />
       </div>
     </div> 
     
@@ -52,6 +52,7 @@
   import Rider from "../components/Rider.vue";
   import LeagueHeader from "../components/LeagueHeader.vue";
   import { AgGridVue } from "ag-grid-vue3";
+  import Donate from '../components/Donate.vue';
 
   const colDefs = ref([
     { 

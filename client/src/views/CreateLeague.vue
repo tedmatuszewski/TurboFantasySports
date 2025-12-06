@@ -1,19 +1,13 @@
 <template>
   <div class="container my-4">
     <div class="row">
-      <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+      <div class="col-md-8 mb-3">
         <h1 class="title">Create Your League</h1>
 
         <div class="alert alert-primary" role="alert">
           <strong>Important:</strong> By creating this league, you will become the league president. 
             You'll be responsible for adding other members, managing the league settings, 
             and configuring teams for all participants.
-        </div>
-
-        <div class="alert alert-primary" role="alert">
-          <strong> 🏆 Support Fantasy SMX Excellence!</strong>
-            Help us keep this platform running and add amazing new features. 
-            Consider clicking the "Buy me a Beer" link above and making a donation to support the developer!
         </div>
 
         <form @submit.prevent="createNewLeague" class="league-form">
@@ -30,6 +24,10 @@
           <button type="submit" class="btn btn-primary">Create League</button>
         </form>
       </div>
+      
+      <div class="col-md-4 d-flex align-items-center justify-content-center">
+        <Donate />
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +37,7 @@
   import { useStorage } from '../storage/StorageContext';
   import { useAuth0 } from '@auth0/auth0-vue';
   import router from '../router/index.js';
+  import Donate from "../components/Donate.vue";
 
   const leagueName = ref("");
   const leagueDescription = ref("");

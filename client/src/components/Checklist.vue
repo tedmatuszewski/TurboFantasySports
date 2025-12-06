@@ -13,7 +13,11 @@
         </div>
 
         <div class="col-md-5 d-flex align-items-center justify-content-center">
-            <img class="d-none d-md-block" src="././../assets/meme.jpg" style="max-width: 100%;" />
+            <Donate />
         </div>
     </div>
 </template>
+
+<script setup>
+  import Donate from "../components/Donate.vue";
+</script>

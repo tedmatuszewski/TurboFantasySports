@@ -20,7 +20,7 @@
     </div>
         
     <div class="alert alert-primary" role="alert">
-      You can have up to {{ Config.maxRiders }} riders on your team. You can edit hour lineup up to the start of the current weeks race. Once the race begins, you will no longer see the edit roster buttons. The roster editing ability will become unlock as soon as the admin of the website uploads the race rasults.
+      You can have up to {{ Config.maxRiders }} riders on your team. You can edit your lineup up to the start of the current weeks race. Once the race begins, you will no longer see the edit roster buttons. The roster editing ability will become unlock as soon as the admin of the website uploads the race rasults.
     </div>
     
     <h3>My Roster</h3>

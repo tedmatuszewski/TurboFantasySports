@@ -33,18 +33,19 @@
         </div>
       </div>
 
-      <vueper-slides ref="slides" class="no-shadow" :visible-slides="3" slide-multiple :arrows="false" fixed-height="120px" :breakpoints="{ 800: { visibleSlides: 2, slideMultiple: 1 } }">
+      <vueper-slides ref="slides" 
+        class="no-shadow" :visible-slides="3" slide-multiple :arrows="false" fixed-height="120px" :breakpoints="{ 1000: { visibleSlides: 2, slideMultiple: 2 }, 700: { visibleSlides: 1, slideMultiple: 1 } }" :dragging-distance="200">
         <vueper-slide v-for="(member, i) in members" :key="i">
           <template #content>
-            <div class="card position-relative" :class="{ 'border-warning': selecting == member.rowKey }" style="width: 20rem;">
+            <div class="card position-relative" :class="{ 'border-warning': selecting == member.rowKey }" style="width: 19rem;">
               <div class="card-body">
-                <h5 class="text-nowrap card-title">
+                <h6 class="text-nowrap card-title">
                   <span class="badge text-bg-secondary">{{member.teamCount}}/{{ Config.maxRiders }}</span>
                   {{ member.TeamName }}
-                </h5>
+                </h6>
                 <p class="card-text text-nowrap fs-6">{{ member.Email }}</p>
               </div>
-              <span v-if="selecting == member.rowKey" class="position-absolute top-0 start-100 translate-middle badge text-bg-warning">Choosing</span>
+              <span v-if="selecting == member.rowKey" class="position-absolute top-0 start-100 translate-middle badge text-bg-warning rounded-0">Choosing</span>
             </div>
           </template>
         </vueper-slide>

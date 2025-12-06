@@ -10,7 +10,7 @@
         :initSlide=initSlide
         :arrows="false"
         fixed-height="200px"
-        :breakpoints="{ 800: { visibleSlides: 2, slideMultiple: 2 } }">
+        :breakpoints="{ 800: { visibleSlides: 2, slideMultiple: 2 }, 600: { visibleSlides: 1, slideMultiple: 1 } }">
             <vueper-slide v-for="(race, i) in races" :key="i">
                 <template #content>
                     <div class="card" style="width: 18rem;">

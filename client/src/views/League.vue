@@ -27,7 +27,7 @@
 
     <ag-grid-vue :rowData="myRidersList" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
 
-    <router-link v-if="isRosterEditable" :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block mt-3">Edit Roster</router-link>
+    <router-link v-if="isRosterEditable" :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block mt-3">Add Riders</router-link>
 
     <div class="row">
       <div class="col-md-6 py-5">
@@ -57,6 +57,7 @@
   import LeagueHeader from "../components/LeagueHeader.vue";
   import { AgGridVue } from "ag-grid-vue3";
   import Donate from '../components/Donate.vue';
+  import TableRemove from "../components/TableRemove.vue";
 
   const colDefs = ref([
     { 
@@ -68,45 +69,32 @@
         click: showRiderModal
       }
     },
+    { 
+      headerName: "Actions",
+      field: "Name",
+      pinned: 'left',
+      cellRenderer: TableRemove,
+      cellRendererParams: {
+        click: removeRiderClick
+      }
+    },
     { field: "Number", headerName: "#" },
-      { field: "Class" },
-      { headerName: "E", field: "Entries" },
-      { headerName: "MEQF", field: "TotalOutcomes" },
-      { headerName: "TP", field: "TotalPoints" },
-      { headerName: "AFP/R", field: "AveragePoints" },
-      { headerName: "ARP/R", field: "AveragePlace" },
-      { headerName: "Wins", field: "Wins" },
-      { headerName: "Top3", field: "Podiums" },
-      { headerName: "Top5", field: "TopFives" },
-      { headerName: "Top10", field: "TopTens" }
+    { field: "Class" },
+    { headerName: "E", field: "Entries" },
+    { headerName: "MEQF", field: "TotalOutcomes" },
+    { headerName: "TP", field: "TotalPoints" },
+    { headerName: "AFP/R", field: "AveragePoints" },
+    { headerName: "ARP/R", field: "AveragePlace" },
+    { headerName: "Wins", field: "Wins" },
+    { headerName: "Top3", field: "Podiums" },
+    { headerName: "Top5", field: "TopFives" },
+    { headerName: "Top10", field: "TopTens" }
   ]);
 
   const storage = useStorage();
   const auth0 = useAuth0();
   const route = useRoute();
   const riderModal = ref(null);
-  // const headers = [
-  //   { text: "", value: "remove"},
-  //   { text: "Number", value: "Number", sortable: true },
-  //   { text: "", value: "headshot", width: 50 },
-  //   { text: "", value: "stats" },
-  //   { text: "", value: "link"},
-  //   { 
-  //     headerName: "Rider",
-  //     field: "rowKey",
-  //     cellRenderer: RiderLink,
-  //   },
-  //   { text: "Class", value: "Class", sortable: true },
-  //   { text: "E", value: "Entries", sortable: true },
-  //   { text: "MEQF", value: "TotalOutcomes", sortable: true },
-  //   { text: "TP", value: "TotalPoints", sortable: true },
-  //   { text: "AFP/R", value: "AveragePoints", sortable: true },
-  //   { text: "ARP/R", value: "AveragePlace", sortable: true },
-  //   { text: "Wins", value: "Wins", sortable: true },
-  //   { text: "Top3", value: "Podiums", sortable: true },
-  //   { text: "Top5", value: "TopFives", sortable: true },
-  //   { text: "Top10", value: "TopTens", sortable: true },
-  // ];
 
   let member = null;
   let myRidersList = ref([]);
@@ -117,14 +105,10 @@
   onMounted(async () => {
     league.value = storage.Leagues.getSingle(route.params.id);
 
-    console.log(league.value);
-    
     // Previous will be null the first race of the year.
     if(prev != null) {
-      console.log("1");
       isRosterEditable.value = league.value.DraftComplete == true && storage.Results.hasResults2(route.params.id, prev.rowKey);
     } else {
-      console.log("2");
       isRosterEditable.value = league.value.DraftComplete == true;
     }
 
@@ -132,12 +116,12 @@
     myRidersList.value = storage.getTeam(route.params.id, member.rowKey);
   });
 
-  async function removeRiderClick(key){
+  async function removeRiderClick(data){
     if(confirm("Are you sure that you want to remove this rider from your team? Removing this rider will put them back in the pool of available riders for anyone else to scoop up.") == false) {
       return;
     }
     
-    let sel = myRidersList.value.find(r => r.rowKey == key);
+    let sel = myRidersList.value.find(r => r.rowKey == data.rowKey);
     let index = myRidersList.value.indexOf(sel);
     let toDelete = await  storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.rowKey, sel.rowKey);
     

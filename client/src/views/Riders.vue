@@ -44,25 +44,6 @@
 
     <input id="filter-text-box" type="text" class="form-control mb-3" placeholder="Search for a rider" v-on:input="onFilterTextBoxChanged()" />
 
-    <!-- <Vue3EasyDataTable
-        :headers="headers"
-        :items="riders"
-        :search-field="searchField"
-        :search-value="searchValue"
-        :rows-per-page="100"
-        v-model:items-selected="itemsSelected"
-        @click-row="rowClick"
-        :hide-footer="true">
-      <template #item-link="{ rowKey }">
-        <RacerLink :id="rowKey"></RacerLink>
-      </template>
-      <template #item-headshot="{ ImageUrl, Injury }">
-        <Headshot :rider="{ ImageUrl, Injury }"></Headshot>
-      </template>
-      <template #item-stats="{ rowKey, Name }">
-        <a href="#" v-on:click.prevent="showRiderModal(rowKey)">{{ Name }}</a>
-      </template>
-    </Vue3EasyDataTable>-->
     <ag-grid-vue ref="grid" @selection-changed="onSelectionChanged" :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :selectionColumnDef="{pinned: 'left', width: 50}" :rowSelection="{ mode: 'multiRow' }" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
   </div> 
     

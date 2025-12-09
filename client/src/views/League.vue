@@ -21,7 +21,7 @@
         
     <div class="alert alert-primary" role="alert">
       You can have up to {{ Config.maxRiders }} riders on your team. The entry list for the next race will process on Thursday at 12:00 PM UTC. You can edit 
-      your lineup up to the start of the current week's race, but once the race begins, roster editing will be temporarily locked until the admin uploads the 
+      your lineup up to the start of the current week's race, but once the race begins, roster editing will be temporarily locked until the processing of 
       race results. Results will be processed on Mondays at 12:00 PM UTC and the site will reflect the results with updated points and standings.
     </div>
     

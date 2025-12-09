@@ -2,20 +2,28 @@
   <div>
     <hero />
 
-    <BulletCallout />
+    <div class="mb-5">
+      <BulletCallout />
+    </div>
     
-    <div class="container py-3">
-      <Checklist />
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7 mb-5">
+          <Checklist />
+        </div>
+
+        <div class="col-md-5 mb-5 d-flex align-items-center justify-content-center">
+          <Donate />
+        </div>
+      </div>
     </div>
 
-    <!-- <div class="container adHomePage">
-      <Adsense adStyle="display:inline-block;height:200px" clientId="ca-pub-1641621719114473" slotId="1623933238" fullWidthResponsive="true"></Adsense>
-    </div> -->
-    
     <CreateLeague />
     
     <div class="container">
-      <leagues />
+      <div class="py-5">
+        <leagues />
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +34,7 @@
   import BulletCallout from "../components/BulletCallout.vue";
   import Checklist from "../components/Checklist.vue";
   import CreateLeague from "../components/CreateLeagueBanner.vue";
+  import Donate from "../components/Donate.vue";
 </script>
 
 <style lang="css" scoped>

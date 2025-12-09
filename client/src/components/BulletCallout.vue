@@ -1,24 +1,6 @@
 <template>
-    <div>
-            <!-- <div class="callout-light text-center fade-in-b">
-                <h1>Callout Light - <b>Bubble</b> - Template <a href="#" class="btn btn-default">Button</a></h1>
-            </div>
-            <div class="callout-dark text-center fade-in-b">
-                <h1>Callout Dark - <b>Bubble</b> - Template <a href="#" class="btn btn-danger">Button</a></h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat ad assumenda nisi harum omnis itaque ea accusamus sint numquam nam est quod ab dolorum atque, quisquam exercitationem tempora similique! Corrupti.</p>
-            </div>
-            <div class="callout-bubble text-center fade-in-b">
-                <h1>Callout Bubble - <b>Bubble</b> - Template <a href="#" class="btn btn-warning">Button</a></h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat ad assumenda nisi harum omnis itaque ea accusamus sint numquam nam est quod ab dolorum atque, quisquam exercitationem tempora similique! Corrupti.</p>
-            </div> -->
-            <div class="callout-dark text-center fade-in-b">
-                <h1>Play - <b>Watch</b> - Score <!--<a href="#" class="btn btn-danger">Button</a>--></h1>
-                <!-- <p>The only true Fantasy SMX Platform.</p> -->
-            </div>
-            <!-- <div class="callout-mage text-center fade-in-b">
-                <h1>Callout Mage - <b>Bubble</b> - Template <a href="#" class="btn btn-success">Button</a></h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat ad assumenda nisi harum omnis itaque ea accusamus sint numquam nam est quod ab dolorum atque, quisquam exercitationem tempora similique! Corrupti.</p>
-            </div> -->
+    <div class="callout-dark text-center fade-in-b">
+        <h1>Play - <b>Watch</b> - Score</h1>
     </div>
 </template>
 

@@ -3,12 +3,6 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: "HeroContent"
-};
-</script>
-
 <style scoped>
   .hero-image {
     height: 35vh;

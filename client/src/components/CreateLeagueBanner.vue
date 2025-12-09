@@ -1,5 +1,5 @@
 <template>
-    <div class="py-5 text-center track-background">
+    <div class="py-5 px-2 text-center track-background">
       <div class="row justify-content-center">
         <div class="col-md-8">
           <h2 class="mb-3">Ready to start your own league?</h2>

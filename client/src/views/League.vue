@@ -25,6 +25,8 @@
       race results. Results will be processed on Mondays at 12:00 PM UTC and the site will reflect the results with updated points and standings.
     </div>
     
+    <RiderTableKey></RiderTableKey>
+    
     <h3>My Roster</h3>
 
     <ag-grid-vue :rowData="myRidersList" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
@@ -60,6 +62,7 @@
   import { AgGridVue } from "ag-grid-vue3";
   import Donate from '../components/Donate.vue';
   import TableRemove from "../components/TableRemove.vue";
+  import RiderTableKey from "../components/RiderTableKey.vue";
 
   const colDefs = ref([
     { 

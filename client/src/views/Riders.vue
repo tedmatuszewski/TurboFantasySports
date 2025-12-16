@@ -7,29 +7,7 @@
       You currently have zero open slots on your team. You must first remove riders from your team on the league home page before you can use this page.
     </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <ul class="list-group list-group-horizontal mb-3">
-          <li class="list-group-item">AFP/R = Average Fantasy Points per Race</li>
-          <li class="list-group-item">ARP/R = Average Rider Position per Race</li>
-        </ul>
-      </div>
-        <div class="col-md-6">
-
-        <ul class="list-group list-group-horizontal mb-3">
-          <li class="list-group-item">MEQF = Main Events Qualified For</li>
-          <li class="list-group-item">E = Number of Races Entered</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <ul class="list-group list-group-horizontal mb-3">
-          <li class="list-group-item">TP = Total Points</li>
-        </ul>
-      </div>
-    </div>
+    <RiderTableKey></RiderTableKey>
 
     <div class="row my-2">
       <div class="col-md">
@@ -58,6 +36,7 @@
   import Config from "../config.json";
   import RacerName from "../components/RacerName.vue";
   import Rider from "../components/Rider.vue";
+  import RiderTableKey from "../components/RiderTableKey.vue";
   import { AgGridVue } from "ag-grid-vue3";
 
   const colDefs = ref([

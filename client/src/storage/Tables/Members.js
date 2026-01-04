@@ -43,6 +43,19 @@ export default defineStore(table, {
 
             return this.data;
         },
+        async getByEmailAndPartition(email, partition) {
+            const entitiesIter = client.listEntities({
+                queryOptions: {
+                    filter: `PartitionKey eq '${partition}' and Email eq '${email}'`
+                }
+            });
+
+            for await (const entity of entitiesIter) {
+                this.data.push(new Member(entity));
+            }
+
+            return this.data;
+        },
         async create(entity) {
             entity.rowKey = generateGuid();
             entity.partitionKey = config.partitionKey;

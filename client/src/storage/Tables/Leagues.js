@@ -37,6 +37,12 @@ export default defineStore(table, {
             
             return this.data;
         },
+        async getByLeagueId(partition, leagueId) {
+            const entity = await client.getEntity(partition, leagueId);
+            let result = new League(entity);
+            
+            return result;
+        },
         async create (entity) {
             entity.rowKey = generateGuid();
             entity.partitionKey = config.partitionKey;

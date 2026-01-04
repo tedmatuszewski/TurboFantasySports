@@ -38,6 +38,21 @@ export default defineStore(table, {
             }
 
             return this.data;
+        },
+        async getByPartitionLeague(partition, league){
+            let result = [];
+
+            const entitiesIter = client.listEntities({
+                queryOptions: {
+                    filter: `PartitionKey eq '${partition}' and League eq '${league}'`
+                }
+            });
+            
+            for await (const entity of entitiesIter) {
+                result.push(new Result(entity));
+            }
+
+            return result;
         }
     }
   });

@@ -77,5 +77,35 @@ export function useStorage() {
         return table;
     };
 
+    context.getSeasonPartitionHistory = () => {
+        let seasons = [
+            { Season: 2025, Partition: "1" }
+        ];
+
+        return seasons;
+    };
+
+    context.getSeasonHistory = async (email, partition) => {
+        let result = [];
+        
+        partition = partition.toString();
+
+        let members = await context.Members.getByEmailAndPartition(email, partition);
+
+        for (let i = 0; i < members.length; i++) {
+            let member = members[i];
+            let league = await context.Leagues.getByLeagueId(partition, member.League);
+    
+            result.push({
+                TeamName: member.TeamName,
+                LeagueName: league.Name,
+                LeagueId: league.rowKey,
+                Partition: partition
+            });
+        }
+        
+        return result;
+    }
+
     return context;
 }

@@ -34,8 +34,9 @@ public class ProcessEntryListHelper
         entry.TotalOutcomes = riderOutcomes.Count();
         entry.AveragePoints = entry.TotalOutcomes > 0 ? Math.Round((double)entry.TotalPoints / (double)entry.TotalOutcomes, 2) : 0;
         entry.AveragePlace = entry.TotalOutcomes > 0 ? Math.Round((double)entry.TotalPlaces / (double)entry.TotalOutcomes, 2) : 0;
+        entry.PartitionKey = entity.PartitionKey;
 
-        if(entry.Class.Contains("showdown"))
+        if (entry.Class.Contains("showdown"))
         {
             entry.Class = entity.Class;
         }

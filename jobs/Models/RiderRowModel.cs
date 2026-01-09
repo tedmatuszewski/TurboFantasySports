@@ -6,7 +6,7 @@ public class RiderRow : Base
 {
     public RiderRow()
     {
-        
+        this.PartitionKey = "1";
     }
 
     public RiderRow(TableEntity entity)

@@ -75,7 +75,7 @@ public class StorageContext
 
     public List<RiderRow> GetRiders()
     {
-        var data = ridersClient.Query<TableEntity>($"PartitionKey eq '{partition}'").ToList().ConvertAll(e => new RiderRow(e));
+        var data = ridersClient.Query<TableEntity>().ToList().ConvertAll(e => new RiderRow(e));
 
         return data;
     }

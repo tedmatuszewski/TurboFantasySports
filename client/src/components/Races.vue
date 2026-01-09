@@ -63,7 +63,7 @@
     function getRaceLink(race) {
         // https://racerxonline.com/sx/2025/daytona
         const year = new Date().getFullYear();
-        return config.racerx + "/sx/" + year + "/" + race.Racerx;
+        return config.racerx + "/" + race.Racerx;
     }
 
     function showResultLink(race) {

@@ -15,7 +15,7 @@ public class RacerXContext
     public List<EntryListLink> GetEntryListLinks(string race)
     {
         var burl = "https://racerxonline.com";
-        var url = $"{burl}/sx/2025/{race}";
+        var url = $"{burl}/{race}";
         var web = new HtmlWeb();
         var doc = web.Load(url);
         var entryListLinks = doc.DocumentNode.SelectNodes("//a[contains(@href, 'entry-list')]");
@@ -44,7 +44,7 @@ public class RacerXContext
         var result = new List<EntryListLink>();
         var web = new HtmlWeb();
         var burl = "https://racerxonline.com";
-        var url = $"{burl}/sx/2025/{race}";
+        var url = $"{burl}/{race}";
         var doc = web.Load(url);
         var result450Link = doc.DocumentNode.SelectSingleNode($"//a[contains(@href, '{race}/450')]").Attributes["href"].Value;
         var result250Link = doc.DocumentNode.SelectSingleNode($"//a[contains(@href, '{race}/250')]").Attributes["href"].Value;

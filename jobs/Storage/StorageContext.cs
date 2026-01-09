@@ -7,7 +7,7 @@ using TurboFantasySports;
 
 public class StorageContext
 {
-    string partition = "1";
+    string partition = "2";
     string accountName = "tedpersonalwebsite";
     string storageAccountKey = "fVAszloqYcVBsKrqpzKOgdnYeInUZCHsX6bIU1l5h5oJ86oyMZzl159Q9o5Xuk4fWB97TQkK02Yv+ASt4/Zw3A==";
     string storageUri;
@@ -34,7 +34,7 @@ public class StorageContext
 
     public RaceModel GetNextRace()
     {
-        var entity = racesClient.Query<TableEntity>()
+        var entity = racesClient.Query<TableEntity>($"PartitionKey eq '{partition}'")
                 .Where(t => DateTime.Parse(t.GetString("Date")) > DateTime.Now)
                 .OrderBy(t => DateTime.Parse(t.GetString("Date")))
                 .FirstOrDefault();
@@ -44,7 +44,7 @@ public class StorageContext
 
     public RaceModel GetLastRace()
     {
-        var entity = racesClient.Query<TableEntity>()
+        var entity = racesClient.Query<TableEntity>($"PartitionKey eq '{partition}'")
                 .Where(t => DateTime.Parse(t.GetString("Date")) < DateTime.Now)
                 .OrderBy(t => DateTime.Parse(t.GetString("Date")))
                 .LastOrDefault();
@@ -54,7 +54,7 @@ public class StorageContext
 
     public RaceModel GetRace(string key)
     {
-        var entity = racesClient.Query<TableEntity>()
+        var entity = racesClient.Query<TableEntity>($"PartitionKey eq '{partition}'")
                     .Where(e => e.GetString("Racerx") == key)
                     .FirstOrDefault();
 
@@ -63,7 +63,7 @@ public class StorageContext
 
     public List<OutcomeModel> GetOutcomes()
     {
-        var outcomes = outcomesClient.Query<TableEntity>().ToList().ConvertAll(e => new OutcomeModel(e));
+        var outcomes = outcomesClient.Query<TableEntity>($"PartitionKey eq '{partition}'").ToList().ConvertAll(e => new OutcomeModel(e));
         
         return outcomes;
     }
@@ -75,7 +75,7 @@ public class StorageContext
 
     public List<RiderRow> GetRiders()
     {
-        var data = ridersClient.Query<TableEntity>().ToList().ConvertAll(e => new RiderRow(e));
+        var data = ridersClient.Query<TableEntity>($"PartitionKey eq '{partition}'").ToList().ConvertAll(e => new RiderRow(e));
 
         return data;
     }
@@ -92,14 +92,14 @@ public class StorageContext
 
     public List<EntryRow> GetEntries()
     {
-        var data = entriesClient.Query<TableEntity>().ToList().ConvertAll(e => new EntryRow(e));
+        var data = entriesClient.Query<TableEntity>($"PartitionKey eq '{partition}'").ToList().ConvertAll(e => new EntryRow(e));
 
         return data;
     }
 
     public List<TeamRow> GetTeams()
     {
-        var data = teamsClient.Query<TableEntity>().ToList().ConvertAll(e => new TeamRow(e));
+        var data = teamsClient.Query<TableEntity>($"PartitionKey eq '{partition}'").ToList().ConvertAll(e => new TeamRow(e));
 
         return data;
     }

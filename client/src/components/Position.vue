@@ -11,7 +11,7 @@
                 </ul>
                 
                 <ul class="list-unstyled mb-4">
-                    <li>You were <span class="badge rounded-pill bg-danger text-white">{{ getOrdinalSuffix(member.DraftPosition) }}</span> in draft order</li>
+                    <li>You were <span class="badge rounded-pill bg-danger text-white">{{ getOrdinalSuffix(member?.DraftPosition) }}</span> in draft order</li>
                     <li>You have {{ numOf250Riders }} 250 riders</li>
                     <li>You have {{ numOf450Riders }} 450 riders</li>
                     <li>You have {{ (numOf250Riders + numOf450Riders) }} of {{ Config.maxRiders }} spots filled</li>
@@ -75,7 +75,6 @@
 
     onMounted(async () => {
         member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
-        
         let team = storage.Teams.getByLeagueAndMember2(route.params.id, member.rowKey);
         let results = storage.Results.getByLeague2(route.params.id);
         let riders = storage.Riders.data;
@@ -84,7 +83,7 @@
         let myRiders = riders.filter(rider => {
             return ids.indexOf(rider.rowKey) !== -1;
         });
-
+        
         results.forEach(r => {
             if(totals[r.Member] === undefined) {
                 totals[r.Member] = 0;
@@ -92,11 +91,11 @@
             
             totals[r.Member] += r.Points;
         });
-        
+            
         let standings = Object.entries(totals)
             .map(([member, points]) => ({ member, points }))
             .sort((a, b) => b.points - a.points);
-        
+            
         place.value = standings.findIndex(s => s.member === member.rowKey);
         totalPoints.value = results.filter(r => r.Member === member.rowKey).reduce((acc, result) => acc + result.Points, 0);
         numOf250Riders.value = myRiders.filter(t => t.Class.indexOf("250") !== -1).length;
@@ -104,7 +103,8 @@
     });
 
     function getOrdinalSuffix(num) {
-        if (num == null || num === undefined) {
+        console.log(num);
+        if (!num || num == null || num === undefined) {
             return "-";
         }
 

@@ -83,4 +83,8 @@
     color: #000 !important;
     background-color: RGBA(255, 193, 7, 1) !important;
 }
+
+.vueperslides__inner {
+    overflow: hidden;
+}
 </style>

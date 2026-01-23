@@ -2,6 +2,7 @@
     "racerxRiderLink": "https://racerxonline.com/rider/",
     "partitionKey": "2",
     "maxRiders": 6,
+    "maxBench": 2,
     "racerx": "https://racerxonline.com",
     "auth0": {
         "domain": "dev-ibgv5y2iaaxv47oz.us.auth0.com",

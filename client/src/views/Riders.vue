@@ -74,19 +74,30 @@
   let member = ref(null);
   let riders = ref([]);
   let riderModal = ref(null);
+  let isRosterEditable = ref(false);
 
   const availableSpots = computed(() => {
     return Config.maxRiders - team.value.length;
   });
 
   const canClickAdd = computed(() => {
-    return availableSpots.value === 0;
+    return availableSpots.value === 0 && isRosterEditable.value;
   });
 
   onMounted(() => {
     member.value = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
     team.value = storage.Teams.getByLeagueAndMember2(route.params.id, member.value.rowKey);
     riders.value = storage.getAvailableRiders(route.params.id);
+    let prev = storage.Races.getPreviousRace();
+    
+    // Previous will be null the first race of the year.
+    if(prev != null) {
+      isRosterEditable.value = league.value.DraftComplete == true && storage.Results.hasResults2(route.params.id, prev.rowKey);
+    } else {
+      isRosterEditable.value = league.value.DraftComplete == true;
+    }
+
+    
   });
 
   function onFilterTextBoxChanged() {

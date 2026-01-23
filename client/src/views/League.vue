@@ -31,7 +31,7 @@
 
     <ag-grid-vue :rowData="myRidersList" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
 
-    <router-link v-if="isRosterEditable" :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block mt-3">Add Riders</router-link>
+    <router-link :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block mt-3">View Riders</router-link>
 
     <div class="row">
       <div class="col-md-6 py-5">
@@ -104,19 +104,9 @@
   let member = null;
   let myRidersList = ref([]);
   let league = ref(null);
-  let prev = storage.Races.getPreviousRace();
-  let isRosterEditable = ref(false);
 
   onMounted(async () => {
     league.value = storage.Leagues.getSingle(route.params.id);
-
-    // Previous will be null the first race of the year.
-    if(prev != null) {
-      isRosterEditable.value = league.value.DraftComplete == true && storage.Results.hasResults2(route.params.id, prev.rowKey);
-    } else {
-      isRosterEditable.value = league.value.DraftComplete == true;
-    }
-
     member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
     myRidersList.value = storage.getTeam(route.params.id, member.rowKey);
   });

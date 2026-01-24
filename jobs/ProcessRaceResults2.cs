@@ -28,8 +28,8 @@ namespace TFS
 
             var links = _racerXContext.GetRaceResultLinks(race.Racerx);
             _logger.LogInformation($"Found {links.Count} links for race results");
-            
-            var teams = _storageContext.GetTeams();
+
+            var teams = _storageContext.GetTeams().Where(r => r.IsBench == false).ToList();
             _logger.LogInformation($"Found {teams.Count} teams");
 
             var outcomes = new List<OutcomeModel>();

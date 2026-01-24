@@ -15,6 +15,7 @@ public class TeamRow : Base
         this.League = entity.GetString("League");
         this.Member = entity.GetString("Member");
         this.Rider = entity.GetString("Rider");
+        this.IsBench = entity.GetBoolean("IsBench") ?? false;
     }
 
     public string League { get; set; }
@@ -22,4 +23,6 @@ public class TeamRow : Base
     public string Member { get; set; }
 
     public string Rider { get; set; }
+
+    public bool IsBench { get; set; }
 }

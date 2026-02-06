@@ -103,7 +103,6 @@
     });
 
     function getOrdinalSuffix(num) {
-        console.log(num);
         if (!num || num == null || num === undefined) {
             return "-";
         }

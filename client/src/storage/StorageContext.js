@@ -20,14 +20,15 @@ export function useStorage() {
     };
 
     context.getTeam = (league, member) => {
-        let team = context.Teams.getByLeagueAndMember2(league, member);
+        let teams = context.Teams.getByLeagueAndMember2(league, member);
         let riders = [];
+        
+        teams.forEach(team => {
+            let rider = context.Riders.getSingle(team.Rider);
 
-        context.Riders.data.forEach(rider => {
-            let mine = team.map(a => a.Rider).indexOf(rider.rowKey);
-            
-            if (mine > -1) {
-            riders.push(rider);
+            if (rider) {
+                rider.IsBench = team.IsBench;                
+                riders.push(rider);
             }
         });
 
@@ -56,7 +57,7 @@ export function useStorage() {
         }
         
         let members = context.Members.getByLeague2(league);
-        let teams = context.Teams.getByLeague2(league);
+        let teams = context.Teams.getByLeague2(league).filter(t => t.IsBench !== true);
         let table = [];
     
         members.forEach(member => {

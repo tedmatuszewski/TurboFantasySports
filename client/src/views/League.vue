@@ -29,9 +29,11 @@
     
     <h3>My Roster</h3>
 
-    <ag-grid-vue :rowData="myRidersList" :columnDefs="colDefs" style="height: 320px;" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
-
+    <ag-grid-vue :rowData="myRidersList" :columnDefs="colDefs" style="height: 420px;" :autoSizeStrategy="{ type: 'fitCellContents' }" :getRowStyle="getRowStyle"></ag-grid-vue>
+    
     <router-link :to="{ name: 'riders', params: { id: route.params.id } }" class="btn btn-primary btn-block mt-3">View Riders</router-link>
+
+    <button class="btn btn-secondary btn-block mt-3" v-on:click="showBenchModal">Edit Bench</button>
 
     <div class="row">
       <div class="col-md-6 py-5">
@@ -44,12 +46,39 @@
     </div> 
     
     <Rider ref="riderModal" :league="route.params.id"></Rider>
+    
+    <div id="benchModal" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Roster</h5>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-info" role="alert">
+              Choose a rider from your active roster, then a rider from your bench and press the "Swap Riders" button to swap their positions.
+            </div>
+
+            <h6>Bench</h6>
+            <ag-grid-vue ref="benchRidersTable" :rowSelection="{ mode: 'singleRow', enableClickSelection: true }" :rowData="myBenchRidersList" :columnDefs="activeColDefs" style="height: 150px;"></ag-grid-vue>
+            
+            <div class="mt-3"></div>
+            
+            <h6>Active</h6>
+            <ag-grid-vue ref="activeRidersTable" :rowSelection="{ mode: 'singleRow', enableClickSelection: true }" :rowData="myActiveRidersList" :columnDefs="benchColDefs" style="height: 350px;"></ag-grid-vue>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" v-on:click="switchBenchRiders">Swap Riders</button>
+            <button type="button" class="btn btn-secondary" v-on:click="closeBenchModal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
   import { useStorage } from '../storage/StorageContext';
-  import { ref,onMounted,computed, reactive  } from "vue";
+  import { ref,onMounted,computed, reactive, nextTick  } from "vue";
   import { useRoute } from 'vue-router';
   import { useAuth0 } from '@auth0/auth0-vue';
   import Races from "../components/Races.vue";
@@ -63,6 +92,68 @@
   import Donate from '../components/Donate.vue';
   import TableRemove from "../components/TableRemove.vue";
   import RiderTableKey from "../components/RiderTableKey.vue";
+
+  const benchColDefs = ref([
+    { field: "Number", headerName: "#", width: 60 },
+    { field: "Name", headerName: "Name" },
+    {
+      field: 'Name',
+      headerName: 'Toggle', 
+      width: 100,
+      cellRenderer: params => {
+        return '<button class="btn btn-sm btn-success">Bench</button>';
+      },
+      onCellClicked: async params => {
+          let benchCount = myBenchRidersList.value.length;
+
+          if(benchCount >= Config.maxBench) {
+            alert("You cannot have more than " + Config.maxBench + " bench riders on your roster.");
+
+            return;
+          }
+   
+          let rider = myRidersList.value.find(r => r.rowKey == params.data.rowKey);
+          let team = storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.rowKey, rider.rowKey)[0];
+          
+          rider.IsBench = true;
+          team.IsBench = true;
+          
+          await storage.Teams.update(team);
+          await storage.Feeds.create({ League: route.params.id, Member: member.rowKey, Action: `Moved ${rider.Name} to the bench` });
+      }
+    }
+  ]);
+
+  const activeColDefs = ref([
+    { field: "Number", headerName: "#", width: 60 },
+    { field: "Name", headerName: "Name" },
+    {
+        field: 'Name',
+        headerName: 'Toggle', 
+        width: 100,
+        cellRenderer: params => {
+            return '<button class="btn btn-sm btn-success">Activate</button>';
+        },
+        onCellClicked: async params => {
+          let activeCount = myActiveRidersList.value.length;
+
+          if(activeCount >= Config.maxRiders) {
+            alert("You cannot have more than " + Config.maxRiders + " active riders on your roster. Please bench an active rider before activating another one.");
+
+            return;
+          }
+   
+          let benchRider = myRidersList.value.find(r => r.rowKey == params.data.rowKey);
+          let benchTeam = storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.rowKey, benchRider.rowKey)[0];
+          
+          benchRider.IsBench = false;
+          benchTeam.IsBench = false;
+          
+          await storage.Teams.update(benchTeam);
+          await storage.Feeds.create({ League: route.params.id, Member: member.rowKey, Action: `Moved ${benchRider.Name} to active roster` });
+        }
+    }
+  ]);
 
   const colDefs = ref([
     { 
@@ -100,16 +191,37 @@
   const auth0 = useAuth0();
   const route = useRoute();
   const riderModal = ref(null);
+  const benchRidersTable = ref(null);
+  const activeRidersTable = ref(null);
 
+  let benchModal2 = null;
   let member = null;
   let myRidersList = ref([]);
   let league = ref(null);
 
+  const myActiveRidersList = computed(() => {
+    return myRidersList.value.filter(rider => rider.IsBench !== true);
+  });
+
+  const myBenchRidersList = computed(() => {
+    return myRidersList.value.filter(rider => rider.IsBench === true); 
+  });
+
   onMounted(async () => {
     league.value = storage.Leagues.getSingle(route.params.id);
     member = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
-    myRidersList.value = storage.getTeam(route.params.id, member.rowKey);
+    myRidersList.value = storage.getTeam(route.params.id, member.rowKey).sort((a, b) => {
+      return (a.IsBench === true) - (b.IsBench === true); // Sort by IsBench: false (active) riders first, then true (bench) riders
+    });
+
+    await nextTick();
+    
+    benchModal2 = new bootstrap.Modal(document.getElementById('benchModal'), {});
   });
+
+  function buttonClicked() {
+    console.log(1);
+  }
 
   async function removeRiderClick(data){
     if(confirm("Are you sure that you want to remove this rider from your team? Removing this rider will put them back in the pool of available riders for anyone else to scoop up.") == false) {
@@ -131,6 +243,46 @@
 
   function showRiderModal(key){
     riderModal.value.open(key);
+  }
+
+  function showBenchModal(){
+    benchModal2.show();
+  }
+
+  function closeBenchModal(){
+    benchModal2.hide();
+  }
+
+  function getRowStyle(params) {
+    if(params.data.IsBench) {
+      return { background: '#f0f0f0' };
+    }
+    return null;
+  }
+
+  async function switchBenchRiders() {
+    let benchSelected = benchRidersTable.value.api.getSelectedRows();
+    let activeSelected = activeRidersTable.value.api.getSelectedRows();
+
+    if(benchSelected.length !== 1 || activeSelected.length !== 1) {
+      alert("You must select one rider from your bench and one rider from your active roster to swap their positions.");
+
+      return;
+    }
+
+    let benchRider = myRidersList.value.find(r => r.rowKey == benchSelected[0].rowKey);
+    let benchTeam = storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.rowKey, benchRider.rowKey)[0];
+    let activeRider = myRidersList.value.find(r => r.rowKey == activeSelected[0].rowKey);
+    let activeTeam = storage.Teams.getByLeagueAndOwnerAndNumber2(route.params.id, member.rowKey, activeRider.rowKey)[0];
+
+    benchRider.IsBench = false;
+    activeRider.IsBench = true;
+    benchTeam.IsBench = false;
+    activeTeam.IsBench = true;
+    
+    await storage.Teams.update(benchTeam);
+    await storage.Teams.update(activeTeam);
+    await storage.Feeds.create({ League: route.params.id, Member: member.rowKey, Action: `Moved ${benchRider.Name} to active roster and ${activeRider.Name} to bench` });
   }
 </script>
 

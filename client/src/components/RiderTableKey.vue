@@ -19,6 +19,7 @@
       <div class="col-md-6">
         <ul class="list-group list-group-horizontal mb-3">
           <li class="list-group-item">TP = Total Points</li>
+          <li class="list-group-item"><span>📛</span> = Rider is Benched</li>
         </ul>
       </div>
     </div>

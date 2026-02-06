@@ -22,7 +22,7 @@
 
     <input id="filter-text-box" type="text" class="form-control mb-3" placeholder="Search for a rider" v-on:input="onFilterTextBoxChanged()" />
 
-    <ag-grid-vue ref="grid" @selection-changed="onSelectionChanged" :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :selectionColumnDef="{pinned: 'left', width: 50}" :rowSelection="{ mode: 'multiRow' }" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
+    <ag-grid-vue ref="grid" @selection-changed="onSelectionChanged" :rowData="riders" :columnDefs="colDefs" style="height: 320px;" :selectionColumnDef="{pinned: 'left', width: 50}" :rowSelection="{ mode: 'multiRow', enableClickSelection: true }" :autoSizeStrategy="{ type: 'fitCellContents' }"></ag-grid-vue>
   </div> 
     
   <Rider ref="riderModal" :league="props.league"></Rider>
@@ -70,6 +70,7 @@
   const teams = ref([]);
   const team = ref([]);
   const grid = ref(null);
+  const league = ref(null);
   
   let member = ref(null);
   let riders = ref([]);
@@ -77,27 +78,26 @@
   let isRosterEditable = ref(false);
 
   const availableSpots = computed(() => {
-    return Config.maxRiders - team.value.length;
+    return (Config.maxRiders + Config.maxBench) - team.value.length;
   });
 
   const canClickAdd = computed(() => {
-    return availableSpots.value === 0 && isRosterEditable.value;
+    return availableSpots.value <= 0 && isRosterEditable.value;
   });
 
   onMounted(() => {
     member.value = storage.Members.getByLeagueAndEmail2(route.params.id, auth0.user.value.email);
     team.value = storage.Teams.getByLeagueAndMember2(route.params.id, member.value.rowKey);
     riders.value = storage.getAvailableRiders(route.params.id);
+    league.value = storage.Leagues.getSingle(route.params.id);
     let prev = storage.Races.getPreviousRace();
-    
+
     // Previous will be null the first race of the year.
     if(prev != null) {
       isRosterEditable.value = league.value.DraftComplete == true && storage.Results.hasResults2(route.params.id, prev.rowKey);
     } else {
       isRosterEditable.value = league.value.DraftComplete == true;
     }
-
-    
   });
 
   function onFilterTextBoxChanged() {
@@ -115,14 +115,14 @@
       return;
     }
 
-    if(team.value.length >= Config.maxRiders) {
-      alert("You already have " + Config.maxRiders + " riders on your team. You must drop riders before you can add more.");
+    if(team.value.length >= (Config.maxRiders + Config.maxBench)) {
+      alert("You already have " + (Config.maxRiders + Config.maxBench) + " riders on your team. You must drop riders before you can add more.");
 
       return;
     }
     
-    if((team.value.length + itemsSelected.value.length) > Config.maxRiders) {
-      alert("You have selected to many riders. You can only have " + Config.maxRiders + " riders on your team.");
+    if((team.value.length + itemsSelected.value.length) > (Config.maxRiders + Config.maxBench)) {
+      alert("You have selected to many riders. You can only have " + (Config.maxRiders + Config.maxBench) + " riders on your team.");
 
       return;
     }
@@ -130,14 +130,23 @@
     itemsSelected.value.map(i => i.rowKey).forEach(async rowKey => {
       let sel = riders.value.find(r => r.rowKey == rowKey);
       let index = riders.value.indexOf(sel);
+      let benchCount = team.value.filter(rider => rider.IsBench).length;
+      let regularCount = team.value.filter(rider => !rider.IsBench).length;
 
+      sel.IsBench = false;
+      
+      if(benchCount < Config.maxBench && regularCount >= Config.maxRiders) {
+        sel.IsBench = true;
+      }
+      
       riders.value.splice(index, 1);
       team.value.push(sel);
 
       await  storage.Teams.create({
         League: route.params.id,
         Member: member.value.rowKey,
-        Rider: sel.rowKey
+        Rider: sel.rowKey,
+        IsBench: sel.IsBench
       });
 
       await storage.Feeds.create({

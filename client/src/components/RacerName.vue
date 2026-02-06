@@ -11,6 +11,10 @@
                 <img style="height:25px;" src="../assets/racer-x-shield.png">
             </a>
         </div>
+
+        <div>
+            <span v-if="props.params.data.IsBench" style="font-size: 25px;" title="Rider is benched">📛</span>
+        </div>
     </div>
 </template>
 

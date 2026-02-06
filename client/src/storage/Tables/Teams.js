@@ -64,6 +64,20 @@ export default defineStore(table, {
             }
 
             await client.deleteEntity(config.partitionKey, key);
+        },
+        async update(entity) {
+            console.log(1.5, entity);
+            var entity = entity.toEntity();
+
+            await client.updateEntity(entity, "Replace");
+            
+            const index = this.data.findIndex(x => x.rowKey === entity.rowKey);
+
+            if (index !== -1) {
+                this.data[index] = new Team(entity);
+            }
+
+            return this.data[index];
         }
     }
   });

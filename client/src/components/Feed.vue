@@ -26,7 +26,6 @@
   let members = ref([]);
 
   onMounted(async () => {
-    console.log("Loading feed for league: " + props.league);
     feed.value =  storage.Feeds.getByLeague(props.league);
     members.value = storage.Members.data;
   });

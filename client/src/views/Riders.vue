@@ -92,6 +92,8 @@
     league.value = storage.Leagues.getSingle(route.params.id);
     let prev = storage.Races.getPreviousRace();
 
+    console.log("prev", prev);
+
     // Previous will be null the first race of the year.
     if(prev != null) {
       isRosterEditable.value = league.value.DraftComplete == true && storage.Results.hasResults2(route.params.id, prev.rowKey);
